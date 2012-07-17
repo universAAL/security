@@ -70,7 +70,7 @@
     </dependencies>
   </dependencyManagement>
   <properties>
-    <gforge.project>uaalsecurity</gforge.project>
+    <gforge.project.name>uaalsecurity</gforge.project.name>
     <maven.compile.source>1.5</maven.compile.source>
     <maven.compile.target>1.5</maven.compile.target>
   </properties>
