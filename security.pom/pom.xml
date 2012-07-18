@@ -5,7 +5,7 @@
   <parent>
     <artifactId>uAAL.pom</artifactId>
     <groupId>org.universAAL</groupId>
-    <version>1.2.0</version>
+    <version>1.2.1-SNAPSHOT</version>
   </parent>
   <groupId>org.universAAL.security</groupId>
   <artifactId>security.pom</artifactId>
@@ -14,8 +14,8 @@
   <name>universAAL Security</name>
   <description>The set of artefacts realizing the universAAL security.</description>
   <scm>
-    <connection>${svn.base}/pom</connection>
-    <developerConnection>${svn.base}/pom</developerConnection>
+    <connection>${svn.base}/${project.artifactId}</connection>
+    <developerConnection>${svn.base}/${project.artifactId}</developerConnection>
     <url>${svn.base.url}pom</url>
   </scm>
   <build>
