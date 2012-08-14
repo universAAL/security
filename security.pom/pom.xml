@@ -33,6 +33,16 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>uaal</id>
+      <name>universAAL Repositories</name>
+      <url>http://depot.universaal.org/maven-repo/releases/</url>
+    </repository>
+  </repositories>
   <modules>
     <module>../security.authorizator</module>
   </modules>
