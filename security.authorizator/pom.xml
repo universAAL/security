@@ -3,33 +3,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>security.pom</artifactId>
     <groupId>org.universAAL.security</groupId>
-    <version>1.2.1-SNAPSHOT</version>
-    <relativePath>../pom/pom.xml</relativePath>
+    <artifactId>security.pom</artifactId>
+    <version>1.3.1-SNAPSHOT</version>
+    <relativePath>../security.pom/pom.xml</relativePath>
   </parent>
   <artifactId>security.authorizator</artifactId>
-  <version>1.2.1-SNAPSHOT</version>
+  <version>1.3.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>universAAL Security Authorizator</name>
   <description>Checks if some user has access permission or not</description>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-Name>${project.name}</Bundle-Name>
-            <Bundle-Activator>org.universAAL.ui.security.osgi.Activator</Bundle-Activator>
-            <Bundle-Description>${project.description}</Bundle-Description>
-            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
   <dependencies>
     <dependency>
       <groupId>org.universAAL.support</groupId>
@@ -56,4 +39,21 @@
       <artifactId>ont.profile.userid</artifactId>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-Name>${project.name}</Bundle-Name>
+            <Bundle-Activator>org.universAAL.ui.security.osgi.Activator</Bundle-Activator>
+            <Bundle-Description>${project.description}</Bundle-Description>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
