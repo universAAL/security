@@ -11,7 +11,7 @@
   <artifactId>security.pom</artifactId>
   <version>1.2.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>universAAL Security</name>
+  <name>universAAL Security Suite</name>
   <description>The set of artefacts realizing the universAAL security.</description>
   <scm>
     <connection>${svn.base}/${project.artifactId}</connection>
