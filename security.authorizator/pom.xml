@@ -11,7 +11,7 @@
   <artifactId>security.authorizator</artifactId>
   <version>1.2.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
-  <name>Authorizator</name>
+  <name>universAAL Security Authorizator</name>
   <description>Checks if some user has access permission or not</description>
   <build>
     <plugins>
