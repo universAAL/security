@@ -1,6 +1,5 @@
 * text=auto !eol
 security.authorizator/ASL2.0.txt -text
-security.authorizator/MITX.txt -text
 security.authorizator/NOTICE.txt -text
 security.authorizator/pom.xml -text
 security.authorizator/src/main/java/org/universAAL/ui/security/authorization/AuthorizatorImpl.java -text
