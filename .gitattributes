@@ -7,7 +7,7 @@ security.authorizator/src/main/java/org/universAAL/ui/security/authorization/IAu
 security.authorizator/src/main/java/org/universAAL/ui/security/osgi/Activator.java -text
 security.authorizator/src/test/java/org/universAAL/ui/security/authorization/test/ArtifactIntegrationTest.java -text
 security.pom/pom.xml -text
-security.pom/security.karaf.feature/ASL2.0.txt -text
-security.pom/security.karaf.feature/NOTICE.txt -text
-security.pom/security.karaf.feature/pom.xml -text
-security.pom/security.karaf.feature/src/features/features.xml -text
+security.pom/security.karaf.feature/ASL2.0.txt -text svneol=unset#text/plain
+security.pom/security.karaf.feature/NOTICE.txt -text svneol=unset#text/plain
+security.pom/security.karaf.feature/pom.xml -text svneol=unset#text/plain
+security.pom/security.karaf.feature/src/features/features.xml -text svneol=unset#text/plain
