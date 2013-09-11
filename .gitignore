@@ -4,4 +4,8 @@ security.authorizator/.settings
 security.authorizator/target
 security.pom/.project
 security.pom/.settings
+security.pom/security.karaf.feature/.classpath
+security.pom/security.karaf.feature/.project
+security.pom/security.karaf.feature/.settings
+security.pom/security.karaf.feature/target
 security.pom/target
