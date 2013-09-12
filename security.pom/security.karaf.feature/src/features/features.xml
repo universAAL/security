@@ -8,6 +8,6 @@
 	<feature name="uAAL-Security.Authorizatior" description="Security Authorizator."
 		version="${pom.version}" resolver='(obr)'>
 		<feature>uAAL-Ont.Profile.userId</feature> 
-		<bundle start-level='93' start='true'>mvn:org.universAAL.security/ont.authorizator/2.0.1-SNAPSHOT</bundle>
+		<bundle start-level='70' start='true'>mvn:org.universAAL.security/ont.authorizator/2.0.1-SNAPSHOT</bundle>
 	</feature>
 </features>
