@@ -28,6 +28,13 @@ security.authorizator-1.3.3-SNAPSHOT/src/main/java/org/universAAL/ui/security/au
 security.authorizator-1.3.3-SNAPSHOT/src/main/java/org/universAAL/ui/security/authorization/IAuthorizator.java -text
 security.authorizator-1.3.3-SNAPSHOT/src/main/java/org/universAAL/ui/security/osgi/Activator.java -text
 security.authorizator-1.3.3-SNAPSHOT/src/test/java/org/universAAL/ui/security/authorization/test/ArtifactIntegrationTest.java -text
+security.authorizator-2.0.1-SNAPSHOT/ASL2.0.txt -text
+security.authorizator-2.0.1-SNAPSHOT/NOTICE.txt -text
+security.authorizator-2.0.1-SNAPSHOT/pom.xml -text
+security.authorizator-2.0.1-SNAPSHOT/src/main/java/org/universAAL/ui/security/authorization/AuthorizatorImpl.java -text
+security.authorizator-2.0.1-SNAPSHOT/src/main/java/org/universAAL/ui/security/authorization/IAuthorizator.java -text
+security.authorizator-2.0.1-SNAPSHOT/src/main/java/org/universAAL/ui/security/osgi/Activator.java -text
+security.authorizator-2.0.1-SNAPSHOT/src/test/java/org/universAAL/ui/security/authorization/test/ArtifactIntegrationTest.java -text
 security.pom-1.1.2-SNAPSHOT/pom.xml -text
 security.pom-1.2.1-SNAPSHOT/pom.xml -text
 security.pom-1.3.2-SNAPSHOT/pom.xml -text
