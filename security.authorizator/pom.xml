@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.universAAL.security</groupId>
     <artifactId>security.pom</artifactId>
-    <version>2.0.2-SNAPSHOT</version>
+    <version>2.0.3-SNAPSHOT</version>
     <relativePath>../security.pom/pom.xml</relativePath>
   </parent>
   <artifactId>security.authorizator</artifactId>
-  <version>2.0.2-SNAPSHOT</version>
+  <version>2.0.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>universAAL Security Authorizator</name>
   <description>Checks if some user has access permission or not</description>
