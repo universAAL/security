@@ -22,6 +22,10 @@ security.authorizator-2.0.2-SNAPSHOT/.classpath
 security.authorizator-2.0.2-SNAPSHOT/.project
 security.authorizator-2.0.2-SNAPSHOT/.settings
 security.authorizator-2.0.2-SNAPSHOT/target
+security.karaf.feature-2.0.2-SNAPSHOT/.classpath
+security.karaf.feature-2.0.2-SNAPSHOT/.project
+security.karaf.feature-2.0.2-SNAPSHOT/.settings
+security.karaf.feature-2.0.2-SNAPSHOT/target
 security.pom-1.1.2-SNAPSHOT/.project
 security.pom-1.1.2-SNAPSHOT/.settings
 security.pom-1.1.2-SNAPSHOT/target
