@@ -1,3 +1,11 @@
+security.authenticator.dummy/.classpath
+security.authenticator.dummy/.project
+security.authenticator.dummy/.settings
+security.authenticator.dummy/target
+security.authenticator.profile/.classpath
+security.authenticator.profile/.project
+security.authenticator.profile/.settings
+security.authenticator.profile/target
 security.authorizator/.classpath
 security.authorizator/.project
 security.authorizator/.settings
