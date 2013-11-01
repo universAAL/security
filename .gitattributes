@@ -12,7 +12,9 @@ security.authenticator.profile/pom.xml -text
 security.authenticator.profile/src/main/java/org/universAAL/security/security/authenticator/profile/AuthenticatorActivator.java -text
 security.authenticator.profile/src/main/java/org/universAAL/security/security/authenticator/profile/UserPasswordCallee.java -text
 security.authenticator.profile/src/main/java/org/universAAL/security/security/authenticator/profile/UserPasswordProfileService.java -text
-security.authenticator.profile/src/test/java/org/universAAL/security/security/profile/authenticator/AppTest.java -text
+security.authenticator.profile/src/main/resources/GetDigestQuery -text
+security.authenticator.profile/src/main/resources/GetUserQuery -text
+security.authenticator.profile/src/test/java/org/universAAL/security/security/profile/authenticator/QueryTest.java -text
 security.authorizator/ASL2.0.txt -text
 security.authorizator/NOTICE.txt -text
 security.authorizator/pom.xml -text

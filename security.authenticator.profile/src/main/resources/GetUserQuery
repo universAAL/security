@@ -1,0 +1,14 @@
+PREFIX prof: <http://ontology.universAAL.org/Profile.owl#>
+PREFIX sec: <http://ontology.universAAL.org/Security.owl#>
+DESCRIBE ?user 
+WHERE {
+  ?user a prof:User.
+  ?user prof:hasProfile ?prof.
+  ?prof prof:hasSubProfile ?subp.
+  ?subp a sec:SecuritySubprofile.
+  ?subp sec:associatedCredentials ?cred.
+  ?cred a sec:UserPasswordCredentials.
+  ?cred sec:username '$1'.
+  ?cred sec:password '$2'.
+  ?cred sec:passwordDigestAlgorithm '$3'.
+}
