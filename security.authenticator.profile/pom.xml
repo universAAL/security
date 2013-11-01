@@ -31,7 +31,11 @@
   	<dependency>
   		<groupId>org.universAAL.ontology</groupId>
   		<artifactId>ont.phWorld</artifactId>
-  	</dependency>  	 
+  	</dependency>  	
+  	<dependency>
+  		<groupId>org.universAAL.ontology</groupId>
+  		<artifactId>ont.che</artifactId>
+  	</dependency> 	 
   	<dependency>
   		<groupId>org.universAAL.ontology</groupId>
   		<artifactId>ont.security</artifactId>
