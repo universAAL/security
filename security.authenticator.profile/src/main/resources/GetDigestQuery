@@ -8,6 +8,6 @@ WHERE {
   ?subp a sec:SecuritySubprofile.
   ?subp sec:associatedCredentials ?cred.
   ?cred a sec:UserPasswordCredentials.
-  ?cred sec:username '$1'.
+  ?cred sec:username "$1"^^<http://www.w3.org/2001/XMLSchema#string>.
   ?cred sec:passwordDigestAlgorithm ?digest.
 }
