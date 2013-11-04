@@ -29,6 +29,7 @@ import org.universAAL.ontology.profile.AssistedPerson;
 import org.universAAL.ontology.profile.Caregiver;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.UserPasswordCredentials;
+import org.universAAL.security.security.authenticator.profile.UserPasswordProfileService;
 
 /**
  * @author amedrano
@@ -68,7 +69,7 @@ public class UserPasswordCallee extends ServiceCallee {
 	}
 	
 	String cmd = call.getProcessURI();
-	if (cmd.equals(UserPasswordDummyService.AUTHENTICATE_USR_PASSWORD_SERVICE)){
+	if (cmd.startsWith(UserPasswordDummyService.AUTHENTICATE_USR_PASSWORD_SERVICE)){
 	    UserPasswordCredentials upc = (UserPasswordCredentials) call.getInputValue(UserPasswordDummyService.CRED_IN);
 	    User u = authenticate(upc.getUsername(),upc.getPassword(), upc.getDigestAlgorithm());
 	    if (u != null){
@@ -77,6 +78,13 @@ public class UserPasswordCallee extends ServiceCallee {
 		sr.addOutput(out);
 		return sr;
 	    }
+	}
+	
+	if (cmd.startsWith(UserPasswordDummyService.GET_PWD_DIGEST_SERVICE)){
+	    ProcessOutput out = new ProcessOutput(UserPasswordDummyService.DIGEST_OUT, "MD5");
+	    ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+	    sr.addOutput(out);
+	    return sr;
 	}
 
 	return new ServiceResponse(CallStatus.serviceSpecificFailure);
