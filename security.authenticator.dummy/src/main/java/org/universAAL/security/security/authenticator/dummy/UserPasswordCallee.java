@@ -25,6 +25,7 @@ import org.universAAL.middleware.service.ServiceResponse;
 import org.universAAL.middleware.service.owls.process.ProcessOutput;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.middleware.util.Constants;
+import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.middleware.xsd.util.Base64;
 import org.universAAL.ontology.profile.AssistedPerson;
 import org.universAAL.ontology.profile.Caregiver;
@@ -96,7 +97,7 @@ public class UserPasswordCallee extends ServiceCallee {
      * @param digestAlgorithm
      * @return
      */
-    private User authenticate(String username, Base64 password,
+    private User authenticate(String username, Base64Binary password,
 	    String digestAlgorithm) {
 	if (username != null && !username.isEmpty()){
 	    if (username.contains(CAREGIVER_TRIGGER)){
