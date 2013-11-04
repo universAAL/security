@@ -20,13 +20,18 @@ package org.universAAL.security.security.authenticator.profile;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
+import java.security.Security;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Vector;
 
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.owl.MergedRestriction;
 import org.universAAL.middleware.rdf.PropertyPath;
+import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.service.CallStatus;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceCall;
@@ -95,6 +100,15 @@ public class UserPasswordCallee extends ServiceCallee {
 		LogUtils.logDebug(owner, getClass(), "handleCall", new String[]{"Unexpected error"}, e);		
 	    }
 	}
+	
+	if (cmd.equals(UserPasswordProfileService.GET_PWD_DIGEST_SERVICE)){
+	    String username = (String) call.getInputValue(UserPasswordProfileService.USER_IN);
+	    String digest = getDigestFor(username);
+	    ProcessOutput out = new ProcessOutput(UserPasswordProfileService.DIGEST_OUT, digest);
+	    ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+	    sr.addOutput(out);
+	    return sr;
+	}
 
 	return new ServiceResponse(CallStatus.serviceSpecificFailure);
     }
@@ -108,7 +122,7 @@ public class UserPasswordCallee extends ServiceCallee {
     private User authenticate(String username, String password,
 	    String digestAlgorithm) {
 	if (digestAlgorithm == null || digestAlgorithm.isEmpty()){
-	    digestAlgorithm = (String) query("GetDigestQuery", new String[]{username});
+	    digestAlgorithm = getDigestFor(username);
 	    try {
 		MessageDigest dig = MessageDigest.getInstance(digestAlgorithm);
 		password = new String (dig.digest(password.getBytes()));
@@ -119,6 +133,44 @@ public class UserPasswordCallee extends ServiceCallee {
 	return (User) query("GetUserQuery", new String[]{username,password,digestAlgorithm});
     }
     
+    /**
+     * @param username
+     * @return
+     */
+    private String getDigestFor(String username) {
+	String dig = null;
+	try {
+	    dig = (String) ((Resource) query("GetDigestQuery", new String[]{username}))
+	        .getProperty(UserPasswordCredentials.PROP_PASSWORD);
+	} catch (Exception e) {
+	    dig = null;
+	}
+	if (dig == null){
+	    Vector<String> v = getAvailableDigests();
+	    Random generator = new Random();
+	    int rnd = generator.nextInt(v.size());
+	    dig = v.get(rnd);
+	}
+	return dig;
+    }
+    
+    private static Vector<String> getAvailableDigests(){
+	Vector<String> messageDigests = new Vector<String>();
+	messageDigests.add("");
+	Provider[] providers = Security.getProviders();
+	
+	for (int i = 0; i < providers.length; i++) {
+	    for (Object en : providers[i].keySet()) {
+		String e = (String) en;
+		if (e.startsWith("MessageDigest.")) {
+		    messageDigests.add(e.substring("MessageDigest.".length()));
+		}
+	    }
+	}
+	
+	return messageDigests;
+    }
+
     private Object query(String queryFile, String[] params){
 	String q = getQuery(queryFile, params);
 	ServiceRequest getQuery = new ServiceRequest(

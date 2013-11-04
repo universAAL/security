@@ -22,6 +22,7 @@ import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.owl.SimpleOntology;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.rdf.ResourceFactory;
+import org.universAAL.middleware.rdf.TypeMapper;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.AuthenticationService;
@@ -35,11 +36,14 @@ public class UserPasswordProfileService extends AuthenticationService {
 
     public static String NAMESPACE = "http://security.universAAL.org/Authenticator#";
     public static String MY_URI = NAMESPACE + "UserPasswordProfileAuthenticator";
-    static final ServiceProfile[] profs = new ServiceProfile[1];
+    static final ServiceProfile[] profs = new ServiceProfile[2];
     
     static String AUTHENTICATE_USR_PASSWORD_SERVICE = NAMESPACE +"authenticate";
     static String CRED_IN = NAMESPACE + "credentialsIn";
     static String USER_OUT = NAMESPACE + "userOut";
+    static String GET_PWD_DIGEST_SERVICE = NAMESPACE +"getDigest";
+    static String USER_IN = NAMESPACE + "userIn";
+    static String DIGEST_OUT = NAMESPACE + "digestOut";
     
     /**
      * @param uri
@@ -72,6 +76,14 @@ public class UserPasswordProfileService extends AuthenticationService {
 	auth.addFilteringInput(CRED_IN, UserPasswordCredentials.MY_URI, 1, 1, new String[]{PROP_GIVEN_CREDENTIALS});
 	auth.addOutput(USER_OUT, User.MY_URI, 1, 1, new String[]{PROP_AUTHENTICATED_USER});
 	profs[0] = auth.myProfile;
+	
+	/*
+	 * Get Digest for Username
+	 */
+	UserPasswordProfileService getDigest = new UserPasswordProfileService(GET_PWD_DIGEST_SERVICE);
+	getDigest.addFilteringInput(USER_IN, TypeMapper.getDatatypeURI(String.class), 1, 1, new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_USERNAME});
+	getDigest.addOutput(DIGEST_OUT, TypeMapper.getDatatypeURI(String.class), 1, 1, new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_PASSWORD_DIGEST});
+	profs[1] = getDigest.myProfile;
     }
 
 }
