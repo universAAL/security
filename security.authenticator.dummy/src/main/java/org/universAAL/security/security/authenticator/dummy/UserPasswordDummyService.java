@@ -27,7 +27,6 @@ import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.AuthenticationService;
 import org.universAAL.ontology.security.UserPasswordCredentials;
-import org.universAAL.security.security.authenticator.profile.UserPasswordProfileService;
 
 /**
  * @author amedrano
