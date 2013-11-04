@@ -9,4 +9,16 @@
 		<feature>uAAL-Ont.Profile.userId</feature> 
 		<bundle start-level='70' start='true'>mvn:org.universAAL.security/security.authorizator/${security.authorizator.version}</bundle>
 	</feature>
+	
+	<feature name="uAAL-Security.Authenticator.Profile" description="Security Authenticator"
+		version="${pom.version}" resolver='(obr)'>
+		<feature>uAAL-Ont.Security</feature> 
+		<bundle start-level='70' start='true'>mvn:org.universAAL.security/security.authentication.profile/${security.authentication.profile.version}</bundle>
+	</feature>
+	
+	<feature name="uAAL-Security.Authenticator.Dummy" description="Security Authenticator (only use this in controlled environments!!)"
+		version="${pom.version}" resolver='(obr)'>
+		<feature>uAAL-Ont.Security</feature> 
+		<bundle start-level='70' start='true'>mvn:org.universAAL.security/security.authentication.dummy/${security.authentication.dummy.version}</bundle>
+	</feature>
 </features>
