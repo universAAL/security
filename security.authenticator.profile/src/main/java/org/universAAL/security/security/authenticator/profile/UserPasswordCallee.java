@@ -40,6 +40,8 @@ import org.universAAL.middleware.service.ServiceRequest;
 import org.universAAL.middleware.service.ServiceResponse;
 import org.universAAL.middleware.service.owls.process.ProcessOutput;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
+import org.universAAL.middleware.xsd.Base64Binary;
+import org.universAAL.middleware.xsd.util.Base64;
 import org.universAAL.ontology.che.ContextHistoryService;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.SecurityOntology;
@@ -86,7 +88,7 @@ public class UserPasswordCallee extends ServiceCallee {
 	}
 	
 	String cmd = call.getProcessURI();
-	if (cmd.equals(UserPasswordProfileService.AUTHENTICATE_USR_PASSWORD_SERVICE)){
+	if (cmd.startsWith(UserPasswordProfileService.AUTHENTICATE_USR_PASSWORD_SERVICE)){
 	    try {
 		UserPasswordCredentials upc = (UserPasswordCredentials) call.getInputValue(UserPasswordProfileService.CRED_IN);
 		User u = authenticate(upc.getUsername(),upc.getPassword(), upc.getDigestAlgorithm());
@@ -101,7 +103,7 @@ public class UserPasswordCallee extends ServiceCallee {
 	    }
 	}
 	
-	if (cmd.equals(UserPasswordProfileService.GET_PWD_DIGEST_SERVICE)){
+	if (cmd.startsWith(UserPasswordProfileService.GET_PWD_DIGEST_SERVICE)){
 	    String username = (String) call.getInputValue(UserPasswordProfileService.USER_IN);
 	    String digest = getDigestFor(username);
 	    ProcessOutput out = new ProcessOutput(UserPasswordProfileService.DIGEST_OUT, digest);
@@ -119,18 +121,18 @@ public class UserPasswordCallee extends ServiceCallee {
      * @param digestAlgorithm
      * @return
      */
-    private User authenticate(String username, String password,
+    private User authenticate(String username, Base64Binary password,
 	    String digestAlgorithm) {
 	if (digestAlgorithm == null || digestAlgorithm.isEmpty()){
 	    digestAlgorithm = getDigestFor(username);
 	    try {
 		MessageDigest dig = MessageDigest.getInstance(digestAlgorithm);
-		password = new String (dig.digest(password.getBytes()));
+		password = new Base64Binary(dig.digest(password.getVal()));
 	    } catch (NoSuchAlgorithmException e) {
 		LogUtils.logWarn(owner, getClass(), "authenticate", new String[]{"unable to digest Password"}, e);
 	    }
 	}
-	return (User) query("GetUserQuery", new String[]{username,password,digestAlgorithm});
+	return (User) query("GetUserQuery", new String[]{username,Base64Binary.encode(password.getVal()),digestAlgorithm});
     }
     
     /**
