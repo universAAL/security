@@ -18,6 +18,7 @@
 package org.universAAL.security.security.authenticator.profile;
 
 import org.universAAL.middleware.container.ModuleContext;
+import org.universAAL.middleware.owl.MergedRestriction;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.owl.SimpleOntology;
 import org.universAAL.middleware.rdf.Resource;
@@ -81,8 +82,22 @@ public class UserPasswordProfileService extends AuthenticationService {
 	 * Get Digest for Username
 	 */
 	UserPasswordProfileService getDigest = new UserPasswordProfileService(GET_PWD_DIGEST_SERVICE);
-	getDigest.addFilteringInput(USER_IN, TypeMapper.getDatatypeURI(String.class), 1, 1, new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_USERNAME});
-	getDigest.addOutput(DIGEST_OUT, TypeMapper.getDatatypeURI(String.class), 1, 1, new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_PASSWORD_DIGEST});
+
+	getDigest.addInstanceLevelRestriction(
+		MergedRestriction.getAllValuesRestriction(PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.MY_URI),
+		new String[]{PROP_GIVEN_CREDENTIALS});
+	getDigest.addFilteringInput(
+		USER_IN,
+		TypeMapper.getDatatypeURI(String.class), 
+		1, 
+		1, 
+		new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_USERNAME});
+	getDigest.addOutput(
+		DIGEST_OUT, 
+		TypeMapper.getDatatypeURI(String.class), 
+		1, 
+		1, 
+		new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_PASSWORD_DIGEST});
 	profs[1] = getDigest.myProfile;
     }
 
