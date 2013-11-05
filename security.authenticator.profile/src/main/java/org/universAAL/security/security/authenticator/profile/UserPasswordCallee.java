@@ -41,7 +41,6 @@ import org.universAAL.middleware.service.ServiceResponse;
 import org.universAAL.middleware.service.owls.process.ProcessOutput;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.middleware.xsd.Base64Binary;
-import org.universAAL.middleware.xsd.util.Base64;
 import org.universAAL.ontology.che.ContextHistoryService;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.SecurityOntology;
@@ -143,7 +142,7 @@ public class UserPasswordCallee extends ServiceCallee {
 	String dig = null;
 	try {
 	    dig = (String) ((Resource) query("GetDigestQuery", new String[]{username}))
-	        .getProperty(UserPasswordCredentials.PROP_PASSWORD);
+	        .getProperty(UserPasswordCredentials.PROP_PASSWORD_DIGEST);
 	} catch (Exception e) {
 	    dig = null;
 	}
