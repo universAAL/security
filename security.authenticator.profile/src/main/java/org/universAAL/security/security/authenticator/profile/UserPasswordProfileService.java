@@ -83,9 +83,10 @@ public class UserPasswordProfileService extends AuthenticationService {
 	 */
 	UserPasswordProfileService getDigest = new UserPasswordProfileService(GET_PWD_DIGEST_SERVICE);
 
-	getDigest.addInstanceLevelRestriction(
-		MergedRestriction.getAllValuesRestriction(PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.MY_URI),
-		new String[]{PROP_GIVEN_CREDENTIALS});
+//	getDigest.addInstanceLevelRestriction(
+//		MergedRestriction.getAllValuesRestriction(PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.MY_URI),
+//		new String[]{PROP_GIVEN_CREDENTIALS});
+	
 	getDigest.addFilteringInput(
 		USER_IN,
 		TypeMapper.getDatatypeURI(String.class), 

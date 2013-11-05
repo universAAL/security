@@ -14,9 +14,10 @@
   <name>universAAL Security Suite</name>
   <description>The set of artefacts realizing the universAAL security.</description>
   <modules>
-    <module>../security.authorizator</module>
+<!--     <module>../security.authorizator</module> -->
     <module>../security.authenticator.dummy</module>
     <module>../security.authenticator.profile</module>
+    <module>../security.authenticator.userPassword.client</module>
     <module>security.karaf.feature</module>
   </modules>
   <scm>
@@ -49,14 +50,19 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+<!--       <dependency> -->
+<!--         <groupId>org.universAAL.security</groupId> -->
+<!--         <artifactId>security.authorizator</artifactId> -->
+<!--         <version>2.0.3-SNAPSHOT</version> -->
+<!--       </dependency> -->
       <dependency>
         <groupId>org.universAAL.security</groupId>
-        <artifactId>security.authorizator</artifactId>
+        <artifactId>security.authenticator.dummy</artifactId>
         <version>2.0.3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.universAAL.security</groupId>
-        <artifactId>security.authenticator.dummy</artifactId>
+        <artifactId>security.authenticator.userPassword.client</artifactId>
         <version>2.0.3-SNAPSHOT</version>
       </dependency>
       <dependency>

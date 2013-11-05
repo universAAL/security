@@ -15,13 +15,10 @@ security.authenticator.profile/src/main/java/org/universAAL/security/security/au
 security.authenticator.profile/src/main/resources/GetDigestQuery -text
 security.authenticator.profile/src/main/resources/GetUserQuery -text
 security.authenticator.profile/src/test/java/org/universAAL/security/security/profile/authenticator/QueryTest.java -text
-security.authorizator/ASL2.0.txt -text
-security.authorizator/NOTICE.txt -text
-security.authorizator/pom.xml -text
-security.authorizator/src/main/java/org/universAAL/ui/security/authorization/AuthorizatorImpl.java -text
-security.authorizator/src/main/java/org/universAAL/ui/security/authorization/IAuthorizator.java -text
-security.authorizator/src/main/java/org/universAAL/ui/security/osgi/Activator.java -text
-security.authorizator/src/test/java/org/universAAL/ui/security/authorization/test/ArtifactIntegrationTest.java -text
+security.authenticator.userPassword.client/pom.xml -text
+security.authenticator.userPassword.client/src/main/java/org/universAAL/security/authenticator/client/AuthenticationPublisher.java -text
+security.authenticator.userPassword.client/src/main/java/org/universAAL/security/authenticator/client/UserPaswordAuthenticatorClient.java -text
+security.authenticator.userPassword.client/src/test/java/org/universAAL/security/authenticator/client/AppTest.java -text
 security.pom/pom.xml -text
 security.pom/security.karaf.feature/ASL2.0.txt -text svneol=unset#text/plain
 security.pom/security.karaf.feature/NOTICE.txt -text svneol=unset#text/plain

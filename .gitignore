@@ -6,10 +6,10 @@ security.authenticator.profile/.classpath
 security.authenticator.profile/.project
 security.authenticator.profile/.settings
 security.authenticator.profile/target
-security.authorizator/.classpath
-security.authorizator/.project
-security.authorizator/.settings
-security.authorizator/target
+security.authenticator.userPassword.client/.classpath
+security.authenticator.userPassword.client/.project
+security.authenticator.userPassword.client/.settings
+security.authenticator.userPassword.client/target
 security.pom/.project
 security.pom/.settings
 security.pom/security.karaf.feature/.classpath
