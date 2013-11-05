@@ -36,7 +36,7 @@ public class UserPasswordDummyService extends AuthenticationService {
 
     public static String NAMESPACE = "http://security.universAAL.org/Authenticator#";
     public static String MY_URI = NAMESPACE + "UserPasswordDummyAuthenticator";
-    static final ServiceProfile[] profs = new ServiceProfile[1];
+    static final ServiceProfile[] profs = new ServiceProfile[2];
     
     static String AUTHENTICATE_USR_PASSWORD_SERVICE = NAMESPACE +"almostAuthenticate";
     static String CRED_IN = NAMESPACE + "credentialsIn";
