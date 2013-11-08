@@ -15,6 +15,8 @@ security.authenticator.profile/src/main/java/org/universAAL/security/security/au
 security.authenticator.profile/src/main/resources/GetDigestQuery -text
 security.authenticator.profile/src/main/resources/GetUserQuery -text
 security.authenticator.profile/src/test/java/org/universAAL/security/security/profile/authenticator/QueryTest.java -text
+security.authenticator.userPassword.client/ASL2.0.txt -text svneol=unset#text/plain
+security.authenticator.userPassword.client/NOTICE.txt -text svneol=unset#text/plain
 security.authenticator.userPassword.client/pom.xml -text
 security.authenticator.userPassword.client/src/main/java/org/universAAL/security/authenticator/client/AuthenticationPublisher.java -text
 security.authenticator.userPassword.client/src/main/java/org/universAAL/security/authenticator/client/UserPaswordAuthenticatorClient.java -text
