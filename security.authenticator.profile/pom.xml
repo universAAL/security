@@ -5,6 +5,7 @@
   	<groupId>org.universAAL.security</groupId>
   	<artifactId>security.pom</artifactId>
   	<version>2.0.3-SNAPSHOT</version>
+  	<relativePath>../security.pom</relativePath>
   </parent>
 
   <artifactId>security.authenticator.profile</artifactId>
@@ -18,15 +19,15 @@
 	</dependency>
   	<dependency>
   		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.context.osgi</artifactId>
+  		<artifactId>mw.bus.context.core</artifactId>
   	</dependency>   	
   	<dependency>
   		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.service.osgi</artifactId>
+  		<artifactId>mw.bus.service.core</artifactId>
   	</dependency>  	
   	<dependency>
   		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.ui.osgi</artifactId>
+  		<artifactId>mw.bus.ui.core</artifactId>
   	</dependency> 
   	<dependency>
   		<groupId>org.universAAL.ontology</groupId>
