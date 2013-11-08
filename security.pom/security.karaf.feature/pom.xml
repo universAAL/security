@@ -18,6 +18,11 @@
     <felix-version>2.0.1</felix-version>
     <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
   </properties>
+  <scm>
+    <connection>${svn.base}/security.pom/${project.artifactId}</connection>
+    <developerConnection>${svn.base}/security.pom/${project.artifactId}</developerConnection>
+    <url>${svn.base.url}$security.pom%2F{project.artifactId}</url>
+  </scm>
   <dependencies>
     <dependency>
       <groupId>org.universAAL.middleware</groupId>
