@@ -18,7 +18,6 @@
 package org.universAAL.security.security.authenticator.profile;
 
 import org.universAAL.middleware.container.ModuleContext;
-import org.universAAL.middleware.owl.MergedRestriction;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.owl.SimpleOntology;
 import org.universAAL.middleware.rdf.Resource;
