@@ -1,0 +1,62 @@
+/*******************************************************************************
+ * Copyright 2013 Universidad Politécnica de Madrid
+ * Copyright 2013 Fraunhofer-Gesellschaft - Institute for Computer Graphics Research
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
+package org.security.session.manager.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.universAAL.middleware.container.ModuleContext;
+import org.universAAL.middleware.service.DefaultServiceCaller;
+import org.universAAL.ontology.location.Location;
+import org.universAAL.ontology.phThing.Device;
+import org.universAAL.ontology.profile.User;
+
+/**
+ * @author amedrano
+ *
+ */
+public class SituationCaller extends DefaultServiceCaller {
+
+    /**
+     * @param context
+     */
+    public SituationCaller(ModuleContext context) {
+	super(context);
+    }
+
+    public Location locationOf(Device d){
+	//TODO
+	return null;
+    }
+    
+    public Device superParentOf(Device d){
+	//TODO
+	return null;
+	
+    }
+    
+    public List<Location> getAllAvailableLocations(){
+	//TODO
+	return null;
+    }
+    
+    public List<Device> devicesInLocation(Location loc) {
+	//TODO
+	return null;
+    }
+}

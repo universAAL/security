@@ -18,6 +18,7 @@
     <module>../security.authenticator.dummy</module>
     <module>../security.authenticator.profile</module>
     <module>../security.authenticator.userPassword.client</module>
+    <module>../security.session.manager</module>
     <module>security.karaf.feature</module>
   </modules>
   <scm>
