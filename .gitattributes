@@ -26,3 +26,16 @@ security.pom/security.karaf.feature/ASL2.0.txt -text svneol=unset#text/plain
 security.pom/security.karaf.feature/NOTICE.txt -text svneol=unset#text/plain
 security.pom/security.karaf.feature/pom.xml -text svneol=unset#text/plain
 security.pom/security.karaf.feature/src/features/features.xml -text svneol=unset#text/plain
+security.session.manager/pom.xml -text
+security.session.manager/src/main/java/org/security/session/manager/ManagerActivator.java -text
+security.session.manager/src/main/java/org/security/session/manager/SessionManager.java -text
+security.session.manager/src/main/java/org/security/session/manager/context/SessionPublisher.java -text
+security.session.manager/src/main/java/org/security/session/manager/context/Subscriber.java -text
+security.session.manager/src/main/java/org/security/session/manager/impl/LocationTreeWrapper.java -text
+security.session.manager/src/main/java/org/security/session/manager/impl/SessionManagerImpl.java -text
+security.session.manager/src/main/java/org/security/session/manager/impl/SituationCaller.java -text
+security.session.manager/src/main/java/org/security/session/manager/impl/UserLocationTree.java -text
+security.session.manager/src/main/java/org/security/session/manager/service/SCallee.java -text
+security.session.manager/src/main/java/org/security/session/manager/service/SessionManagerService.java -text
+security.session.manager/src/test/java/deprecated/LocationTreeNode.java -text
+security.session.manager/src/test/java/org/security/session/manager/AppTest.java -text
