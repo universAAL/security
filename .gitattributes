@@ -29,13 +29,22 @@ security.pom/security.karaf.feature/src/features/features.xml -text svneol=unset
 security.session.manager/pom.xml -text
 security.session.manager/src/main/java/org/security/session/manager/ManagerActivator.java -text
 security.session.manager/src/main/java/org/security/session/manager/SessionManager.java -text
+security.session.manager/src/main/java/org/security/session/manager/context/LocationChangeListener.java -text svneol=unset#text/plain
 security.session.manager/src/main/java/org/security/session/manager/context/SessionPublisher.java -text
+security.session.manager/src/main/java/org/security/session/manager/context/SituationMonitor.java -text
 security.session.manager/src/main/java/org/security/session/manager/context/Subscriber.java -text
-security.session.manager/src/main/java/org/security/session/manager/impl/LocationTreeWrapper.java -text
+security.session.manager/src/main/java/org/security/session/manager/helpers/CHeQuery.java -text svneol=unset#text/plain
+security.session.manager/src/main/java/org/security/session/manager/helpers/LocationTreeWrapper.java -text
+security.session.manager/src/main/java/org/security/session/manager/helpers/SerializerGetter.java -text svneol=unset#text/plain
+security.session.manager/src/main/java/org/security/session/manager/helpers/UserDeviceWrapper.java -text svneol=unset#text/plain
+security.session.manager/src/main/java/org/security/session/manager/helpers/UserLocationTree.java -text
+security.session.manager/src/main/java/org/security/session/manager/helpers/UserLocationTreeRoot.java -text svneol=unset#text/plain
 security.session.manager/src/main/java/org/security/session/manager/impl/SessionManagerImpl.java -text
-security.session.manager/src/main/java/org/security/session/manager/impl/SituationCaller.java -text
-security.session.manager/src/main/java/org/security/session/manager/impl/UserLocationTree.java -text
+security.session.manager/src/main/java/org/security/session/manager/impl/SituationMonitorImpl.java -text svneol=unset#text/plain
 security.session.manager/src/main/java/org/security/session/manager/service/SCallee.java -text
 security.session.manager/src/main/java/org/security/session/manager/service/SessionManagerService.java -text
+security.session.manager/src/main/resources/getDevices.sparql -text
+security.session.manager/src/main/resources/getLocations.sparql -text
+security.session.manager/src/main/resources/getResource.sparql -text
 security.session.manager/src/test/java/deprecated/LocationTreeNode.java -text
 security.session.manager/src/test/java/org/security/session/manager/AppTest.java -text

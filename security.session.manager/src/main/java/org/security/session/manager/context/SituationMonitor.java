@@ -15,48 +15,36 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.impl;
+package org.security.session.manager.context;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.universAAL.middleware.container.ModuleContext;
-import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.ontology.location.Location;
 import org.universAAL.ontology.phThing.Device;
-import org.universAAL.ontology.profile.User;
 
 /**
+ * Implementation will initialize status and monitor changes regarding {@link Device}s
+ * and {@link Location}s; in order to keep internal status synchronized with actual
+ * status.
+ * 
  * @author amedrano
- *
+ * 
  */
-public class SituationCaller extends DefaultServiceCaller {
+public interface SituationMonitor {
 
-    /**
-     * @param context
-     */
-    public SituationCaller(ModuleContext context) {
-	super(context);
-    }
+    public Location locationOf(Device d);
+    
+    public Location getInternalStateOf(Location l);
+    
+    public Device getInternalStateOf(Device d);
 
-    public Location locationOf(Device d){
-	//TODO
-	return null;
-    }
+    public List<Location> getAllAvailableLocations();
+
+    public List<Device> devicesInLocation(Location loc);
+
+    public void addListener(LocationChangeListener lcl);
+
+    public void removeListener(LocationChangeListener lcl);
     
-    public Device superParentOf(Device d){
-	//TODO
-	return null;
-	
-    }
-    
-    public List<Location> getAllAvailableLocations(){
-	//TODO
-	return null;
-    }
-    
-    public List<Device> devicesInLocation(Location loc) {
-	//TODO
-	return null;
-    }
+    public void close();
 }

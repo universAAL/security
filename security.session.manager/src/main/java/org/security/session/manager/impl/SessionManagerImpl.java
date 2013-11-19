@@ -18,19 +18,25 @@
 package org.security.session.manager.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.security.session.manager.SessionManager;
 import org.security.session.manager.context.SessionPublisher;
+import org.security.session.manager.context.SituationMonitor;
+import org.security.session.manager.helpers.UserDeviceWrapper;
+import org.security.session.manager.helpers.UserLocationTree;
+import org.security.session.manager.helpers.UserLocationTreeRoot;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
-import org.universAAL.middleware.context.ContextEvent;
+import org.universAAL.middleware.util.Constants;
 import org.universAAL.ontology.location.Location;
 import org.universAAL.ontology.phThing.Device;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.DeviceBoundSession;
-import org.universAAL.ontology.security.SecurityOntology;
+import org.universAAL.ontology.security.LocationBoundSession;
 import org.universAAL.ontology.security.Session;
 
 /**
@@ -42,88 +48,166 @@ public class SessionManagerImpl implements SessionManager {
     private static Session INVALID = 
 	    (Session) Session.getInstance(Session.MY_URI, Session.INSTANCE_INVALID_SESSION);
     
-    SituationCaller caller;
+    
+    /**
+     * The module context.
+     */
+    private ModuleContext owner;
+
+    /**
+     * The publisher of {@link Session}s.
+     */
+    private SessionPublisher publisher;
+    
+    /**
+     * The {@link SituationMonitor}.
+     */
+    private SituationMonitor monitor;
     
     /**
      * The main map for sessions, mapping user URI 
      * to their current Session.
      */
-    Map<User, Session> sessions;
+    private Map<User, Session> sessions;
+    
+    /**
+     * The Last state of the userLocation.
+     */
+    private Map<User, Location> userLocation; 
 
     /**
-     * 
+     * The {@link Location} tree virtual root. 
      */
-    Map<Location, Set<User>> locationMap;
-    
-    private ModuleContext owner;
-
-    private SessionPublisher publisher;
+    private UserLocationTreeRoot locationRoot;
     
     /**
      * constructor
      */
-    public SessionManagerImpl(ModuleContext mc, SituationCaller sc, SessionPublisher publisher) {
-	caller = sc;
+    public SessionManagerImpl(ModuleContext mc, SituationMonitor sc, SessionPublisher publisher) {
+	monitor = sc;
 	this.publisher = publisher;
 	owner = mc;
 	sessions = new HashMap<User, Session>();
+	userLocation = new HashMap<User, Location>();
+	locationRoot = new UserLocationTreeRoot(monitor);
     }
 
     /** {@ inheritDoc}	 */
     public void userAuthenticatedTo(User usr, Device dvc) {
 	Session s = null;
-	/*
-	 * find the location of the authentication
-	 */
-	Location loc = caller.locationOf(dvc);
-	if (loc != null){
+	if (canLocationBoundedSessionBeIssued(usr,dvc)){
 	    /*
 	     * if there is a location then, uplift to the location 
 	     * where there are no other users.
 	     */
 	    
+	    s = new LocationBoundSession(constructSessionURI(usr));
+	    s.setProperty(LocationBoundSession.PROP_BOUNDED_LOCATION, 
+		    locationRoot.getMaxUser(usr).getLocation());
 	}
 	else {
 	    /*
 	     * if there is not a location of the authentication 
 	     * create a device bounded session for the most parent device.
 	     */
-	    s = new DeviceBoundSession();
-//	    s.setExpiration(date); //TODO when? add a watchdog
-	    s.setProperty(DeviceBoundSession.PROP_BOUNDED_DEVICE, caller.superParentOf(dvc));
+	    s = new DeviceBoundSession(constructSessionURI(usr));
+	    Device d = monitor.getInternalStateOf(dvc);
+	    UserDeviceWrapper udw = new UserDeviceWrapper(d);
+	    s.setProperty(DeviceBoundSession.PROP_BOUNDED_DEVICE, udw.getRoot().getDevice());
 	}
 	if (s != null){
+//	    s.setExpiration(date); //TODO when? add a watchdog
 	    //add it to the map
 	    sessions.put(usr, s);
-	    //publish the uplifted session. //TODO remove private properties in copies.
-//	    usr.changeProperty(SecurityOntology.PROP_SESSION, s.copy(false));
-//	    publisher.publish(new ContextEvent(usr, SecurityOntology.PROP_SESSION));
+	    //publish the uplifted session. 
+	    publisher.updateSession(usr,s);
 	}
 
+    }
+
+    /**
+     * @param usr
+     * @return
+     */
+    private String constructSessionURI(User usr) {
+	return Constants.uAAL_MIDDLEWARE_LOCAL_ID_PREFIX + "sessionFor" + usr.getLocalName();
+    }
+
+    /**
+     * @param usr
+     * @param dvc
+     * @return
+     */
+    private boolean canLocationBoundedSessionBeIssued(User usr, Device dvc) {
+	/*
+	 * find the location of the authentication
+	 */
+	Location loc = monitor.locationOf(dvc);
+	Location uLoc = userLocation.get(usr);
+	//TODO compare, check that locations are compatible
+	return (loc != null && uLoc != null);
     }
 
     /** {@ inheritDoc}	 */
     public void userDeauthenticatedFrom(User usr, Device dvc) {
-	// TODO Auto-generated method stub
-
+	// TODO Discussion: user loggin of in one device means it logs of in the space?
+	sessions.put(usr, INVALID);
+	publisher.updateSession(usr, INVALID);
     }
 
     /** {@ inheritDoc}	 */
     public void userLocationChange(User usr, Location loc) {
-	// TODO Auto-generated method stub
-
+	Location iLoc = monitor.getInternalStateOf(loc);
+	userLocation.put(usr, iLoc);
+	//check if any user session has to be updated.
+	UserLocationTree ult = new UserLocationTree(iLoc);
+	Set<User> affected = locationRoot.deallocateUser(usr);
+	affected.addAll(ult.allocateUser(usr));
+	affected.add(usr);
+	for (User user : affected) {
+	    Session us = sessions.get(user);
+	    if (us instanceof LocationBoundSession) {
+		UserLocationTree mu = locationRoot.getMaxUser(user);
+		if (!mu.getLocation().equal(us.getProperty(LocationBoundSession.PROP_BOUNDED_LOCATION))){
+		    us.changeProperty(LocationBoundSession.PROP_BOUNDED_LOCATION, mu.getLocation());
+		    sessions.put(user, us);
+		    publisher.updateSession(user, us);
+		}
+	    }
+	}
+	//check if DeviceBoundSession can be uplifted to a LocationBoundSession.
+	Session s = sessions.get(usr);
+	if (s instanceof DeviceBoundSession) {
+	    Device d = (Device) s.getProperty(DeviceBoundSession.PROP_BOUNDED_DEVICE);
+	    if (canLocationBoundedSessionBeIssued(usr, d)) {
+		userAuthenticatedTo(usr, d);
+	    }
+	}
     }
 
     /** {@ inheritDoc}	 */
     public Set<User> validUsersForDevice(Device dvc) {
-	// TODO Auto-generated method stub
-	return null;
+	Device d = monitor.getInternalStateOf(dvc);
+	Location dLoc = monitor.locationOf(d);
+	Set<User> users = new HashSet<User>();
+	if (dLoc != null) {
+	    users.addAll(new UserLocationTree(dLoc).getUserSet());
+	}
+	//add the users with DeviceBoundSessions in this device.
+	users.addAll(new UserDeviceWrapper(d).getUserSet());
+	return users;
     }
 
     /** {@ inheritDoc}	 */
     public Set<User> validUsersForLocation(Location loc) {
-	// TODO Auto-generated method stub
-	return null;
+	Set<User> users =new UserLocationTree(loc).getUserSet();
+	//add the users with DeviceBoundSessions in the devices in this location.
+	// TODO Discussion: does this make sense?
+	List<Device> devs = monitor.devicesInLocation(loc);
+	for (Device d : devs) {
+	    users.addAll(new UserDeviceWrapper(d).getUserSet());
+	}
+	return users;
     }
 
     /** {@ inheritDoc}	 */
@@ -135,8 +219,9 @@ public class SessionManagerImpl implements SessionManager {
 		    "A copy of an un managed user has been requested, " +
 	    		"this might mean there is some security breach attemp");
 	    sessions.put(usr, INVALID);
+	    s = INVALID;
 	}
-    	return (Session) sessions.get(usr.getURI()).copy(false);
+    	return SessionPublisher.filteredCopy(s);
     }
 
 }
