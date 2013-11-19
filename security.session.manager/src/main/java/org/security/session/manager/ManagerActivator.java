@@ -1,8 +1,9 @@
 package org.security.session.manager;
 
 import org.security.session.manager.context.SessionPublisher;
+import org.security.session.manager.context.SituationMonitor;
 import org.security.session.manager.context.Subscriber;
-import org.security.session.manager.impl.SituationCaller;
+import org.security.session.manager.impl.SessionManagerImpl;
 import org.security.session.manager.service.SCallee;
 import org.security.session.manager.service.SessionManagerService;
 import org.universAAL.middleware.container.ModuleActivator;
@@ -21,7 +22,7 @@ public class ManagerActivator implements ModuleActivator {
 
 	private SessionPublisher publisher;
 
-	private SituationCaller scaller;
+	private SituationMonitor monitor;
 	
 	public void start(ModuleContext ctxt) throws Exception {	
 		context = ctxt;
@@ -29,28 +30,39 @@ public class ManagerActivator implements ModuleActivator {
 		/*
 		 * uAAL stuff
 		 */
+		LogUtils.logDebug(context, getClass(), "start", "Starting Publisher.");
 		publisher = new SessionPublisher(context);
-		scaller = new SituationCaller(context);
+
+		LogUtils.logDebug(context, getClass(), "start", "Starting Situation Monitor.");
+		//monitor ;
 		
-		//TODO Initialize sessionManager.
+		//Initialize sessionManager.
+		LogUtils.logDebug(context, getClass(), "start", "Starting Session Manager.");
+		sessionManager = new SessionManagerImpl(context, monitor, publisher);
+		
+		LogUtils.logDebug(context, getClass(), "start", "Starting Susbscriber.");
 		subscriber = new Subscriber(context, sessionManager);
+		
+
+		LogUtils.logDebug(context, getClass(), "start", "Adding services.");
 		scallee = new SCallee(context, SessionManagerService.initialize(context), sessionManager);
 		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
 
 
 	public void stop(ModuleContext ctxt) throws Exception {
-		LogUtils.logDebug(context, getClass(), "start", "Stopping.");
+		LogUtils.logDebug(context, getClass(), "stop", "Stopping.");
 		/*
 		 * close uAAL stuff
 		 */
 		if (publisher != null){
 		    publisher.close();
+			LogUtils.logDebug(context, getClass(), "start", "Stopping.");
 		    publisher = null;
 		}
-		if (scaller != null){
-		    scaller.close();
-		    scaller = null;
+		if (monitor != null){
+		    monitor.close();
+		    monitor = null;
 		}
 		if (subscriber != null) {
 		    subscriber.close();
@@ -61,7 +73,7 @@ public class ManagerActivator implements ModuleActivator {
 		    scallee = null;
 		}
 		
-		LogUtils.logDebug(context, getClass(), "start", "Stopped.");
+		LogUtils.logDebug(context, getClass(), "stop", "Stopped.");
 
 	}
 

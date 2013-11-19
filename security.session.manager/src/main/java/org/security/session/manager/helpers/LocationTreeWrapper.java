@@ -15,7 +15,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.impl;
+package org.security.session.manager.helpers;
 
 import java.util.HashSet;
 import java.util.List;
@@ -109,5 +109,10 @@ public class LocationTreeWrapper {
      */
     public boolean isRoot() {
 	return getParent() == null;
+    }
+
+    /** {@ inheritDoc}	 */
+    public boolean equals(LocationTreeWrapper obj) {
+	return loc.equals(obj.loc);
     }
 }

@@ -15,7 +15,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.impl;
+package org.security.session.manager.helpers;
 
 import java.util.ArrayList;
 import java.util.Collection;
