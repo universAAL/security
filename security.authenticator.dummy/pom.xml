@@ -1,58 +1,56 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-  	<groupId>org.universAAL.security</groupId>
-  	<artifactId>security.pom</artifactId>
-  	<version>2.0.3-SNAPSHOT</version>
-  	<relativePath>../security.pom</relativePath>
+    <groupId>org.universAAL.security</groupId>
+    <artifactId>security.pom</artifactId>
+    <version>2.0.4-SNAPSHOT</version>
+    <relativePath>../security.pom</relativePath>
   </parent>
-
   <artifactId>security.authenticator.dummy</artifactId>
-  <version>2.0.3-SNAPSHOT</version>
+  <version>2.0.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>universAAL Security Dummy Authenticator</name>
   <description>This module should only be used for testing purposes, in controled environments, since it does not authenticate at all</description>
   <dependencies>
-	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-	</dependency>
-  	<dependency>
-  		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.context.core</artifactId>
-  	</dependency>   	
-  	<dependency>
-  		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.service.core</artifactId>
-  	</dependency>  	
-  	<dependency>
-  		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.ui.core</artifactId>
-  	</dependency> 
-  	<dependency>
-  		<groupId>org.universAAL.ontology</groupId>
-  		<artifactId>ont.phWorld</artifactId>
-  	</dependency>  	 
-  	<dependency>
-  		<groupId>org.universAAL.ontology</groupId>
-  		<artifactId>ont.security</artifactId>
-  	</dependency> 	 	
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.middleware</groupId>
+      <artifactId>mw.bus.context.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.middleware</groupId>
+      <artifactId>mw.bus.service.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.middleware</groupId>
+      <artifactId>mw.bus.ui.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.ontology</groupId>
+      <artifactId>ont.phWorld</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.ontology</groupId>
+      <artifactId>ont.security</artifactId>
+    </dependency>
   </dependencies>
-
   <build>
-	<plugins>
-		<plugin>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>maven-bundle-plugin</artifactId>
-			<extensions>true</extensions>
-			<configuration>
-				<instructions>
-					<Export-Package>org.universAAL.security.security.authenticator.dummy</Export-Package>
-				</instructions>
-			</configuration>
-		</plugin>
-	</plugins>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>org.universAAL.security.security.authenticator.dummy</Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
-  
 </project>
