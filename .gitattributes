@@ -6,6 +6,15 @@ security.authenticator.dummy-2.0.3-SNAPSHOT/src/main/java/org/universAAL/securit
 security.authenticator.dummy-2.0.3-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/dummy/UserPasswordCallee.java -text
 security.authenticator.dummy-2.0.3-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/dummy/UserPasswordDummyService.java -text
 security.authenticator.dummy-2.0.3-SNAPSHOT/src/test/java/org/universAAL/security/security/profile/authenticator/AppTest.java -text
+security.authenticator.profile-2.0.3-SNAPSHOT/ASL2.0.txt -text
+security.authenticator.profile-2.0.3-SNAPSHOT/NOTICE.txt -text
+security.authenticator.profile-2.0.3-SNAPSHOT/pom.xml -text
+security.authenticator.profile-2.0.3-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/profile/AuthenticatorActivator.java -text
+security.authenticator.profile-2.0.3-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/profile/UserPasswordCallee.java -text
+security.authenticator.profile-2.0.3-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/profile/UserPasswordProfileService.java -text
+security.authenticator.profile-2.0.3-SNAPSHOT/src/main/resources/GetDigestQuery -text
+security.authenticator.profile-2.0.3-SNAPSHOT/src/main/resources/GetUserQuery -text
+security.authenticator.profile-2.0.3-SNAPSHOT/src/test/java/org/universAAL/security/security/profile/authenticator/QueryTest.java -text
 security.authorizator-1.1.2-SNAPSHOT/LICENSE.txt -text
 security.authorizator-1.1.2-SNAPSHOT/pom.xml -text
 security.authorizator-1.1.2-SNAPSHOT/src/main/java/org/universAAL/ui/security/authorization/AuthorizatorImpl.java -text
