@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="universAAL-Security" xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
+
+	<repository>mvn:org.universAAL.middleware/mw.karaf.feature/${mw.karaf.feature.version}/xml/features</repository>
+	<repository>mvn:org.universAAL.ontology/ont.karaf.feature/${ont.karaf.feature.version}/xml/features</repository>
+
+<!-- 	<feature name="uAAL-Security.Authorizatior" description="Security Authorizator." -->
+<!-- 		version="${pom.version}" resolver='(obr)'> -->
+<!-- 		<feature>uAAL-Ont.Profile.userId</feature>  -->
+<!-- 		<bundle start-level='70' start='true'>mvn:org.universAAL.security/security.authorizator/${security.authorizator.version}</bundle> -->
+<!-- 	</feature> -->
+	
+	<feature name="uAAL-Security.Authenticator.Profile" description="Security Authenticator"
+		version="${pom.version}" resolver='(obr)'>
+		<feature>uAAL-Ont.Security</feature> 
+		<bundle start-level='70' start='true'>mvn:org.universAAL.security/security.authenticator.profile/${security.authenticator.profile.version}</bundle>
+	</feature>
+	
+	<feature name="uAAL-Security.Authenticator.Dummy" description="Security Authenticator (only use this in controlled environments!!)"
+		version="${pom.version}" resolver='(obr)'>
+		<feature>uAAL-Ont.Security</feature> 
+		<bundle start-level='70' start='true'>mvn:org.universAAL.security/security.authenticator.dummy/${security.authenticator.dummy.version}</bundle>
+	</feature>
+	
+	<feature name="uAAL-Security.Authenticator.UserPassword.Client" description="Authenticator client, for user password credentials."
+		version="${pom.version}" resolver='(obr)'>
+		<feature>uAAL-Ont.Security</feature> 
+		<bundle start-level='70' start='true'>wrap:mvn:org.universAAL.security/security.authenticator.userPassword.client/${security.authenticator.userPassword.client.version}</bundle>
+	</feature>
+</features>
