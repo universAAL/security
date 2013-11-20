@@ -71,3 +71,7 @@ security.pom-2.0.3-SNAPSHOT/security.karaf.feature/.project
 security.pom-2.0.3-SNAPSHOT/security.karaf.feature/.settings
 security.pom-2.0.3-SNAPSHOT/security.karaf.feature/target
 security.pom-2.0.3-SNAPSHOT/target
+security.session.manager-2.0.3-SNAPSHOT/.classpath
+security.session.manager-2.0.3-SNAPSHOT/.project
+security.session.manager-2.0.3-SNAPSHOT/.settings
+security.session.manager-2.0.3-SNAPSHOT/target

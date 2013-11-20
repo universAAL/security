@@ -1,0 +1,10 @@
+PREFIX loc: <http://ontology.universAAL.org/Location.owl#>
+PREFIX sec: <http://security.universAAL.org/Security#>
+
+CONSTRUCT { sec:auxBag sec:auxProp ?s.
+ ?s a ?t;
+ ?p ?v } 
+WHERE { 
+?s ?p ?v;
+ a loc:Location.
+}  
