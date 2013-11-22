@@ -54,8 +54,10 @@ public class AuthenticatorActivator implements ModuleActivator, SharedObjectList
 
     /** {@ inheritDoc}	 */
     public synchronized void sharedObjectAdded(Object sharedObj, Object removeHook) {
-	serializer = (MessageContentSerializerEx) sharedObj;
-	this.notifyAll();
+	if (sharedObj instanceof MessageContentSerializerEx) {
+	    serializer = (MessageContentSerializerEx) sharedObj;
+	    this.notifyAll();
+	}
     }
 
     /** {@ inheritDoc}	 */
