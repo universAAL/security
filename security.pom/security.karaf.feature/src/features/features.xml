@@ -4,12 +4,6 @@
 	<repository>mvn:org.universAAL.middleware/mw.karaf.feature/${mw.karaf.feature.version}/xml/features</repository>
 	<repository>mvn:org.universAAL.ontology/ont.karaf.feature/${ont.karaf.feature.version}/xml/features</repository>
 
-<!-- 	<feature name="uAAL-Security.Authorizatior" description="Security Authorizator." -->
-<!-- 		version="${pom.version}" resolver='(obr)'> -->
-<!-- 		<feature>uAAL-Ont.Profile.userId</feature>  -->
-<!-- 		<bundle start-level='70' start='true'>mvn:org.universAAL.security/security.authorizator/${security.authorizator.version}</bundle> -->
-<!-- 	</feature> -->
-	
 	<feature name="uAAL-Security.Authenticator.Profile" description="Security Authenticator"
 		version="${pom.version}" resolver='(obr)'>
 		<feature>uAAL-Ont.Security</feature> 
