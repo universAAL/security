@@ -20,13 +20,13 @@ import org.universAAL.middleware.container.ModuleActivator;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.SharedObjectListener;
 import org.universAAL.middleware.container.utils.LogUtils;
-import org.universAAL.middleware.serialization.MessageContentSerializerEx;
+import org.universAAL.middleware.serialization.MessageContentSerializer;
 
 public class AuthenticatorActivator implements ModuleActivator, SharedObjectListener {
 
     ModuleContext context;
     private UserPasswordCallee callee;
-    private MessageContentSerializerEx serializer; 
+    private MessageContentSerializer serializer; 
 
     /** {@ inheritDoc} */
     public void start(ModuleContext mc) throws Exception {
@@ -37,7 +37,7 @@ public class AuthenticatorActivator implements ModuleActivator, SharedObjectList
 	 */
 	Object[] obj = context.getContainer()
 		.fetchSharedObject(context, 
-			new Object[] { MessageContentSerializerEx.class.getName() }, this);
+			new Object[] { MessageContentSerializer.class.getName() }, this);
 	if (obj.length > 0){
 	    sharedObjectAdded(obj[0], null);
 	}
@@ -54,8 +54,8 @@ public class AuthenticatorActivator implements ModuleActivator, SharedObjectList
 
     /** {@ inheritDoc}	 */
     public synchronized void sharedObjectAdded(Object sharedObj, Object removeHook) {
-	if (sharedObj instanceof MessageContentSerializerEx) {
-	    serializer = (MessageContentSerializerEx) sharedObj;
+	if (sharedObj instanceof MessageContentSerializer) {
+	    serializer = (MessageContentSerializer) sharedObj;
 	    this.notifyAll();
 	}
     }
@@ -67,7 +67,7 @@ public class AuthenticatorActivator implements ModuleActivator, SharedObjectList
 	}
     }
     
-    public synchronized MessageContentSerializerEx getSerializer(){
+    public synchronized MessageContentSerializer getSerializer(){
 	while (serializer == null){
 	    try {
 		this.wait();
