@@ -54,6 +54,10 @@ security.karaf.feature-2.0.3-SNAPSHOT/.classpath
 security.karaf.feature-2.0.3-SNAPSHOT/.project
 security.karaf.feature-2.0.3-SNAPSHOT/.settings
 security.karaf.feature-2.0.3-SNAPSHOT/target
+security.karaf.feature-2.0.4-SNAPSHOT/.classpath
+security.karaf.feature-2.0.4-SNAPSHOT/.project
+security.karaf.feature-2.0.4-SNAPSHOT/.settings
+security.karaf.feature-2.0.4-SNAPSHOT/target
 security.pom-1.1.2-SNAPSHOT/.project
 security.pom-1.1.2-SNAPSHOT/.settings
 security.pom-1.1.2-SNAPSHOT/target
