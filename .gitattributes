@@ -1,0 +1,6 @@
+* text=auto !eol
+security.pom/pom.xml -text
+security.pom/security.karaf.feature/ASL2.0.txt -text svneol=unset#text/plain
+security.pom/security.karaf.feature/NOTICE.txt -text svneol=unset#text/plain
+security.pom/security.karaf.feature/pom.xml -text svneol=unset#text/plain
+security.pom/security.karaf.feature/src/features/features.xml -text svneol=unset#text/plain
