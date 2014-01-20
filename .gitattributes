@@ -1,4 +1,11 @@
 * text=auto !eol
+security.authenticator.dummy/ASL2.0.txt -text
+security.authenticator.dummy/NOTICE.txt -text
+security.authenticator.dummy/pom.xml -text
+security.authenticator.dummy/src/main/java/org/universAAL/security/security/authenticator/dummy/AuthenticatorActivator.java -text
+security.authenticator.dummy/src/main/java/org/universAAL/security/security/authenticator/dummy/UserPasswordCallee.java -text
+security.authenticator.dummy/src/main/java/org/universAAL/security/security/authenticator/dummy/UserPasswordDummyService.java -text
+security.authenticator.dummy/src/test/java/org/universAAL/security/security/profile/authenticator/AppTest.java -text
 security.pom/pom.xml -text
 security.pom/security.karaf.feature/ASL2.0.txt -text svneol=unset#text/plain
 security.pom/security.karaf.feature/NOTICE.txt -text svneol=unset#text/plain
