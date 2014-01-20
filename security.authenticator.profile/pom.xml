@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.universAAL.security</groupId>
     <artifactId>security.pom</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
     <relativePath>../security.pom</relativePath>
   </parent>
   <artifactId>security.authenticator.profile</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>universAAL Security Profiling Server Managed User Password Authenticator</name>
   <dependencies>
