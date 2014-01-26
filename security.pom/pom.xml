@@ -13,6 +13,12 @@
   <packaging>pom</packaging>
   <name>universAAL Security Suite</name>
   <description>The set of artefacts realizing the universAAL security.</description>
+	<distributionManagement>
+		<site>
+			<id>depot.universaal.org</id>
+			<url>${uaal.site.url}security/security.pom</url>
+		</site>
+	</distributionManagement>
   <modules>
     <module>../security.authenticator.dummy</module>
     <module>../security.authenticator.profile</module>
