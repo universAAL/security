@@ -15,12 +15,11 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.service;
+package org.universAAL.security.session.manager.service;
 
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.security.session.manager.SessionManager;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.service.CallStatus;
@@ -33,6 +32,7 @@ import org.universAAL.ontology.location.Location;
 import org.universAAL.ontology.phThing.Device;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.Session;
+import org.universAAL.security.session.manager.SessionManager;
 
 /**
  * 

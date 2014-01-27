@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package org.security.session.manager;
+package org.universAAL.security.session.manager;
 
-import org.security.session.manager.context.SessionPublisher;
-import org.security.session.manager.context.SituationMonitor;
-import org.security.session.manager.context.Subscriber;
-import org.security.session.manager.impl.SessionManagerImpl;
-import org.security.session.manager.service.SCallee;
-import org.security.session.manager.service.SessionManagerService;
 import org.universAAL.middleware.container.ModuleActivator;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
+import org.universAAL.security.session.manager.context.SessionPublisher;
+import org.universAAL.security.session.manager.context.SituationMonitor;
+import org.universAAL.security.session.manager.context.Subscriber;
+import org.universAAL.security.session.manager.impl.SessionManagerImpl;
+import org.universAAL.security.session.manager.service.SCallee;
+import org.universAAL.security.session.manager.service.SessionManagerService;
 
 public class ManagerActivator implements ModuleActivator {
 

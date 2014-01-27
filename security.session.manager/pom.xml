@@ -55,7 +55,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>org.security.session.manager</Export-Package>
+            <Export-Package>org.universAAL.security.session.manager</Export-Package>
             <Private-Package>org.sercurity.session.manager.context</Private-Package>
           </instructions>
         </configuration>

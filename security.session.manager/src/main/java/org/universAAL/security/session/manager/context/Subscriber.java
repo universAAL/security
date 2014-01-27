@@ -15,12 +15,11 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.context;
+package org.universAAL.security.session.manager.context;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.security.session.manager.SessionManager;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.context.ContextEvent;
@@ -32,6 +31,7 @@ import org.universAAL.ontology.phThing.Device;
 import org.universAAL.ontology.phThing.PhysicalThing;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.SecurityOntology;
+import org.universAAL.security.session.manager.SessionManager;
 
 /**
  * @author amedrano

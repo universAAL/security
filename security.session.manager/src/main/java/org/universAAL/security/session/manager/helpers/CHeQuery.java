@@ -15,13 +15,12 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.helpers;
+package org.universAAL.security.session.manager.helpers;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
-import org.security.session.manager.impl.SituationMonitorImpl;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.owl.MergedRestriction;
@@ -33,6 +32,7 @@ import org.universAAL.middleware.service.ServiceResponse;
 import org.universAAL.middleware.service.owls.process.ProcessOutput;
 import org.universAAL.ontology.che.ContextHistoryService;
 import org.universAAL.ontology.security.SecurityOntology;
+import org.universAAL.security.session.manager.impl.SituationMonitorImpl;
 
 /**
  * @author amedrano
