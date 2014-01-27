@@ -15,7 +15,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager;
+package org.universAAL.security.session.manager;
 
 import java.util.Set;
 

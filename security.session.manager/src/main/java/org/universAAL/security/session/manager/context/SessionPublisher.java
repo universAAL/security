@@ -15,7 +15,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.context;
+package org.universAAL.security.session.manager.context;
 
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;

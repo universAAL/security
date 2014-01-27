@@ -15,16 +15,16 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.helpers;
+package org.universAAL.security.session.manager.helpers;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.security.session.manager.context.LocationChangeListener;
-import org.security.session.manager.context.SituationMonitor;
 import org.universAAL.ontology.location.Location;
 import org.universAAL.ontology.profile.User;
+import org.universAAL.security.session.manager.context.LocationChangeListener;
+import org.universAAL.security.session.manager.context.SituationMonitor;
 
 
 /**

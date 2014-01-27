@@ -15,7 +15,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.impl;
+package org.universAAL.security.session.manager.impl;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,12 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.security.session.manager.SessionManager;
-import org.security.session.manager.context.SessionPublisher;
-import org.security.session.manager.context.SituationMonitor;
-import org.security.session.manager.helpers.UserDeviceWrapper;
-import org.security.session.manager.helpers.UserLocationTree;
-import org.security.session.manager.helpers.UserLocationTreeRoot;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.util.Constants;
@@ -38,6 +32,12 @@ import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.DeviceBoundSession;
 import org.universAAL.ontology.security.LocationBoundSession;
 import org.universAAL.ontology.security.Session;
+import org.universAAL.security.session.manager.SessionManager;
+import org.universAAL.security.session.manager.context.SessionPublisher;
+import org.universAAL.security.session.manager.context.SituationMonitor;
+import org.universAAL.security.session.manager.helpers.UserDeviceWrapper;
+import org.universAAL.security.session.manager.helpers.UserLocationTree;
+import org.universAAL.security.session.manager.helpers.UserLocationTreeRoot;
 
 /**
  * @author amedrano

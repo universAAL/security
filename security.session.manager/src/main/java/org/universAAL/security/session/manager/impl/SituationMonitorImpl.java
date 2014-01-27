@@ -15,15 +15,11 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.security.session.manager.impl;
+package org.universAAL.security.session.manager.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.security.session.manager.context.LocationChangeListener;
-import org.security.session.manager.context.SituationMonitor;
-import org.security.session.manager.helpers.CHeQuery;
-import org.security.session.manager.helpers.LocationTreeWrapper;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.context.ContextEvent;
 import org.universAAL.middleware.context.ContextEventPattern;
@@ -32,6 +28,10 @@ import org.universAAL.middleware.owl.MergedRestriction;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.ontology.location.Location;
 import org.universAAL.ontology.phThing.Device;
+import org.universAAL.security.session.manager.context.LocationChangeListener;
+import org.universAAL.security.session.manager.context.SituationMonitor;
+import org.universAAL.security.session.manager.helpers.CHeQuery;
+import org.universAAL.security.session.manager.helpers.LocationTreeWrapper;
 
 /**
  * @author amedrano
