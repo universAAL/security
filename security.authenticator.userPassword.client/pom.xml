@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.universAAL.security</groupId>
     <artifactId>security.pom</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.1.0</version>
     <relativePath>../security.pom</relativePath>
   </parent>
   <artifactId>security.authenticator.userPassword.client</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.1.0</version>
   <name>universAAL Security UserPassword Authentication client</name>
   <dependencies>
     <dependency>
