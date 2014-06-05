@@ -6,6 +6,10 @@ security.authenticator.dummy-2.0.4-SNAPSHOT/.classpath
 security.authenticator.dummy-2.0.4-SNAPSHOT/.project
 security.authenticator.dummy-2.0.4-SNAPSHOT/.settings
 security.authenticator.dummy-2.0.4-SNAPSHOT/target
+security.authenticator.dummy-3.0.1-SNAPSHOT/.classpath
+security.authenticator.dummy-3.0.1-SNAPSHOT/.project
+security.authenticator.dummy-3.0.1-SNAPSHOT/.settings
+security.authenticator.dummy-3.0.1-SNAPSHOT/target
 security.authenticator.profile-2.0.3-SNAPSHOT/.classpath
 security.authenticator.profile-2.0.3-SNAPSHOT/.project
 security.authenticator.profile-2.0.3-SNAPSHOT/.settings

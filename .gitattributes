@@ -13,6 +13,13 @@ security.authenticator.dummy-2.0.4-SNAPSHOT/src/main/java/org/universAAL/securit
 security.authenticator.dummy-2.0.4-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/dummy/UserPasswordCallee.java -text
 security.authenticator.dummy-2.0.4-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/dummy/UserPasswordDummyService.java -text
 security.authenticator.dummy-2.0.4-SNAPSHOT/src/test/java/org/universAAL/security/security/profile/authenticator/AppTest.java -text
+security.authenticator.dummy-3.0.1-SNAPSHOT/ASL2.0.txt -text
+security.authenticator.dummy-3.0.1-SNAPSHOT/NOTICE.txt -text
+security.authenticator.dummy-3.0.1-SNAPSHOT/pom.xml -text
+security.authenticator.dummy-3.0.1-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/dummy/AuthenticatorActivator.java -text
+security.authenticator.dummy-3.0.1-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/dummy/UserPasswordCallee.java -text
+security.authenticator.dummy-3.0.1-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/dummy/UserPasswordDummyService.java -text
+security.authenticator.dummy-3.0.1-SNAPSHOT/src/test/java/org/universAAL/security/security/profile/authenticator/AppTest.java -text
 security.authenticator.profile-2.0.3-SNAPSHOT/ASL2.0.txt -text
 security.authenticator.profile-2.0.3-SNAPSHOT/NOTICE.txt -text
 security.authenticator.profile-2.0.3-SNAPSHOT/pom.xml -text
