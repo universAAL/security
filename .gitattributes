@@ -38,6 +38,15 @@ security.authenticator.profile-2.0.4-SNAPSHOT/src/main/java/org/universAAL/secur
 security.authenticator.profile-2.0.4-SNAPSHOT/src/main/resources/GetDigestQuery -text
 security.authenticator.profile-2.0.4-SNAPSHOT/src/main/resources/GetUserQuery -text
 security.authenticator.profile-2.0.4-SNAPSHOT/src/test/java/org/universAAL/security/security/profile/authenticator/QueryTest.java -text
+security.authenticator.profile-3.0.1-SNAPSHOT/ASL2.0.txt -text
+security.authenticator.profile-3.0.1-SNAPSHOT/NOTICE.txt -text
+security.authenticator.profile-3.0.1-SNAPSHOT/pom.xml -text
+security.authenticator.profile-3.0.1-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/profile/AuthenticatorActivator.java -text
+security.authenticator.profile-3.0.1-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/profile/UserPasswordCallee.java -text
+security.authenticator.profile-3.0.1-SNAPSHOT/src/main/java/org/universAAL/security/security/authenticator/profile/UserPasswordProfileService.java -text
+security.authenticator.profile-3.0.1-SNAPSHOT/src/main/resources/GetDigestQuery -text
+security.authenticator.profile-3.0.1-SNAPSHOT/src/main/resources/GetUserQuery -text
+security.authenticator.profile-3.0.1-SNAPSHOT/src/test/java/org/universAAL/security/security/profile/authenticator/QueryTest.java -text
 security.authenticator.userPassword.client-2.0.3-SNAPSHOT/ASL2.0.txt -text svneol=unset#text/plain
 security.authenticator.userPassword.client-2.0.3-SNAPSHOT/NOTICE.txt -text svneol=unset#text/plain
 security.authenticator.userPassword.client-2.0.3-SNAPSHOT/pom.xml -text
