@@ -70,6 +70,10 @@ security.karaf.feature-2.0.4-SNAPSHOT/.classpath
 security.karaf.feature-2.0.4-SNAPSHOT/.project
 security.karaf.feature-2.0.4-SNAPSHOT/.settings
 security.karaf.feature-2.0.4-SNAPSHOT/target
+security.karaf.feature-3.0.1-SNAPSHOT/.classpath
+security.karaf.feature-3.0.1-SNAPSHOT/.project
+security.karaf.feature-3.0.1-SNAPSHOT/.settings
+security.karaf.feature-3.0.1-SNAPSHOT/target
 security.pom-1.1.2-SNAPSHOT/.project
 security.pom-1.1.2-SNAPSHOT/.settings
 security.pom-1.1.2-SNAPSHOT/target
