@@ -17,3 +17,7 @@ security.pom/security.karaf.feature/.project
 security.pom/security.karaf.feature/.settings
 security.pom/security.karaf.feature/target
 security.pom/target
+security.session.manager/.classpath
+security.session.manager/.project
+security.session.manager/.settings
+security.session.manager/target
