@@ -81,6 +81,12 @@ security.authenticator.userPassword.client-3.0.1-SNAPSHOT/pom.xml -text
 security.authenticator.userPassword.client-3.0.1-SNAPSHOT/src/main/java/org/universAAL/security/authenticator/client/AuthenticationPublisher.java -text
 security.authenticator.userPassword.client-3.0.1-SNAPSHOT/src/main/java/org/universAAL/security/authenticator/client/UserPaswordAuthenticatorClient.java -text
 security.authenticator.userPassword.client-3.0.1-SNAPSHOT/src/test/java/org/universAAL/security/authenticator/client/AppTest.java -text
+security.authenticator.userPassword.client-3.1.1-SNAPSHOT/ASL2.0.txt -text svneol=unset#text/plain
+security.authenticator.userPassword.client-3.1.1-SNAPSHOT/NOTICE.txt -text svneol=unset#text/plain
+security.authenticator.userPassword.client-3.1.1-SNAPSHOT/pom.xml -text
+security.authenticator.userPassword.client-3.1.1-SNAPSHOT/src/main/java/org/universAAL/security/authenticator/client/AuthenticationPublisher.java -text
+security.authenticator.userPassword.client-3.1.1-SNAPSHOT/src/main/java/org/universAAL/security/authenticator/client/UserPaswordAuthenticatorClient.java -text
+security.authenticator.userPassword.client-3.1.1-SNAPSHOT/src/test/java/org/universAAL/security/authenticator/client/AppTest.java -text
 security.authorizator-1.1.2-SNAPSHOT/LICENSE.txt -text
 security.authorizator-1.1.2-SNAPSHOT/pom.xml -text
 security.authorizator-1.1.2-SNAPSHOT/src/main/java/org/universAAL/ui/security/authorization/AuthorizatorImpl.java -text
