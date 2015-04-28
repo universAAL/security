@@ -21,20 +21,12 @@
     <module>security.karaf.feature</module>
   </modules>
   <scm>
-    <connection>${svn.base}/${project.artifactId}</connection>
-    <developerConnection>${svn.base}/${project.artifactId}</developerConnection>
-    <url>${svn.base.url}pom</url>
+    <connection>scm:git:https://github.com/universAAL/security.git</connection>
+	<developerConnection>scm:git:git@github.com:universAAL/security.git</developerConnection>
   </scm>
-  <distributionManagement>
-    <site>
-      <id>depot.universaal.org</id>
-      <url>${uaal.site.url}security/security.pom</url>
-    </site>
-  </distributionManagement>
   <properties>
     <nameMatchString>^universAAL Security .*</nameMatchString>
     <separatedGroupIds>org.universAAL.middleware</separatedGroupIds>
-    <gforge.project.name>uaalsecurity</gforge.project.name>
     <maven.compile.source>1.5</maven.compile.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compile.target>1.5</maven.compile.target>
