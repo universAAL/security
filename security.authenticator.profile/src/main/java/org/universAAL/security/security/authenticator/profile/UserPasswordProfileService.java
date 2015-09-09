@@ -101,4 +101,7 @@ public class UserPasswordProfileService extends AuthenticationService {
 	profs[1] = getDigest.myProfile;
     }
 
+    public String getClassURI() {
+	return MY_URI;
+    }
 }
