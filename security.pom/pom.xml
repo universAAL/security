@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.universAAL</groupId>
     <artifactId>uAAL.pom</artifactId>
-    <version>3.4.0</version>
+    <version>3.4.1-SNAPSHOT</version>
   </parent>
   <groupId>org.universAAL.security</groupId>
   <artifactId>security.pom</artifactId>
-  <version>3.4.0</version>
+  <version>3.4.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>universAAL Security Suite</name>
   <description>The set of artefacts realizing the universAAL security.</description>
@@ -28,8 +28,8 @@
     <nameMatchString>^universAAL Security .*</nameMatchString>
     <separatedGroupIds>org.universAAL.middleware</separatedGroupIds>
     <maven.compile.source>1.5</maven.compile.source>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compile.target>1.5</maven.compile.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <groupIdMatchString>^org\.universAAL\.security</groupIdMatchString>
     <artifactIdMatchString>^security\..*</artifactIdMatchString>
   </properties>
@@ -38,41 +38,41 @@
       <dependency>
         <groupId>org.universAAL.middleware</groupId>
         <artifactId>mw.pom.osgi</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.universAAL.ontology</groupId>
         <artifactId>ont.pom</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.universAAL.security</groupId>
         <artifactId>security.authenticator.dummy</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.universAAL.security</groupId>
         <artifactId>security.authenticator.userPassword.client</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.universAAL.security</groupId>
         <artifactId>security.authenticator.profile</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.universAAL.security</groupId>
         <artifactId>security.karaf.feature</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.universAAL.security</groupId>
         <artifactId>security.session.manager</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
