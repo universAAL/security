@@ -11,6 +11,7 @@
   <artifactId>security.authenticator.userPassword.client</artifactId>
   <version>3.4.1-SNAPSHOT</version>
   <name>universAAL Security UserPassword Authentication client</name>
+  <packaging>bundle</packaging>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -37,4 +38,22 @@
       <artifactId>ont.security</artifactId>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+		<plugin>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>maven-bundle-plugin</artifactId>
+			<extensions>true</extensions>
+			<configuration>
+				<instructions>
+					<Bundle-Name>${project.name}</Bundle-Name>
+					<Bundle-Description>${project.description}</Bundle-Description>
+					<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+					<Export-Package>org.universAAL.security.authenticator.client</Export-Package>
+					<Import-Package>org.osgi.framework;version="[1,2)",*</Import-Package>
+				</instructions>
+			</configuration>
+		</plugin>
+    </plugins>
+  </build>
 </project>
