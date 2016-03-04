@@ -44,11 +44,24 @@ public class CHeQuery {
     private static final String OUTPUT_RESULT_STRING = SecurityOntology.NAMESPACE
 	    + "outputfromCHE";
     private ModuleContext owner;
+    private static ServiceCaller sc = null;
+    
     /**
      * 
      */
     public CHeQuery(ModuleContext mc) {
 	owner = mc;
+	if (sc == null) {
+	    sc = new DefaultServiceCaller(owner);
+	    sc.setLabel("Security Session Manager CHE Query");
+	}
+    }
+    
+    public static void close() {
+	if (sc == null) {
+	    sc.close();
+	    sc = null;
+	}
     }
 
     public Object query(String queryFile, String[] params){
@@ -66,10 +79,8 @@ public class CHeQuery {
   			true,
   			new String[] { ContextHistoryService.PROP_RETURNS })
   			.getThePath());
-  	ServiceCaller sc = new DefaultServiceCaller(owner);
   	ServiceResponse sr = sc.call(getQuery);
   	List res = sr.getOutput(OUTPUT_RESULT_STRING, true);
-  	sc.close();
   	if (res.size() >0 && res.get(0) instanceof String){
   	    try {
 		return new SerializerGetter(owner).getSerializer().deserialize((String) res.get(0));
