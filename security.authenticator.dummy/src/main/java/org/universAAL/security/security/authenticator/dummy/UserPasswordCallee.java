@@ -27,6 +27,8 @@ import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.middleware.util.Constants;
 import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.middleware.xsd.util.Base64;
+import org.universAAL.ontology.cryptographic.Digest;
+import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
 import org.universAAL.ontology.profile.AssistedPerson;
 import org.universAAL.ontology.profile.Caregiver;
 import org.universAAL.ontology.profile.User;
@@ -82,7 +84,7 @@ public class UserPasswordCallee extends ServiceCallee {
 	}
 	
 	if (cmd.startsWith(UserPasswordDummyService.GET_PWD_DIGEST_SERVICE)){
-	    ProcessOutput out = new ProcessOutput(UserPasswordDummyService.DIGEST_OUT, "MD5");
+	    ProcessOutput out = new ProcessOutput(UserPasswordDummyService.DIGEST_OUT, SecureHashAlgorithm.IND_SHA512);
 	    ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
 	    sr.addOutput(out);
 	    return sr;
@@ -98,7 +100,7 @@ public class UserPasswordCallee extends ServiceCallee {
      * @return
      */
     private User authenticate(String username, Base64Binary password,
-	    String digestAlgorithm) {
+	    Digest digestAlgorithm) {
 	if (username != null && !username.isEmpty()){
 	    if (username.contains(CAREGIVER_TRIGGER)){
 		return new Caregiver(Constants.uAAL_MIDDLEWARE_LOCAL_ID_PREFIX +

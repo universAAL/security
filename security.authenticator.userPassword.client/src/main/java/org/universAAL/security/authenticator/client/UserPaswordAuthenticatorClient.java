@@ -28,6 +28,8 @@ import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
 import org.universAAL.middleware.service.ServiceResponse;
 import org.universAAL.middleware.xsd.Base64Binary;
+import org.universAAL.ontology.cryptographic.Digest;
+import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.AuthenticationService;
 import org.universAAL.ontology.security.SecurityOntology;
@@ -85,6 +87,12 @@ public class UserPaswordAuthenticatorClient extends DefaultServiceCaller{
 	}
     }
     
+    /**
+     * To Be Deprecated.
+     * @deprecated
+     * @param cred
+     * @return
+     */
     private ServiceResponse singleCallAuthentication(UserPasswordCredentials cred){
 	ServiceRequest sr = new ServiceRequest(new AuthenticationService(), null);
 	sr.addRequiredOutput(USER_OUT, new String[]{AuthenticationService.PROP_AUTHENTICATED_USER});
@@ -97,14 +105,16 @@ public class UserPaswordAuthenticatorClient extends DefaultServiceCaller{
 	ServiceRequest sr1 = new ServiceRequest( new AuthenticationService(), null);
 	sr1.addRequiredOutput(DIGEST_OUT, new String[]{AuthenticationService.PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_PASSWORD_DIGEST});
 	sr1.addValueFilter(new String[]{AuthenticationService.PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_USERNAME}, cred.getUsername());
+	// TODO ensure the call is not serialized local or remotely
+	//sr1.setOriginScope(sr1.ONLY_LOCAL_SCOPE);
 	ServiceResponse so = call(sr1);
 	if (!so.getCallStatus().equals(CallStatus.succeeded))
 	   return null;
-	String digest = (String) so.getOutput(DIGEST_OUT, true).get(0); //XXX check all results
+	Digest digest = (Digest) so.getOutput(DIGEST_OUT, true).get(0); //XXX check all results
 
 	cred.setDigestAlgorithm(digest);
 	try {
-	    MessageDigest dig = MessageDigest.getInstance(digest);
+	    MessageDigest dig = getMD(digest);
 	    Base64Binary pwd = new Base64Binary (dig.digest(cred.getPassword().getVal()));
 	    cred.setDigestAlgorithm(digest);
 	    cred.setpassword(pwd);
@@ -118,4 +128,27 @@ public class UserPaswordAuthenticatorClient extends DefaultServiceCaller{
 	so = call(sr2);
 	return so;
     }
+    
+    private MessageDigest getMD(Digest digestAlgorithm) throws NoSuchAlgorithmException{
+    	//TODO call encryption service for a fully dynamic way to do this
+		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2){
+			return MessageDigest.getInstance("MD2");
+		}
+		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD5){
+			return MessageDigest.getInstance("MD5");
+		}
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA){
+			return MessageDigest.getInstance("SHA");
+		}
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA256){
+			return MessageDigest.getInstance("SHA-256");
+		}
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA384){
+			return MessageDigest.getInstance("SHA-384");
+		}
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA512){
+			return MessageDigest.getInstance("SHA-512");
+		}
+		throw new NoSuchAlgorithmException();
+	}
 }

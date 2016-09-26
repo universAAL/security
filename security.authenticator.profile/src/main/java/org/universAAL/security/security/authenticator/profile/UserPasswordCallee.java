@@ -20,8 +20,6 @@ package org.universAAL.security.security.authenticator.profile;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
-import java.security.Security;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -42,6 +40,8 @@ import org.universAAL.middleware.service.owls.process.ProcessOutput;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.ontology.che.ContextHistoryService;
+import org.universAAL.ontology.cryptographic.Digest;
+import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.SecurityOntology;
 import org.universAAL.ontology.security.UserPasswordCredentials;
@@ -104,7 +104,7 @@ public class UserPasswordCallee extends ServiceCallee {
 	
 	if (cmd.startsWith(UserPasswordProfileService.GET_PWD_DIGEST_SERVICE)){
 	    String username = (String) call.getInputValue(UserPasswordProfileService.USER_IN);
-	    String digest = getDigestFor(username);
+	    Digest digest = getDigestFor(username);
 	    ProcessOutput out = new ProcessOutput(UserPasswordProfileService.DIGEST_OUT, digest);
 	    ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
 	    sr.addOutput(out);
@@ -121,33 +121,56 @@ public class UserPasswordCallee extends ServiceCallee {
      * @return
      */
     private User authenticate(String username, Base64Binary password,
-	    String digestAlgorithm) {
-	if (digestAlgorithm == null || digestAlgorithm.isEmpty()){
+	    Digest digestAlgorithm) {
+	if (digestAlgorithm == null){
 	    digestAlgorithm = getDigestFor(username);
 	    try {
-		MessageDigest dig = MessageDigest.getInstance(digestAlgorithm);
+		MessageDigest dig = getMD(digestAlgorithm);
 		password = new Base64Binary(dig.digest(password.getVal()));
 	    } catch (NoSuchAlgorithmException e) {
 		LogUtils.logWarn(owner, getClass(), "authenticate", new String[]{"unable to digest Password"}, e);
 	    }
 	}
-	return (User) query("GetUserQuery", new String[]{username,Base64Binary.encode(password.getVal()),digestAlgorithm});
+	return (User) query("GetUserQuery", new String[]{username,Base64Binary.encode(password.getVal()),digestAlgorithm.getURI()});
     }
     
-    /**
+    private MessageDigest getMD(Digest digestAlgorithm) throws NoSuchAlgorithmException{
+    	//TODO call encryption service for a fully dynamic way to do this
+		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2){
+			return MessageDigest.getInstance("MD2");
+		}
+		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD5){
+			return MessageDigest.getInstance("MD5");
+		}
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA){
+			return MessageDigest.getInstance("SHA");
+		}
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA256){
+			return MessageDigest.getInstance("SHA-256");
+		}
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA384){
+			return MessageDigest.getInstance("SHA-384");
+		}
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA512){
+			return MessageDigest.getInstance("SHA-512");
+		}
+		throw new NoSuchAlgorithmException();
+	}
+
+	/**
      * @param username
      * @return
      */
-    private String getDigestFor(String username) {
-	String dig = null;
+    private Digest getDigestFor(String username) {
+    	Digest dig = null;
 	try {
-	    dig = (String) ((Resource) query("GetDigestQuery", new String[]{username}))
+	    dig = (Digest) ((Resource) query("GetDigestQuery", new String[]{username}))
 	        .getProperty(UserPasswordCredentials.PROP_PASSWORD_DIGEST);
 	} catch (Exception e) {
 	    dig = null;
 	}
 	if (dig == null){
-	    Vector<String> v = getAvailableDigests();
+	    Vector<Digest> v = getAvailableDigests();
 	    Random generator = new Random();
 	    int rnd = generator.nextInt(v.size());
 	    dig = v.get(rnd);
@@ -155,19 +178,17 @@ public class UserPasswordCallee extends ServiceCallee {
 	return dig;
     }
     
-    private static Vector<String> getAvailableDigests(){
-	Vector<String> messageDigests = new Vector<String>();
-	messageDigests.add("");
-	Provider[] providers = Security.getProviders();
+    private static Vector<Digest> getAvailableDigests(){
+	Vector<Digest> messageDigests = new Vector<Digest>();
 	
-	for (int i = 0; i < providers.length; i++) {
-	    for (Object en : providers[i].keySet()) {
-		String e = (String) en;
-		if (e.startsWith("MessageDigest.")) {
-		    messageDigests.add(e.substring("MessageDigest.".length()));
-		}
-	    }
-	}
+	//TODO: Do this automatically, finding all instances sub class of Digest
+	messageDigests.add(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2);
+	messageDigests.add(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD5);
+	messageDigests.add(SecureHashAlgorithm.IND_SHA);
+	messageDigests.add(SecureHashAlgorithm.IND_SHA256);
+	messageDigests.add(SecureHashAlgorithm.IND_SHA384);
+	messageDigests.add(SecureHashAlgorithm.IND_SHA512);
+	
 	
 	return messageDigests;
     }

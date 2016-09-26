@@ -24,6 +24,7 @@ import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.rdf.ResourceFactory;
 import org.universAAL.middleware.rdf.TypeMapper;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
+import org.universAAL.ontology.cryptographic.Digest;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.AuthenticationService;
 import org.universAAL.ontology.security.UserPasswordCredentials;
@@ -82,7 +83,7 @@ public class UserPasswordDummyService extends AuthenticationService {
 	 */
 	UserPasswordDummyService getDigest = new UserPasswordDummyService(GET_PWD_DIGEST_SERVICE);
 	getDigest.addFilteringInput(USER_IN, TypeMapper.getDatatypeURI(String.class), 1, 1, new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_USERNAME});
-	getDigest.addOutput(DIGEST_OUT, TypeMapper.getDatatypeURI(String.class), 1, 1, new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_PASSWORD_DIGEST});
+	getDigest.addOutput(DIGEST_OUT, Digest.MY_URI, 1, 1, new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_PASSWORD_DIGEST});
 	profs[1] = getDigest.myProfile;
     }
 

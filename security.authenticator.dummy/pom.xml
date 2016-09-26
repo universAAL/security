@@ -20,19 +20,15 @@
     </dependency>
     <dependency>
       <groupId>org.universAAL.middleware</groupId>
-      <artifactId>mw.bus.context.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.universAAL.middleware</groupId>
       <artifactId>mw.bus.service.core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.universAAL.middleware</groupId>
-      <artifactId>mw.bus.ui.core</artifactId>
+      <groupId>org.universAAL.ontology</groupId>
+      <artifactId>ont.profile</artifactId>
     </dependency>
     <dependency>
       <groupId>org.universAAL.ontology</groupId>
-      <artifactId>ont.phWorld</artifactId>
+      <artifactId>ont.cryptographic</artifactId>
     </dependency>
     <dependency>
       <groupId>org.universAAL.ontology</groupId>
