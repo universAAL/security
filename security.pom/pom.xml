@@ -17,6 +17,7 @@
     <module>../security.authenticator.dummy</module>
     <module>../security.authenticator.profile</module>
     <module>../security.authenticator.userPassword.client</module>
+    <module>../security.crypto.services</module>
     <module>../security.session.manager</module>
     <module>security.karaf.feature</module>
   </modules>
@@ -62,6 +63,11 @@
       <dependency>
         <groupId>org.universAAL.security</groupId>
         <artifactId>security.authenticator.profile</artifactId>
+        <version>3.4.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.universAAL.security</groupId>
+        <artifactId>security.crypto.services</artifactId>
         <version>3.4.1-SNAPSHOT</version>
       </dependency>
       <dependency>
