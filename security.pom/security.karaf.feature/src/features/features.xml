@@ -21,4 +21,10 @@
 		<feature>uAAL-Ont.Security</feature> 
 		<bundle start-level='70' start='true'>wrap:mvn:org.universAAL.security/security.authenticator.userPassword.client/${security.authenticator.userPassword.client.version}</bundle>
 	</feature>
+	
+	<feature name="uAAL-Security.Cryptographic.Services" description="Module implementing basic criptography services."
+		version="${pom.version}" resolver='(obr)'>
+		<feature>uAAL-Ont.Cryptographic</feature> 
+		<bundle start-level='70' start='true'>wrap:mvn:org.universAAL.security/security.crypto.services/${security.crypto.services.version}</bundle>
+	</feature>
 </features>
