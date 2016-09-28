@@ -36,10 +36,11 @@ import org.universAAL.middleware.service.owls.process.ProcessOutput;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.ontology.cryptographic.EncryptedResource;
+import org.universAAL.ontology.cryptographic.KeyRing;
 
 /**
  * @author amedrano
- *
+ * 
  */
 public class EncryptionServiceCallee extends ServiceCallee {
 
@@ -62,114 +63,184 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		super(context, realizedServices, throwOnError);
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public void communicationChannelBroken() {
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResponse handleCall(ServiceCall call) {
-			
-		String[] symAlg = new String[] {"AES","Blowfish","DES"};
-			
-			for (int i = 0; i < symAlg.length; i++) {
-				String algorithm = symAlg[i];
-				if (call.getProcessURI().contains(algorithm)) {
-					if (call.getProcessURI().contains("encrypt")) {
-						Resource ir = (Resource) call
-								.getInputValue(EncryptionServiceProfiles.CLEAR_RESOURCE);
-						Base64Binary key = (Base64Binary) call
-								.getInputValue(EncryptionServiceProfiles.KEY);
-						try {
 
-							ProcessOutput po = new ProcessOutput(
-									EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
-									doSymetricEncryption(ir, key, algorithm));
-							ServiceResponse sr = new ServiceResponse(
-									CallStatus.succeeded);
-							sr.addOutput(po);
+		String[] symAlg = new String[] { "AES", "Blowfish", "DES" };
 
-							return sr;
+		for (int i = 0; i < symAlg.length; i++) {
+			String algorithm = symAlg[i];
+			if (call.getProcessURI().contains(algorithm)) {
+				if (call.getProcessURI().contains("encrypt")) {
+					Resource ir = (Resource) call
+							.getInputValue(EncryptionServiceProfiles.CLEAR_RESOURCE);
+					Base64Binary key = (Base64Binary) call
+							.getInputValue(EncryptionServiceProfiles.KEY);
+					try {
 
-						} catch (Exception e) {
-							LogUtils.logError(owner, getClass(), "Encrypt"
-									+ algorithm,
-									new String[] { "unable to encrypt." }, e);
-							return new ServiceResponse(
-									CallStatus.serviceSpecificFailure);
-						}
-					}
-					if (call.getProcessURI().contains("decrypt")) {
-						EncryptedResource ir = (EncryptedResource) call
-								.getInputValue(EncryptionServiceProfiles.ENCRYPTED_RESOURCE);
-						Base64Binary key = (Base64Binary) call
-								.getInputValue(EncryptionServiceProfiles.KEY);
+						ProcessOutput po = new ProcessOutput(
+								EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
+								doEncryption(ir, key, algorithm));
+						ServiceResponse sr = new ServiceResponse(
+								CallStatus.succeeded);
+						sr.addOutput(po);
 
-						try {
+						return sr;
 
-							ProcessOutput po = new ProcessOutput(
-									EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
-									doSymetricDecryption(ir, key, algorithm));
-							ServiceResponse sr = new ServiceResponse(
-									CallStatus.succeeded);
-							sr.addOutput(po);
-
-							return sr;
-
-						} catch (Exception e) {
-							LogUtils.logError(owner, getClass(), "Decrypt"
-									+ algorithm,
-									new String[] { "unable to decrypt." }, e);
-							return new ServiceResponse(
-									CallStatus.serviceSpecificFailure);
-						}
-
+					} catch (Exception e) {
+						LogUtils.logError(owner, getClass(), "Encrypt"
+								+ algorithm,
+								new String[] { "unable to encrypt." }, e);
+						return new ServiceResponse(
+								CallStatus.serviceSpecificFailure);
 					}
 				}
+				if (call.getProcessURI().contains("decrypt")) {
+					EncryptedResource ir = (EncryptedResource) call
+							.getInputValue(EncryptionServiceProfiles.ENCRYPTED_RESOURCE);
+					Base64Binary key = (Base64Binary) call
+							.getInputValue(EncryptionServiceProfiles.KEY);
+
+					try {
+
+						ProcessOutput po = new ProcessOutput(
+								EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
+								doDecryption(ir, key, algorithm));
+						ServiceResponse sr = new ServiceResponse(
+								CallStatus.succeeded);
+						sr.addOutput(po);
+
+						return sr;
+
+					} catch (Exception e) {
+						LogUtils.logError(owner, getClass(), "Decrypt"
+								+ algorithm,
+								new String[] { "unable to decrypt." }, e);
+						return new ServiceResponse(
+								CallStatus.serviceSpecificFailure);
+					}
+
+				}
 			}
-			
-		if (call.getProcessURI().contains(EncryptionServiceProfiles.ENCRYPT_RSA)){
-			
 		}
-		if (call.getProcessURI().contains(EncryptionServiceProfiles.DECRYPT_RSA)){
-			
+		String algorithm = "RSA";
+		if (call.getProcessURI().contains(algorithm)) {
+			KeyRing keyring = (KeyRing) call
+					.getInputValue(EncryptionServiceProfiles.KEY);
+			Base64Binary key = resolveKey(keyring);
+			if (key == null){
+				ServiceResponse sr =  new ServiceResponse(CallStatus.serviceSpecificFailure);
+				sr.setResourceComment("MAN! I need at least one key; public or private does not matter!");
+				return sr;
+			}
+			if (call.getProcessURI().contains("encrypt")) {
+				Resource ir = (Resource) call
+						.getInputValue(EncryptionServiceProfiles.CLEAR_RESOURCE);
+				try {
+
+					ProcessOutput po = new ProcessOutput(
+							EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
+							doEncryption(ir, key, algorithm));
+					ServiceResponse sr = new ServiceResponse(
+							CallStatus.succeeded);
+					sr.addOutput(po);
+
+					return sr;
+
+				} catch (Exception e) {
+					LogUtils.logError(owner, getClass(), "Encrypt"
+							+ algorithm,
+							new String[] { "unable to encrypt." }, e);
+					return new ServiceResponse(
+							CallStatus.serviceSpecificFailure);
+				}
+			}
+			if (call.getProcessURI().contains("decrypt")) {
+				EncryptedResource ir = (EncryptedResource) call
+						.getInputValue(EncryptionServiceProfiles.ENCRYPTED_RESOURCE);
+
+				try {
+
+					ProcessOutput po = new ProcessOutput(
+							EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
+							doDecryption(ir, key, algorithm));
+					ServiceResponse sr = new ServiceResponse(
+							CallStatus.succeeded);
+					sr.addOutput(po);
+
+					return sr;
+
+				} catch (Exception e) {
+					LogUtils.logError(owner, getClass(), "Decrypt"
+							+ algorithm,
+							new String[] { "unable to decrypt." }, e);
+					return new ServiceResponse(
+							CallStatus.serviceSpecificFailure);
+				}
+
+			}
 		}
 		return new ServiceResponse(CallStatus.noMatchingServiceFound);
 	}
-
 	
-	private EncryptedResource doSymetricEncryption(Resource ir, Base64Binary key, String encrytionAlgorithm) 
-			throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+	static Base64Binary resolveKey(KeyRing keyring) {
+		
+		Base64Binary key = null;
+		
+		if (keyring.hasProperty(KeyRing.PROP_PRIVATE_KEY) && !keyring.hasProperty(KeyRing.PROP_PUBLIC_KEY)){
+			key = keyring.getPrivateKey();
+		}else if (!keyring.hasProperty(KeyRing.PROP_PRIVATE_KEY) && keyring.hasProperty(KeyRing.PROP_PUBLIC_KEY)){
+			key = keyring.getPublicKey();
+		} else if (keyring.hasProperty(KeyRing.PROP_PRIVATE_KEY) && keyring.hasProperty(KeyRing.PROP_PUBLIC_KEY)){
+			key = keyring.getPrivateKey();
+		}
+		return key;
+	}
+
+	private EncryptedResource doEncryption(Resource ir, Base64Binary key,
+			String encrytionAlgorithm) throws NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeyException,
+			IllegalBlockSizeException, BadPaddingException {
 		Cipher cipher = Cipher.getInstance(encrytionAlgorithm);
 
 		// Serialize Resource
 		String message = ProjectActivator.serializer.getObject().serialize(ir);
 
-		//configure cipher
-		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getVal(), encrytionAlgorithm) );
-		//Encrypt
+		// configure cipher
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getVal(),
+				encrytionAlgorithm));
+		// Encrypt
 		byte[] byteCipherText = cipher.doFinal(message.getBytes());
 
-		//Collect result
+		// Collect result
 		EncryptedResource or = new EncryptedResource();
 		or.setCypheredText(new Base64Binary(byteCipherText));
 		return or;
 	}
-	
-	private Resource doSymetricDecryption(EncryptedResource ir, Base64Binary key, String encrytionAlgorithm) 
-			throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+
+	private Resource doDecryption(EncryptedResource ir, Base64Binary key,
+			String encrytionAlgorithm) throws NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeyException,
+			IllegalBlockSizeException, BadPaddingException {
 		Cipher cipher = Cipher.getInstance(encrytionAlgorithm);
 
-		//configure cipher
-		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getVal(), encrytionAlgorithm) );
-		//Encrypt
+		// configure cipher
+		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getVal(),
+				encrytionAlgorithm));
+		// Encrypt
 		byte[] clearText = cipher.doFinal(ir.getCypheredText().getVal());
 
-		//Collect result
+		// Collect result
 		// deserialize Resource
-		Resource or = (Resource) ProjectActivator.serializer.getObject().deserialize(new String(clearText,Charset.forName("UTF8")));
-		
+		Resource or = (Resource) ProjectActivator.serializer.getObject()
+				.deserialize(new String(clearText, Charset.forName("UTF8")));
+
 		return or;
 	}
 }
