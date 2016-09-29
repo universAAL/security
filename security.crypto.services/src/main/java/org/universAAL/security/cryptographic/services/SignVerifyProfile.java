@@ -139,7 +139,7 @@ static final ServiceProfile[] profs = new ServiceProfile[3];
 		
 		profs[2] = exVerify.myProfile;
 		
-		
+		// TODO ADD signature.
 	}
 	
 }
