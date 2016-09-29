@@ -37,7 +37,7 @@ import org.universAAL.ontology.cryptographic.symmetric.DES;
  *
  */
 public class EncryptionServiceProfiles extends EncryptionService {
-	static final ServiceProfile[] profs = new ServiceProfile[6];
+	static final ServiceProfile[] profs = new ServiceProfile[8];
 	
 	static final String NAMESPACE = "http://security.universAAL.org/Cryposervices#";
     public static String MY_URI = NAMESPACE + "SomeDe-EcryptionSerives";
@@ -105,6 +105,8 @@ public class EncryptionServiceProfiles extends EncryptionService {
 		dAES.addFilteringInput(ENCRYPTED_RESOURCE, EncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION});
 		dAES.addOutput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
 		
+		profs[0]=eAES.myProfile;
+		profs[1]=dAES.myProfile;
 
 		//Blowfish
 		EncryptionServiceProfiles eBlow = new EncryptionServiceProfiles(ENCRYPT_BLOWFISH);
@@ -119,6 +121,8 @@ public class EncryptionServiceProfiles extends EncryptionService {
 		dBlow.addFilteringInput(ENCRYPTED_RESOURCE, EncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION});
 		dBlow.addOutput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
 		
+		profs[2]=eBlow.myProfile;
+		profs[3]=dBlow.myProfile;
 		
 		//DES
 		EncryptionServiceProfiles eDES = new EncryptionServiceProfiles(ENCRYPT_DES);
@@ -133,6 +137,8 @@ public class EncryptionServiceProfiles extends EncryptionService {
 		dDES.addFilteringInput(ENCRYPTED_RESOURCE, EncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION});
 		dDES.addOutput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
 		
+		profs[4]=eDES.myProfile;
+		profs[5]=dDES.myProfile;
 		
 		//RSA
 		EncryptionServiceProfiles eRSA = new EncryptionServiceProfiles(ENCRYPT_RSA);
@@ -146,5 +152,8 @@ public class EncryptionServiceProfiles extends EncryptionService {
 		dRSA.addFilteringInput(METHOD, RSA.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION});
 		dRSA.addFilteringInput(ENCRYPTED_RESOURCE, EncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION});
 		dRSA.addOutput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
+		
+		profs[6]=eRSA.myProfile;
+		profs[7]=dRSA.myProfile;
 	}
 }
