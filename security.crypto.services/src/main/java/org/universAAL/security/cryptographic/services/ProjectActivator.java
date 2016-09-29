@@ -24,8 +24,9 @@ import org.universAAL.middleware.serialization.MessageContentSerializer;
 public class ProjectActivator implements ModuleActivator {
 
 	public static ModuleContext context;
-	DigestServiceCallee digestCallee;
-	EncryptionServiceCallee encrypCallee;
+	private DigestServiceCallee digestCallee;
+	private EncryptionServiceCallee encrypCallee;
+	private SignVeriftCallee signCallee;
 	static PassiveDependencyProxy<MessageContentSerializer> serializer;
 	
 	public void start(ModuleContext ctxt) throws Exception {	
@@ -40,8 +41,11 @@ public class ProjectActivator implements ModuleActivator {
 		
 		DigestServiceImpl.initialize(context);
 		EncryptionServiceProfiles.initialize(context);
+		SignVerifyProfile.initialize(context);
 		digestCallee = new DigestServiceCallee(context, DigestServiceImpl.profs);
 		encrypCallee = new EncryptionServiceCallee(context, EncryptionServiceProfiles.profs);
+		signCallee = new SignVeriftCallee(context, SignVerifyProfile.profs);
+		
 		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
 
@@ -51,7 +55,9 @@ public class ProjectActivator implements ModuleActivator {
 		/*
 		 * close uAAL stuff
 		 */
-		
+		digestCallee.close();
+		encrypCallee.close();
+		signCallee.close();
 		LogUtils.logDebug(context, getClass(), "stop", "Stopped.");
 
 	}
