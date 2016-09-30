@@ -53,7 +53,7 @@ public class CHeQuery {
 	owner = mc;
 	if (sc == null) {
 	    sc = new DefaultServiceCaller(owner);
-	    sc.setLabel("Security Session Manager CHE Query");
+	   // sc.setLabel("Security Session Manager CHE Query");
 	}
     }
     
