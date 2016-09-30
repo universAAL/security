@@ -1,0 +1,12 @@
+#1 are prefixes
+#2 is the object URI to be updated
+#3 is the property URI
+#4 is the property value turtle serialization
+
+$1
+
+DELETE {<$2> <$3> ?o}
+INSERT {<$2> <$3> $4}
+WHERE  { 
+        <$2> <$3> ?o . 
+}

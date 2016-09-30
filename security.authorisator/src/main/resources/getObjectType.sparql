@@ -1,0 +1,5 @@
+#1 bag object URI
+#2 bag property URI
+#3 Class URI
+
+CONSTRUCT { <$1> <$2> ?u } WHERE { ?u a <$3> }

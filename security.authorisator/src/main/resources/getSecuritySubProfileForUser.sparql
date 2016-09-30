@@ -1,0 +1,10 @@
+#1 bag object URI
+#2 bag property URI
+#3 user URI
+
+CONSTRUCT { <$1> <$2> ?s } 
+WHERE {
+		<$3> <http://ontology.universAAL.org/Profile.owl#hasProfile> ?p . 
+	    ?p <http://ontology.universAAL.org/Profile.owl#hasSubProfile> ?s . 
+	    ?s a <http://ontology.universAAL.org/Security.owl#SecuritySubprofile> 
+	  }

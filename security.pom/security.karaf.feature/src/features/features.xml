@@ -27,4 +27,12 @@
 		<feature>uAAL-Ont.Cryptographic</feature> 
 		<bundle start-level='70' start='true'>wrap:mvn:org.universAAL.security/security.crypto.services/${security.crypto.services.version}</bundle>
 	</feature>
+	
+	<feature name="uAAL-Security.Authorisator" description="Module implementing Security as a service role-based-authorisation services."
+		version="${pom.version}" resolver='(obr)'>
+		<feature>uAAL-Ont.Profile</feature> 
+		<feature>uAAL-Ont.CHe</feature> 
+		<feature>uAAL-Ont.Security</feature> 
+		<bundle start-level='70' start='true'>wrap:mvn:org.universAAL.security/security.authorisator/${security.authorisator.version}</bundle>
+	</feature>
 </features>
