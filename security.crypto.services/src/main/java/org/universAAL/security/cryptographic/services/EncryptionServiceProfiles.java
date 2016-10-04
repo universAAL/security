@@ -37,7 +37,7 @@ import org.universAAL.ontology.cryptographic.symmetric.DES;
  *
  */
 public class EncryptionServiceProfiles extends EncryptionService {
-	static final ServiceProfile[] profs = new ServiceProfile[16];
+	static final ServiceProfile[] profs = new ServiceProfile[20];
 	
 	static final String NAMESPACE = "http://security.universAAL.org/Cryposervices#";
     public static String MY_URI = NAMESPACE + "SomeDe-EcryptionSerives";
@@ -47,28 +47,33 @@ public class EncryptionServiceProfiles extends EncryptionService {
     static final String DECRYPT_AES = NAMESPACE + "decrypt-AES";
     static final String DECRYPT_AES_TER = NAMESPACE + "decrypt-AES-throughER";
     static final String DECRYPT_AES_WOM = NAMESPACE + "decrypt-AES-withoutExplicitMethod";
+    static final String GENERATE_AES_KEY = NAMESPACE + "generate-new-AES-key";
 
     //Blowfish
     static final String ENCRYPT_BLOWFISH = NAMESPACE + "encrypt-Blowfish";
     static final String DECRYPT_BLOWFISH = NAMESPACE + "decrypt-Blowfish";
     static final String DECRYPT_BLOWFISH_TER = NAMESPACE + "decrypt-Blowfish-throughER";
     static final String DECRYPT_BLOWFISH_WOM = NAMESPACE + "decrypt-Blowfish-withoutExplicitMethod";
+    static final String GENERATE_BLOWFISH_KEY = NAMESPACE + "generate-new-Blowfish-key";
     //DES
     static final String ENCRYPT_DES = NAMESPACE + "encrypt-DES";
     static final String DECRYPT_DES = NAMESPACE + "decrypt-DES";
     static final String DECRYPT_DES_TER = NAMESPACE + "decrypt-DES-throughER";
     static final String DECRYPT_DES_WOM = NAMESPACE + "decrypt-DES-withoutExplicitMethod";
+    static final String GENERATE_DES_KEY = NAMESPACE + "generate-new-DES-key";
     //RSA
     static final String ENCRYPT_RSA = NAMESPACE + "encrypt-RSA";
     static final String DECRYPT_RSA = NAMESPACE + "decrypt-RSA";
     static final String DECRYPT_RSA_TER = NAMESPACE + "decrypt-RSA-throughER";
     static final String DECRYPT_RSA_WOM = NAMESPACE + "decrypt-RSA-withoutExplicitMethod";
+    static final String GENERATE_RSA_KEYRING = NAMESPACE + "generate-new-RSA-keyring";
     
 
     static final String CLEAR_RESOURCE = NAMESPACE + "clear_resource";
     static final String ENCRYPTED_RESOURCE = NAMESPACE + "encrypted_resource";
     static final String METHOD = NAMESPACE + "encryptionMethod";
     static final String KEY = NAMESPACE + "encryptionKey";
+	static final String KEY_LENGTH = NAMESPACE + "encryptionKeyLength";
     
 	/**
 	 * 
@@ -235,5 +240,33 @@ public class EncryptionServiceProfiles extends EncryptionService {
 		profs[i+1]=dRSA.myProfile;
 		profs[i+2]=dRSA_TER.myProfile;
 		profs[i+3]=dRSA_WOM.myProfile;
+		
+		//Generate new RSA keyring
+		EncryptionServiceProfiles gRSA = new EncryptionServiceProfiles(GENERATE_RSA_KEYRING);
+		gRSA.addFilteringInput(METHOD, RSA.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTION});
+		gRSA.addFilteringInput(KEY_LENGTH, TypeMapper.getDatatypeURI(Integer.class), 0, 1, new String[]{EncryptionService.PROP_ENCRYPTION,RSA.PROP_KEY_RING,KeyRing.PROP_KEY_LENGTH});
+		gRSA.addOutput(KEY, KeyRing.MY_URI, 1, 1, new String[]{EncryptionService.PROP_ENCRYPTION,RSA.PROP_KEY_RING});
+		profs[16] = gRSA.myProfile;
+		
+		//Generate new AES keyring
+		EncryptionServiceProfiles gAES = new EncryptionServiceProfiles(GENERATE_AES_KEY);
+		gAES.addFilteringInput(METHOD, AES.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTION});
+		gAES.addFilteringInput(KEY_LENGTH, TypeMapper.getDatatypeURI(Integer.class), 0, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY,SimpleKey.PROP_KEY_LENGTH});
+		gAES.addOutput(KEY, SimpleKey.MY_URI, 1, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY});
+		profs[17] = gAES.myProfile;
+		
+		//Generate new BlowFish keyring
+		EncryptionServiceProfiles gBlow = new EncryptionServiceProfiles(GENERATE_BLOWFISH_KEY);
+		gBlow.addFilteringInput(METHOD, Blowfish.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTION});
+		gBlow.addFilteringInput(KEY_LENGTH, TypeMapper.getDatatypeURI(Integer.class), 0, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY,SimpleKey.PROP_KEY_LENGTH});
+		gBlow.addOutput(KEY, SimpleKey.MY_URI, 1, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY});
+		profs[18] = gBlow.myProfile;
+
+		//Generate new DES keyring
+		EncryptionServiceProfiles gDES = new EncryptionServiceProfiles(GENERATE_DES_KEY);
+		gDES.addFilteringInput(METHOD, DES.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTION});
+		gDES.addFilteringInput(KEY_LENGTH, TypeMapper.getDatatypeURI(Integer.class), 0, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY,SimpleKey.PROP_KEY_LENGTH});
+		gDES.addOutput(KEY, SimpleKey.MY_URI, 1, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY});
+		profs[19] = gDES.myProfile;
 	}
 }

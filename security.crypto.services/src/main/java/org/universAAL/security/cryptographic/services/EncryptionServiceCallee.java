@@ -17,11 +17,13 @@ package org.universAAL.security.cryptographic.services;
 
 import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -39,7 +41,9 @@ import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.EncryptedResource;
 import org.universAAL.ontology.cryptographic.Encryption;
+import org.universAAL.ontology.cryptographic.EncryptionKey;
 import org.universAAL.ontology.cryptographic.KeyRing;
+import org.universAAL.ontology.cryptographic.SimpleKey;
 import org.universAAL.ontology.cryptographic.asymmetric.RSA;
 import org.universAAL.ontology.cryptographic.symmetric.AES;
 import org.universAAL.ontology.cryptographic.symmetric.Blowfish;
@@ -80,6 +84,64 @@ public class EncryptionServiceCallee extends ServiceCallee {
 	public ServiceResponse handleCall(ServiceCall call) {
 		Base64Binary key = null;
 		Encryption algorithm = (Encryption) call.getInputValue(EncryptionServiceProfiles.METHOD);
+		if (call.getProcessURI().contains(EncryptionServiceProfiles.GENERATE_RSA_KEYRING)){
+			try {
+				Object kl = call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH);
+				int keyLength;
+				if (kl == null || !(kl instanceof Integer) ||  ((Integer)kl).intValue() == 0){
+					keyLength = 512;
+				} else {
+					keyLength = ((Integer)kl).intValue();
+				}
+				KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+				keyGen.initialize(keyLength);
+				byte[] publicKey = keyGen.genKeyPair().getPublic().getEncoded();
+				byte[] privateKey = keyGen.genKeyPair().getPrivate().getEncoded();
+				
+				//generate Keyring
+				KeyRing out = new KeyRing();
+				out.setPublicKey(new Base64Binary(publicKey));
+				out.setPrivateKey(new Base64Binary(privateKey));
+				out.setProperty(EncryptionKey.PROP_KEY_LENGTH, new Integer(keyLength));
+				
+				ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+				sr.addOutput(new ProcessOutput(EncryptionServiceProfiles.KEY, out));
+				return sr;
+			} catch (Exception e) {
+				LogUtils.logError(owner, getClass(), "GenerateRSAkeyring", new String []{"Something whent wrong"}, e);
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
+			}
+		}
+		if (call.getProcessURI().contains("generate-new")){
+			try {
+				Object kl = call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH);
+				int keyLength;
+				if (kl == null || !(kl instanceof Integer) ||  ((Integer)kl).intValue() == 0){
+					if (algorithm.getClassURI().equals(DES.MY_URI)){
+						keyLength = 56;
+					}else {
+						keyLength = 256;
+					}
+				} else {
+					keyLength = ((Integer)kl).intValue();
+				}
+				
+				KeyGenerator keyGen = KeyGenerator.getInstance(getJavaCipherProviderFromEncryption(algorithm));
+				keyGen.init(keyLength);
+								
+				//generate Keyring
+				SimpleKey out = new SimpleKey();
+				out.setKeyText(new Base64Binary(keyGen.generateKey().getEncoded()));
+				out.setProperty(EncryptionKey.PROP_KEY_LENGTH, new Integer(keyLength));
+				
+				ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+				sr.addOutput(new ProcessOutput(EncryptionServiceProfiles.KEY, out));
+				return sr;
+			} catch (Exception e) {
+				LogUtils.logError(owner, getClass(), "GenerateRSAkeyring", new String []{"Something whent wrong"}, e);
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
+			}
+		}
 		if (ManagedIndividual.checkMembership(AsymmetricEncryption.MY_URI, algorithm)) {
 			//if it is an asymmetrical operation resolve the Key to use
 			KeyRing keyring = (KeyRing) call
@@ -94,7 +156,6 @@ public class EncryptionServiceCallee extends ServiceCallee {
 			key = (Base64Binary) call
 					.getInputValue(EncryptionServiceProfiles.KEY);
 		}
-
 		if (call.getProcessURI().contains("encrypt")) {
 			Resource ir = (Resource) call
 					.getInputValue(EncryptionServiceProfiles.CLEAR_RESOURCE);
