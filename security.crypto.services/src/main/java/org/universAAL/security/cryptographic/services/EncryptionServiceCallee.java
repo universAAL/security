@@ -44,6 +44,7 @@ import org.universAAL.ontology.cryptographic.Encryption;
 import org.universAAL.ontology.cryptographic.EncryptionKey;
 import org.universAAL.ontology.cryptographic.KeyRing;
 import org.universAAL.ontology.cryptographic.SimpleKey;
+import org.universAAL.ontology.cryptographic.SymmetricEncryption;
 import org.universAAL.ontology.cryptographic.asymmetric.RSA;
 import org.universAAL.ontology.cryptographic.symmetric.AES;
 import org.universAAL.ontology.cryptographic.symmetric.Blowfish;
@@ -84,56 +85,15 @@ public class EncryptionServiceCallee extends ServiceCallee {
 	public ServiceResponse handleCall(ServiceCall call) {
 		Base64Binary key = null;
 		Encryption algorithm = (Encryption) call.getInputValue(EncryptionServiceProfiles.METHOD);
-		if (call.getProcessURI().contains(EncryptionServiceProfiles.GENERATE_RSA_KEYRING)){
-			try {
-				Object kl = call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH);
-				int keyLength;
-				if (kl == null || !(kl instanceof Integer) ||  ((Integer)kl).intValue() == 0){
-					keyLength = 512;
-				} else {
-					keyLength = ((Integer)kl).intValue();
-				}
-				KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-				keyGen.initialize(keyLength);
-				byte[] publicKey = keyGen.genKeyPair().getPublic().getEncoded();
-				byte[] privateKey = keyGen.genKeyPair().getPrivate().getEncoded();
-				
-				//generate Keyring
-				KeyRing out = new KeyRing();
-				out.setPublicKey(new Base64Binary(publicKey));
-				out.setPrivateKey(new Base64Binary(privateKey));
-				out.setProperty(EncryptionKey.PROP_KEY_LENGTH, new Integer(keyLength));
-				
-				ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
-				sr.addOutput(new ProcessOutput(EncryptionServiceProfiles.KEY, out));
-				return sr;
-			} catch (Exception e) {
-				LogUtils.logError(owner, getClass(), "GenerateRSAkeyring", new String []{"Something whent wrong"}, e);
-				return new ServiceResponse(CallStatus.serviceSpecificFailure);
-			}
-		}
 		if (call.getProcessURI().contains("generate-new")){
 			try {
-				Object kl = call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH);
-				int keyLength;
-				if (kl == null || !(kl instanceof Integer) ||  ((Integer)kl).intValue() == 0){
-					if (algorithm.getClassURI().equals(DES.MY_URI)){
-						keyLength = 56;
-					}else {
-						keyLength = 256;
-					}
-				} else {
-					keyLength = ((Integer)kl).intValue();
+				EncryptionKey out;
+				if (ManagedIndividual.checkMembership(SymmetricEncryption.MY_URI, algorithm)){
+					out = generateSymmetricKey((SymmetricEncryption) algorithm,call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH));
 				}
-				
-				KeyGenerator keyGen = KeyGenerator.getInstance(getJavaCipherProviderFromEncryption(algorithm));
-				keyGen.init(keyLength);
-								
-				//generate Keyring
-				SimpleKey out = new SimpleKey();
-				out.setKeyText(new Base64Binary(keyGen.generateKey().getEncoded()));
-				out.setProperty(EncryptionKey.PROP_KEY_LENGTH, new Integer(keyLength));
-				
+				else {
+					out = generateKeyRing((AsymmetricEncryption) algorithm, call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH));
+				}
 				ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
 				sr.addOutput(new ProcessOutput(EncryptionServiceProfiles.KEY, out));
 				return sr;
@@ -244,6 +204,9 @@ public class EncryptionServiceCallee extends ServiceCallee {
 
 		// Collect result
 		EncryptedResource or = new EncryptedResource();
+		Encryption cleanE = (Encryption) algorithm.copy(false);
+		cleanE.changeProperty(Encryption.PROP_KEY, null);
+		or.setEncryption(cleanE);
 		or.setCypheredText(new Base64Binary(byteCipherText));
 		return or;
 	}
@@ -267,6 +230,48 @@ public class EncryptionServiceCallee extends ServiceCallee {
 				.deserialize(new String(clearText, Charset.forName("UTF8")));
 
 		return or;
+	}
+	
+	static SimpleKey generateSymmetricKey(SymmetricEncryption enc, Object preferredKeyLength) throws NoSuchAlgorithmException{
+		int keyLength;
+		if (preferredKeyLength == null || !(preferredKeyLength instanceof Integer) ||  ((Integer)preferredKeyLength).intValue() == 0){
+			if (enc.getClassURI().equals(DES.MY_URI)){
+				keyLength = 56;
+			}else {
+				keyLength = 256;
+			}
+		} else {
+			keyLength = ((Integer)preferredKeyLength).intValue();
+		}
+		
+		KeyGenerator keyGen = KeyGenerator.getInstance(getJavaCipherProviderFromEncryption(enc));
+		keyGen.init(keyLength);
+						
+		//generate Keyring
+		SimpleKey out = new SimpleKey();
+		out.setKeyText(new Base64Binary(keyGen.generateKey().getEncoded()));
+		out.setProperty(EncryptionKey.PROP_KEY_LENGTH, new Integer(keyLength));
+		return out;
+	}
+	
+	static KeyRing generateKeyRing (AsymmetricEncryption algorithm, Object preferredKeyLength) throws NoSuchAlgorithmException{
+		int keyLength;
+		if (preferredKeyLength == null || !(preferredKeyLength instanceof Integer) ||  ((Integer)preferredKeyLength).intValue() == 0){
+			keyLength = 512;
+		} else {
+			keyLength = ((Integer)preferredKeyLength).intValue();
+		}
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(getJavaCipherProviderFromEncryption(algorithm));
+		keyGen.initialize(keyLength);
+		byte[] publicKey = keyGen.genKeyPair().getPublic().getEncoded();
+		byte[] privateKey = keyGen.genKeyPair().getPrivate().getEncoded();
+		
+		//generate Keyring
+		KeyRing out = new KeyRing();
+		out.setPublicKey(new Base64Binary(publicKey));
+		out.setPrivateKey(new Base64Binary(privateKey));
+		out.setProperty(EncryptionKey.PROP_KEY_LENGTH, new Integer(keyLength));
+		return out;
 	}
 	
 	static String getJavaCipherProviderFromEncryption(Encryption enc){

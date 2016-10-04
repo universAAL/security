@@ -22,6 +22,7 @@ import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.rdf.ResourceFactory;
 import org.universAAL.middleware.rdf.TypeMapper;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
+import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.EncryptedResource;
 import org.universAAL.ontology.cryptographic.EncryptionService;
 import org.universAAL.ontology.cryptographic.KeyRing;
@@ -104,6 +105,7 @@ public class EncryptionServiceProfiles extends EncryptionService {
 		
 		/*
 		 * Service Profiles
+		 * XXX: Method may not need to be an input, it might just be a restriction?
 		 */
 		//AES
 			// Encrypt resource using given method
@@ -209,13 +211,13 @@ public class EncryptionServiceProfiles extends EncryptionService {
 		
 		//RSA
 		EncryptionServiceProfiles eRSA = new EncryptionServiceProfiles(ENCRYPT_RSA);
-		eRSA.addFilteringInput(KEY, KeyRing.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION, SymmetricEncryption.PROP_SIMPLE_KEY});
+		eRSA.addFilteringInput(KEY, KeyRing.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION, AsymmetricEncryption.PROP_KEY_RING});
 		eRSA.addFilteringInput(METHOD, RSA.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION});
 		eRSA.addFilteringInput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
 		eRSA.addOutput(ENCRYPTED_RESOURCE, EncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 
 		EncryptionServiceProfiles dRSA = new EncryptionServiceProfiles(DECRYPT_RSA);
-		dRSA.addFilteringInput(KEY, KeyRing.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION, SymmetricEncryption.PROP_SIMPLE_KEY});
+		dRSA.addFilteringInput(KEY, KeyRing.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION, AsymmetricEncryption.PROP_KEY_RING});
 		dRSA.addFilteringInput(METHOD, RSA.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION});
 		dRSA.addFilteringInput(ENCRYPTED_RESOURCE, EncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 		dRSA.addOutput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
@@ -223,14 +225,14 @@ public class EncryptionServiceProfiles extends EncryptionService {
 	
 			// Decrypt encrypted resource using ER method, Key through service method
 		EncryptionServiceProfiles dRSA_TER = new EncryptionServiceProfiles(DECRYPT_RSA_TER);
-		dRSA_TER.addFilteringInput(KEY, KeyRing.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION, SymmetricEncryption.PROP_SIMPLE_KEY});
+		dRSA_TER.addFilteringInput(KEY, KeyRing.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION, AsymmetricEncryption.PROP_KEY_RING});
 		dRSA_TER.addFilteringInput(METHOD, RSA.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE,EncryptedResource.PROP_ENCRYPTION});
 		dRSA_TER.addFilteringInput(ENCRYPTED_RESOURCE, EncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 		dRSA_TER.addOutput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
 	
 			// Decrypt encrypted resource using ER method, Key attached to ER Method
 		EncryptionServiceProfiles dRSA_WOM = new EncryptionServiceProfiles(DECRYPT_RSA_WOM);
-		dRSA_WOM.addFilteringInput(KEY, KeyRing.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE, SymmetricEncryption.PROP_SIMPLE_KEY});
+		dRSA_WOM.addFilteringInput(KEY, KeyRing.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE, AsymmetricEncryption.PROP_KEY_RING});
 		dRSA_WOM.addFilteringInput(METHOD, RSA.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE,EncryptedResource.PROP_ENCRYPTION});
 		dRSA_WOM.addFilteringInput(ENCRYPTED_RESOURCE, EncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 		dRSA_WOM.addOutput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
@@ -248,21 +250,21 @@ public class EncryptionServiceProfiles extends EncryptionService {
 		gRSA.addOutput(KEY, KeyRing.MY_URI, 1, 1, new String[]{EncryptionService.PROP_ENCRYPTION,RSA.PROP_KEY_RING});
 		profs[16] = gRSA.myProfile;
 		
-		//Generate new AES keyring
+		//Generate new AES key
 		EncryptionServiceProfiles gAES = new EncryptionServiceProfiles(GENERATE_AES_KEY);
 		gAES.addFilteringInput(METHOD, AES.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTION});
 		gAES.addFilteringInput(KEY_LENGTH, TypeMapper.getDatatypeURI(Integer.class), 0, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY,SimpleKey.PROP_KEY_LENGTH});
 		gAES.addOutput(KEY, SimpleKey.MY_URI, 1, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY});
 		profs[17] = gAES.myProfile;
 		
-		//Generate new BlowFish keyring
+		//Generate new BlowFish key
 		EncryptionServiceProfiles gBlow = new EncryptionServiceProfiles(GENERATE_BLOWFISH_KEY);
 		gBlow.addFilteringInput(METHOD, Blowfish.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTION});
 		gBlow.addFilteringInput(KEY_LENGTH, TypeMapper.getDatatypeURI(Integer.class), 0, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY,SimpleKey.PROP_KEY_LENGTH});
 		gBlow.addOutput(KEY, SimpleKey.MY_URI, 1, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY});
 		profs[18] = gBlow.myProfile;
 
-		//Generate new DES keyring
+		//Generate new DES key
 		EncryptionServiceProfiles gDES = new EncryptionServiceProfiles(GENERATE_DES_KEY);
 		gDES.addFilteringInput(METHOD, DES.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTION});
 		gDES.addFilteringInput(KEY_LENGTH, TypeMapper.getDatatypeURI(Integer.class), 0, 1, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY,SimpleKey.PROP_KEY_LENGTH});
