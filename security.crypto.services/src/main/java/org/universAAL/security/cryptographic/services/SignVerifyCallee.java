@@ -22,6 +22,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
+import org.universAAL.middleware.owl.ManagedIndividual;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.service.CallStatus;
 import org.universAAL.middleware.service.ServiceCall;
@@ -39,13 +40,13 @@ import org.universAAL.ontology.cryptographic.SignedResource;
  * @author amedrano
  *
  */
-public class SignVeriftCallee extends ServiceCallee {
+public class SignVerifyCallee extends ServiceCallee {
 
 	/**
 	 * @param context
 	 * @param realizedServices
 	 */
-	public SignVeriftCallee(ModuleContext context,
+	public SignVerifyCallee(ModuleContext context,
 			ServiceProfile[] realizedServices) {
 		super(context, realizedServices);
 	}
@@ -55,7 +56,7 @@ public class SignVeriftCallee extends ServiceCallee {
 	 * @param realizedServices
 	 * @param throwOnError
 	 */
-	public SignVeriftCallee(ModuleContext context,
+	public SignVerifyCallee(ModuleContext context,
 			ServiceProfile[] realizedServices, boolean throwOnError) {
 		super(context, realizedServices, throwOnError);
 	}
@@ -75,6 +76,7 @@ public class SignVeriftCallee extends ServiceCallee {
 			Digest dig = (Digest) call.getInputValue(SignVerifyProfile.DIG_METHOD);
 			Base64Binary key = EncryptionServiceCallee.resolveKey(enc.getKeyRing()[0]);
 			try {
+				r = strip4specialCase(r);				
 				//Digest
 				Base64Binary hash = DigestServiceCallee.digestResource(r, dig);
 				//Encrypt
@@ -118,7 +120,7 @@ public class SignVeriftCallee extends ServiceCallee {
 			
 			try {
 				//Digest
-				Base64Binary hash = DigestServiceCallee.digestResource(sr.getSignedResource(), dig);
+				Base64Binary hash = DigestServiceCallee.digestResource(strip4specialCase(sr.getSignedResource()), dig);
 				
 				//check signatures
 				Boolean result = Boolean.FALSE;
@@ -139,6 +141,22 @@ public class SignVeriftCallee extends ServiceCallee {
 				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			}
 		}
+	}
+
+	static private Resource strip4specialCase(Resource r) {
+		if (ManagedIndividual.checkMembership(SignedResource.MY_URI, r)){
+			/*
+			 * you are about to sign / verify a signed resource, 
+			 * due to loopy reasons we need to strip the signedResource 
+			 * intrinsic properties before proceeding.
+			 */
+			Resource copy = r.deepCopy();
+			copy.changeProperty(SignedResource.PROP_ASYMMETRIC, null);
+			copy.changeProperty(SignedResource.PROP_DIGEST, null);
+			copy.changeProperty(SignedResource.PROP_SIGNATURE, null);
+			copy.changeProperty(SignedResource.PROP_SIGNED_RESOURCE, null);
+		}
+		return r;
 	}
 
 	static Base64Binary decrypt(AsymmetricEncryption enc, Base64Binary key,

@@ -42,7 +42,7 @@ import org.universAAL.security.interfaces.AccessChecker;
 public class CheckUserRoles implements AccessChecker {
 
 
-	private PassiveDependencyProxy<MessageContentSerializer> serializer;
+	private PassiveDependencyProxy<MessageContentSerializer> serializer = null;
 	
 	private static final String AUX_BAG_OBJECT = ProjectActivator.NAMESPACE + "auxilaryBagObject";
 	private static final String AUX_BAG_PROP =  ProjectActivator.NAMESPACE + "auxilaryBagProperty";
@@ -51,22 +51,15 @@ public class CheckUserRoles implements AccessChecker {
 	public Set<AccessType> checkAccess(ModuleContext mc, User usr,
 			Resource asset) {
 		
-		serializer = new PassiveDependencyProxy<MessageContentSerializer>(
-				mc,
-				new Object[] { MessageContentSerializer.class.getName() });
+		init(mc);
+		
 		
 		// get the SecuritySubProfile for the user
 		
-		String response = CHeQuerrier.getQuery(CHeQuerrier.getResource("getSecuritySubProfileForUser.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP,usr.getURI()});
-		Object o = serializer.getObject().deserialize(response);
-		SecuritySubprofile ssp;
-		if (o instanceof SecuritySubprofile){
-			ssp = (SecuritySubprofile) o;
-		} else if (o instanceof List){
-			LogUtils.logWarn(mc, getClass(), "checkAccess", "WTF mode: More than one SecuritySubprofile found for the given user: " + usr.getURI());
-			ssp = (SecuritySubprofile) ((List)o).get(0);
-		} else {
-			LogUtils.logError(mc, getClass(), "checkAccess", "No SecuritySubprofile found for the given user: " + usr.getURI());
+
+		SecuritySubprofile ssp = getSecuritySubProfile(mc, usr);
+		if (ssp == null){
+			LogUtils.logInfo(mc, getClass(), "checkAccess", "No SecuritySubprofile found for user:" + usr.getURI());
 			return Collections.EMPTY_SET;
 		}
 		
@@ -78,6 +71,19 @@ public class CheckUserRoles implements AccessChecker {
 		}
 		
 		//match the asset with all AccessRights
+		
+		return matchAccessRightsWAsset(finalAccessRights, asset);
+	}
+	
+	protected void init(ModuleContext mc){
+		if (serializer == null) {
+			serializer = new PassiveDependencyProxy<MessageContentSerializer>(
+					mc,
+					new Object[] { MessageContentSerializer.class.getName() });
+		}
+	}
+	
+	protected HashSet<AccessType> matchAccessRightsWAsset(Set<AccessRight> finalAccessRights, Resource asset){
 		HashSet<AccessType> res = new HashSet<AccessType>();
 		for (AccessRight ar : finalAccessRights) {
 			Object te = ar.getProperty(AccessRight.MY_URI);
@@ -86,9 +92,23 @@ public class CheckUserRoles implements AccessChecker {
 				res.addAll(AssetDefaultAccessChecker.resolveFromValue(ar));
 			}
 		}
-		
-		
 		return res;
 	}
 
+	protected SecuritySubprofile getSecuritySubProfile(ModuleContext mc, User usr){
+		String response = CHeQuerrier.getQuery(CHeQuerrier.getResource("getSecuritySubProfileForUser.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP,usr.getURI()});
+		Object o = serializer.getObject().deserialize(response);
+		SecuritySubprofile ssp;
+		if (o instanceof SecuritySubprofile){
+			ssp = (SecuritySubprofile) o;
+		} else if (o instanceof List){
+			LogUtils.logWarn(mc, getClass(), "checkAccess", "WTF mode: More than one SecuritySubprofile found for the given user: " + usr.getURI());
+			ssp = (SecuritySubprofile) ((List)o).get(0);
+		} else {
+			LogUtils.logError(mc, getClass(), "checkAccess", "No SecuritySubprofile found for the given user: " + usr.getURI());
+			return null;
+		}
+		return ssp;
+	}
+	
 }

@@ -49,6 +49,8 @@ public class ProjectActivator implements ModuleActivator {
 	
 	public static ModuleContext context;
 	ServiceProfile[] profs = new ServiceProfile[15];
+
+	private AuthorisatorCallee callee;
 	
 	public void start(ModuleContext ctxt) throws Exception {	
 		context = ctxt;
@@ -172,6 +174,10 @@ public class ProjectActivator implements ModuleActivator {
 		remCheckCU.addInputWithRemoveEffect(ASSET, Asset.MY_URI, 1, 1, new String[]{AuthorizationService.PROP_ASSET_ACCESS});
 		profs[10] = remCheckCU.getProfile();
 		
+		callee = new AuthorisatorCallee(ctxt, profs);
+		
+		//TODO: create a context publisher which publishes user access to assets for accountability (combined with CHe)
+		
 		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
 
@@ -181,6 +187,7 @@ public class ProjectActivator implements ModuleActivator {
 		/*
 		 * close uAAL stuff
 		 */
+		callee.close();
 		
 		LogUtils.logDebug(context, getClass(), "stop", "Stopped.");
 

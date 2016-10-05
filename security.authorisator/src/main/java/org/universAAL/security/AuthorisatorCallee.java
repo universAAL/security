@@ -15,15 +15,13 @@
  ******************************************************************************/
 package org.universAAL.security;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
-import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.owl.ManagedIndividual;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.serialization.MessageContentSerializer;
@@ -38,6 +36,8 @@ import org.universAAL.ontology.security.AccessRight;
 import org.universAAL.ontology.security.AccessType;
 import org.universAAL.ontology.security.Role;
 import org.universAAL.ontology.security.SecuritySubprofile;
+import org.universAAL.security.access_checkers.AssetDefaultAccessChecker;
+import org.universAAL.security.access_checkers.CheckUserRoles;
 import org.universAAL.security.interfaces.AccessChecker;
 import org.universAAL.security.profiles.AuthorisationServiceProfile;
 
@@ -49,7 +49,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 
 	private static final String AUX_BAG_OBJECT = ProjectActivator.NAMESPACE + "auxilaryBagObject";
 	private static final String AUX_BAG_PROP =  ProjectActivator.NAMESPACE + "auxilaryBagProperty";
-	private Map<Class,AccessChecker> checkers = new HashMap<Class,AccessChecker>();
+	private static List<AccessChecker> checkers = new ArrayList<AccessChecker>();
 	private PassiveDependencyProxy<MessageContentSerializer> serializer;
 	
 	/**
@@ -62,6 +62,8 @@ public class AuthorisatorCallee extends ServiceCallee {
 		serializer = new PassiveDependencyProxy<MessageContentSerializer>(
 				context,
 				new Object[] { MessageContentSerializer.class.getName() });
+		registerChecker(new AssetDefaultAccessChecker());
+		registerChecker(new CheckUserRoles());
 	}
 
 	/**{@inheritDoc} */
@@ -176,9 +178,8 @@ public class AuthorisatorCallee extends ServiceCallee {
 			}
 			
 			Resource asset = (Resource) call.getInputValue(ProjectActivator.ASSET);
-			updateCheckers();
 			Set<AccessType> compiledAccess = new HashSet<AccessType>();
-			for (AccessChecker ac : checkers.values()) {
+			for (AccessChecker ac : checkers) {
 				compiledAccess.addAll(ac.checkAccess(owner,  (User) usr, asset));
 			}
 			
@@ -191,20 +192,6 @@ public class AuthorisatorCallee extends ServiceCallee {
 		}
 
 		return new ServiceResponse(CallStatus.noMatchingServiceFound);
-	}
-
-	private void updateCheckers() {
-		List<Class<?>> classes = ClassFinder.find("org.universAAL.security.access_checkers");
-		for (Class<?> c : classes) {
-			if (!checkers.containsKey(c))
-			try {
-				Object o = c.getConstructor().newInstance();
-				checkers.put(c,(AccessChecker) o);
-			} catch (Exception e) {
-				LogUtils.logError(owner, getClass(), "updateCheckers", new String [] {"Error while loading AccessCheckers"}, e);
-			}
-		}
-		
 	}
 
 	private void updateProperty(Resource r, String prop) {
@@ -236,4 +223,22 @@ public class AuthorisatorCallee extends ServiceCallee {
 		return serializer.getObject().deserialize(result);
 	}
 	
+	
+	public static void registerChecker(AccessChecker ac){
+		synchronized (checkers) {
+			checkers.add(ac);
+		}
+	}
+	public static void unregisterChecker(AccessChecker ac){
+		synchronized (checkers) {
+			checkers.remove(ac);
+		}
+	}
+	public static void unregisterChecker(Class acc){
+		for (AccessChecker ac : checkers) {
+			if (ac.getClass().equals(acc)){
+				unregisterChecker(ac);
+			}
+		}
+	}
 }
