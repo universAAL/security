@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
+import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.owl.MergedRestriction;
 import org.universAAL.middleware.rdf.PropertyPath;
@@ -81,9 +82,7 @@ public class CHeQuerrier {
 	}
 
 	private MessageContentSerializer getSerializer() {
-		return (MessageContentSerializer) owner.getContainer()
-				.fetchSharedObject(owner, 
-						new Object[] { MessageContentSerializer.class.getName() });
+		return new PassiveDependencyProxy<MessageContentSerializer>(owner, new Object[] { MessageContentSerializer.class.getName() }).getObject();
 	}
 
 	public static InputStream getResource(String Rfile){
