@@ -38,7 +38,7 @@ import org.universAAL.ontology.cryptographic.EncryptedResource;
 import org.universAAL.ontology.cryptographic.Encryption;
 import org.universAAL.ontology.cryptographic.EncryptionService;
 import org.universAAL.ontology.cryptographic.MultidestinationEncryptedResource;
-import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
+import org.universAAL.ontology.cryptographic.symmetric.AES;
 
 /**
  * @author amedrano
@@ -105,7 +105,7 @@ public class AnonServiceCallee extends ServiceCallee {
 					EncryptionService.PROP_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI), 
 					new String[]{EncryptionService.PROP_ENCRYPTED_RESOURCE});
 			ServiceRequest sr = new ServiceRequest(encSrv, call.getInvolvedUser());
-			sr.addValueFilter(new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE,EncryptedResource.PROP_ENCRYPTION}, SecureHashAlgorithm.IND_SHA256);
+			sr.addValueFilter(new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE,EncryptedResource.PROP_ENCRYPTION}, new AES());
 			sr.addRequiredOutput(PARAM_ENCRY_RESOURCE_OUT, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 			
 			DefaultServiceCaller caller = new DefaultServiceCaller(owner);
