@@ -27,7 +27,6 @@ import org.universAAL.ioc.dependencies.DependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.SharedObjectListener;
 import org.universAAL.middleware.container.utils.LogUtils;
-import org.universAAL.security.cryptographic.services.ProjectActivator;
 
 /**
  * 
@@ -45,6 +44,7 @@ public class PassiveDependencyProxy<T> implements DependencyProxy<T>,
     private T proxy;
     private Object remH;
     private Class<?> objectType;
+    ModuleContext context;
 
     public PassiveDependencyProxy(final ModuleContext context,
 	    final Object[] filters) {
@@ -54,6 +54,7 @@ public class PassiveDependencyProxy<T> implements DependencyProxy<T>,
 	    throw new RuntimeException("Bad filtering", ex);
 	}
 	this.filters = filters;
+	this.context = context;
 	final Object[] ref = context.getContainer().fetchSharedObject(context,
 		filters, this);
 	if (ref != null && ref.length > 0) {
@@ -109,7 +110,7 @@ public class PassiveDependencyProxy<T> implements DependencyProxy<T>,
 	    setObject((T) sharedObj);
 	    this.remH = removeHook;
 	} catch (final Exception e) {
-	    LogUtils.logError(ProjectActivator.context, getClass(),
+	    LogUtils.logError(context, getClass(),
 		    "sharedObjectAdded",
 		    new String[] { "unexpected Exception" }, e);
 	}

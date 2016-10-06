@@ -21,6 +21,7 @@
     <module>../security.session.manager</module>
     <module>../security.authorisator</module>
     <module>../security.authorisator.delegation</module>
+    <module>../security.anonymization</module>
     <module>security.karaf.feature</module>
   </modules>
   <scm>
@@ -90,6 +91,11 @@
       <dependency>
         <groupId>org.universAAL.security</groupId>
         <artifactId>security.authorisator.delegation</artifactId>
+        <version>3.4.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.universAAL.security</groupId>
+        <artifactId>security.anonymization</artifactId>
         <version>3.4.1-SNAPSHOT</version>
       </dependency>
     </dependencies>
