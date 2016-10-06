@@ -8,6 +8,7 @@ import org.universAAL.security.access_checkers.DelegationAccessChecker;
 public class DelegationActivator implements ModuleActivator {
 
 	static ModuleContext context;
+	private DelegationServieCallee callee;
 	
 	public void start(ModuleContext ctxt) throws Exception {	
 		context = ctxt;
@@ -17,7 +18,8 @@ public class DelegationActivator implements ModuleActivator {
 		 */
 		//Add authorisation modification
 		AuthorisatorCallee.registerChecker(new DelegationAccessChecker());
-		
+		DelegationService.initialize(context);
+		callee = new DelegationServieCallee(context, DelegationService.profs); 
 		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
 
@@ -28,7 +30,7 @@ public class DelegationActivator implements ModuleActivator {
 		 * close uAAL stuff
 		 */
 		AuthorisatorCallee.unregisterChecker(DelegationAccessChecker.class);
-		
+		callee.close();
 		LogUtils.logDebug(context, getClass(), "stop", "Stopped.");
 
 	}
