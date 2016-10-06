@@ -130,6 +130,7 @@ static final ServiceProfile[] profs = new ServiceProfile[4];
 		//Decrypt
 		MultiDestinationProfiles decrypt = new MultiDestinationProfiles(PROCESS_DECRYPT);
 		decrypt.addFilteringInput(PARAM_KEY_RING, KeyRing.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION, AsymmetricEncryption.PROP_KEY_RING});
+		//TODO: keyrings can be used with different AsymmetricEncryptions, create similar pattern as for cheate with LVL2.
 		decrypt.addFilteringInput(PARAM_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 		decrypt.addOutput(PARAM_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
 		
