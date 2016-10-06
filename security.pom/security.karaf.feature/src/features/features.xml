@@ -35,4 +35,10 @@
 		<feature>uAAL-Ont.Security</feature> 
 		<bundle start-level='70' start='true'>wrap:mvn:org.universAAL.security/security.authorisator/${security.authorisator.version}</bundle>
 	</feature>
+	
+	<feature name="uAAL-Security.Authorisator.Delegation" description="Module Extending Authorisation with delegation and some delegation services."
+		version="${pom.version}" resolver='(obr)'>
+		<feature>uAAL-Security.Authorisator</feature> 
+		<bundle start-level='71' start='true'>wrap:mvn:org.universAAL.security/security.authorisator.delegation/${security.authorisator.delegation.version}</bundle>
+	</feature>
 </features>

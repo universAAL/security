@@ -43,6 +43,10 @@
       <groupId>org.universAAL.security</groupId>
       <artifactId>security.authorisator</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.universAAL.security</groupId>
+      <artifactId>security.authorisator.delegation</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <filters>
