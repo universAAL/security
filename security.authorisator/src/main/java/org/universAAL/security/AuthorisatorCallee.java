@@ -51,7 +51,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 	private static final String AUX_BAG_PROP =  ProjectActivator.NAMESPACE + "auxilaryBagProperty";
 	private static List<AccessChecker> checkers = new ArrayList<AccessChecker>();
 	private PassiveDependencyProxy<MessageContentSerializer> serializer;
-	
+	private CHeQuerrier query;
 	/**
 	 * @param context
 	 * @param realizedServices
@@ -62,6 +62,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		serializer = new PassiveDependencyProxy<MessageContentSerializer>(
 				context,
 				new Object[] { MessageContentSerializer.class.getName() });
+		query = new CHeQuerrier(owner);
 		registerChecker(new AssetDefaultAccessChecker());
 		registerChecker(new CheckUserRoles());
 	}
@@ -202,7 +203,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		
 		String prefixes = split[0];
 		String serialValue = split[1];
-		CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{prefixes,r.getURI(),prop, serialValue});
+		query.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{prefixes,r.getURI(),prop, serialValue}));
 		
 	}
 	
@@ -214,13 +215,12 @@ public class AuthorisatorCallee extends ServiceCallee {
 		
 		String prefixes = split[0];
 		String serialValue = split[1];
-		CHeQuerrier.getQuery(CHeQuerrier.getResource("updateFullObject.sparql"), new String[]{prefixes,r.getURI(), serialValue});
+		query.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateFullObject.sparql"), new String[]{prefixes,r.getURI(), serialValue}));
 		
 	}
 
 	private Object getAllObjectsOfType(String classuri){
-		String result = CHeQuerrier.getQuery(CHeQuerrier.getResource("getObjectType.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP, classuri});
-		return serializer.getObject().deserialize(result);
+		return query.query( CHeQuerrier.getQuery(CHeQuerrier.getResource("getObjectType.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP, classuri}));
 	}
 	
 	

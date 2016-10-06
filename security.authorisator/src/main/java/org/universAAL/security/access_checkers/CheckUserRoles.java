@@ -42,7 +42,7 @@ import org.universAAL.security.interfaces.AccessChecker;
 public class CheckUserRoles implements AccessChecker {
 
 
-	private PassiveDependencyProxy<MessageContentSerializer> serializer = null;
+	private CHeQuerrier querier;
 	
 	private static final String AUX_BAG_OBJECT = ProjectActivator.NAMESPACE + "auxilaryBagObject";
 	private static final String AUX_BAG_PROP =  ProjectActivator.NAMESPACE + "auxilaryBagProperty";
@@ -76,10 +76,8 @@ public class CheckUserRoles implements AccessChecker {
 	}
 	
 	protected void init(ModuleContext mc){
-		if (serializer == null) {
-			serializer = new PassiveDependencyProxy<MessageContentSerializer>(
-					mc,
-					new Object[] { MessageContentSerializer.class.getName() });
+		if (querier == null){
+			querier = new CHeQuerrier(mc);
 		}
 	}
 	
@@ -96,8 +94,7 @@ public class CheckUserRoles implements AccessChecker {
 	}
 
 	protected SecuritySubprofile getSecuritySubProfile(ModuleContext mc, User usr){
-		String response = CHeQuerrier.getQuery(CHeQuerrier.getResource("getSecuritySubProfileForUser.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP,usr.getURI()});
-		Object o = serializer.getObject().deserialize(response);
+		Object o = querier.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("getSecuritySubProfileForUser.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP,usr.getURI()}));
 		SecuritySubprofile ssp;
 		if (o instanceof SecuritySubprofile){
 			ssp = (SecuritySubprofile) o;
