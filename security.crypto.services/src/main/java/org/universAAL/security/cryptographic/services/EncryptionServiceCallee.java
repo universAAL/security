@@ -16,15 +16,17 @@
 package org.universAAL.security.cryptographic.services;
 
 import java.nio.charset.Charset;
-import java.security.InvalidKeyException;
+import java.security.GeneralSecurityException;
+import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.universAAL.middleware.container.ModuleContext;
@@ -84,6 +86,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 	@Override
 	public ServiceResponse handleCall(ServiceCall call) {
 		Base64Binary key = null;
+		boolean symmetrical = true;
 		Encryption algorithm = (Encryption) call.getInputValue(EncryptionServiceProfiles.METHOD);
 		if (call.getProcessURI().contains("generate-new")){
 			try {
@@ -103,6 +106,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 			}
 		}
 		if (ManagedIndividual.checkMembership(AsymmetricEncryption.MY_URI, algorithm)) {
+			symmetrical = false;
 			//if it is an asymmetrical operation resolve the Key to use
 			KeyRing keyring = (KeyRing) call
 					.getInputValue(EncryptionServiceProfiles.KEY);
@@ -119,17 +123,15 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		if (call.getProcessURI().contains("encrypt")) {
 			Resource ir = (Resource) call
 					.getInputValue(EncryptionServiceProfiles.CLEAR_RESOURCE);
+			EncryptedResource er = null;
+			
 			try {
-
-				ProcessOutput po = new ProcessOutput(
-						EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
-						doEncryption(ir, key, algorithm));
-				ServiceResponse sr = new ServiceResponse(
-						CallStatus.succeeded);
-				sr.addOutput(po);
-
-				return sr;
-
+				if (symmetrical) {
+					er = doEncryption(ir, key, (SymmetricEncryption) algorithm);
+				}else {
+					//encryption with Asymmetrical
+					er = doEncryption(ir, key, (AsymmetricEncryption) algorithm);
+				}
 			} catch (Exception e) {
 				LogUtils.logError(owner, getClass(), "Encrypt"
 						+ algorithm,
@@ -137,6 +139,15 @@ public class EncryptionServiceCallee extends ServiceCallee {
 				return new ServiceResponse(
 						CallStatus.serviceSpecificFailure);
 			}
+				ProcessOutput po = new ProcessOutput(
+						EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
+						er);
+						
+				ServiceResponse sr = new ServiceResponse(
+						CallStatus.succeeded);
+				sr.addOutput(po);
+
+				return sr;
 		}
 		if (call.getProcessURI().contains("decrypt")) {
 			EncryptedResource ir = (EncryptedResource) call
@@ -148,16 +159,16 @@ public class EncryptionServiceCallee extends ServiceCallee {
 				return sr;
 			}
 
+			Resource r = null;
+			
 			try {
-
-				ProcessOutput po = new ProcessOutput(
-						EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
-						doDecryption(ir, key, algorithm));
-				ServiceResponse sr = new ServiceResponse(
-						CallStatus.succeeded);
-				sr.addOutput(po);
-
-				return sr;
+				if(symmetrical){
+					r = doDecryption(ir, key, (SymmetricEncryption) algorithm);
+				}else {
+					//decryption with Asymmetrical
+					r = doDecryption(ir, key, (AsymmetricEncryption) algorithm);
+					
+				}
 
 			} catch (Exception e) {
 				LogUtils.logError(owner, getClass(), "Decrypt"
@@ -166,6 +177,16 @@ public class EncryptionServiceCallee extends ServiceCallee {
 				return new ServiceResponse(
 						CallStatus.serviceSpecificFailure);
 			}
+
+
+			ProcessOutput po = new ProcessOutput(
+					EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
+					r);
+			ServiceResponse sr = new ServiceResponse(
+					CallStatus.succeeded);
+			sr.addOutput(po);
+
+			return sr;
 
 		}
 
@@ -187,9 +208,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 	}
 
 	static EncryptedResource doEncryption(Resource ir, Base64Binary key,
-			Encryption algorithm) throws NoSuchAlgorithmException,
-			NoSuchPaddingException, InvalidKeyException,
-			IllegalBlockSizeException, BadPaddingException {
+			SymmetricEncryption algorithm) throws GeneralSecurityException {
 		String alg = getJavaCipherProviderFromEncryption(algorithm);
 		Cipher cipher = Cipher.getInstance(alg);
 
@@ -212,9 +231,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 	}
 
 	static Resource doDecryption(EncryptedResource ir, Base64Binary key,
-			Encryption encrytionAlgorithm) throws NoSuchAlgorithmException,
-			NoSuchPaddingException, InvalidKeyException,
-			IllegalBlockSizeException, BadPaddingException {
+			SymmetricEncryption encrytionAlgorithm) throws GeneralSecurityException {
 		String alg = getJavaCipherProviderFromEncryption(encrytionAlgorithm);
 		Cipher cipher = Cipher.getInstance(alg);
 
@@ -238,7 +255,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 			if (enc.getClassURI().equals(DES.MY_URI)){
 				keyLength = 56;
 			}else {
-				keyLength = 256;
+				keyLength = 128;
 			}
 		} else {
 			keyLength = ((Integer)preferredKeyLength).intValue();
@@ -252,6 +269,52 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		out.setKeyText(new Base64Binary(keyGen.generateKey().getEncoded()));
 		out.setProperty(EncryptionKey.PROP_KEY_LENGTH, new Integer(keyLength));
 		return out;
+	}
+	
+	static EncryptedResource doEncryption(Resource ir, Base64Binary privatekey,
+			AsymmetricEncryption algorithm) throws GeneralSecurityException {
+		String alg = getJavaCipherProviderFromEncryption(algorithm);
+		Cipher cipher = Cipher.getInstance(alg);
+		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privatekey.getVal());
+		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(algorithm));
+		PrivateKey prKey = keyFactory.generatePrivate(keySpec);
+		
+		// Serialize Resource
+		String message = ProjectActivator.serializer.getObject().serialize(ir);
+
+		// configure cipher
+		cipher.init(Cipher.ENCRYPT_MODE, prKey);
+		// Encrypt
+		byte[] byteCipherText = cipher.doFinal(message.getBytes());
+
+		// Collect result
+		EncryptedResource or = new EncryptedResource();
+		Encryption cleanE = (Encryption) algorithm.copy(false);
+		cleanE.changeProperty(Encryption.PROP_KEY, null);
+		or.setEncryption(cleanE);
+		or.setCypheredText(new Base64Binary(byteCipherText));
+		return or;
+	}
+
+	static Resource doDecryption(EncryptedResource ir, Base64Binary publickey,
+			AsymmetricEncryption encrytionAlgorithm) throws GeneralSecurityException {
+		String alg = getJavaCipherProviderFromEncryption(encrytionAlgorithm);
+		Cipher cipher = Cipher.getInstance(alg);
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publickey.getVal());
+		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(encrytionAlgorithm));
+		PublicKey pubKey = keyFactory.generatePublic(keySpec);
+
+		// configure cipher
+		cipher.init(Cipher.DECRYPT_MODE, pubKey);
+		// Encrypt
+		byte[] clearText = cipher.doFinal(ir.getCypheredText().getVal());
+
+		// Collect result
+		// deserialize Resource
+		Resource or = (Resource) ProjectActivator.serializer.getObject()
+				.deserialize(new String(clearText, Charset.forName("UTF8")));
+
+		return or;
 	}
 	
 	static KeyRing generateKeyRing (AsymmetricEncryption algorithm, Object preferredKeyLength) throws NoSuchAlgorithmException{
@@ -274,17 +337,19 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		return out;
 	}
 	
+	
+	
 	static String getJavaCipherProviderFromEncryption(Encryption enc){
-		if (enc.getURI().equals(AES.MY_URI)){
+		if (ManagedIndividual.checkMembership(AES.MY_URI, enc)) {
 			return "AES";
 		}
-		if (enc.getURI().equals(Blowfish.MY_URI)){
+		if (ManagedIndividual.checkMembership(Blowfish.MY_URI, enc)){
 			return "Blowfish";
 		}
-		if (enc.getURI().equals(DES.MY_URI)){
+		if (ManagedIndividual.checkMembership(DES.MY_URI, enc)){
 			return "DES";
 		}
-		if (enc.getURI().equals(RSA.MY_URI)){
+		if (ManagedIndividual.checkMembership(RSA.MY_URI, enc)){
 			return "RSA";
 		}
 		return null;

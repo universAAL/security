@@ -253,7 +253,7 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 		SimpleKey sk = decryptSessionKey(mder, keyring);
 		if (sk != null) {
 			try {
-				return EncryptionServiceCallee.doDecryption(mder, sk.getKeyText(), mder.getEncryption());
+				return EncryptionServiceCallee.doDecryption(mder, sk.getKeyText(), (SymmetricEncryption) mder.getEncryption());
 			} catch (Exception e) {
 				LogUtils.logError(owner, getClass(), "decrypt", new String[]{"unable to decrypt"}, e);
 			} 

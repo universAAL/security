@@ -16,9 +16,14 @@
 package org.universAAL.security.cryptographic.services;
 
 import java.security.GeneralSecurityException;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.List;
 
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
@@ -33,8 +38,9 @@ import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.Digest;
-import org.universAAL.ontology.cryptographic.Encryption;
 import org.universAAL.ontology.cryptographic.SignedResource;
+import org.universAAL.ontology.cryptographic.asymmetric.RSA;
+import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
 
 /**
  * @author amedrano
@@ -76,22 +82,7 @@ public class SignVerifyCallee extends ServiceCallee {
 			Digest dig = (Digest) call.getInputValue(SignVerifyProfile.DIG_METHOD);
 			Base64Binary key = EncryptionServiceCallee.resolveKey(enc.getKeyRing()[0]);
 			try {
-				r = strip4specialCase(r);				
-				//Digest
-				Base64Binary hash = DigestServiceCallee.digestResource(r, dig);
-				//Encrypt
-				Base64Binary sign = encrypt(enc, key, hash);
-				
-				//set up the result
-				SignedResource sr = new SignedResource();
-				sr.setSignedResource(r);
-				sr.setSignature(new Base64Binary[]{sign});
-				sr.setDigest(dig);
-				
-				//create copy without the keyring
-				AsymmetricEncryption method = (AsymmetricEncryption) enc.deepCopy();
-				method.changeProperty(AsymmetricEncryption.PROP_KEY_RING, null);
-				method.changeProperty(AsymmetricEncryption.PROP_KEY, null);
+				SignedResource sr = sign(r, dig, enc, key);
 				
 				ServiceResponse sresp = new ServiceResponse(CallStatus.succeeded);
 				sresp.addOutput(new ProcessOutput(SignVerifyProfile.SIGNED_RESOURCE, sr));
@@ -119,20 +110,7 @@ public class SignVerifyCallee extends ServiceCallee {
 			}
 			
 			try {
-				//Digest
-				Base64Binary hash = DigestServiceCallee.digestResource(strip4specialCase(sr.getSignedResource()), dig);
-				
-				//check signatures
-				Boolean result = Boolean.FALSE;
-				Base64Binary[] signatures = sr.getSignature();
-				for (int i = 0; i < signatures.length; i++) {
-					Base64Binary signedHash = decrypt(enc, key, signatures[i]);
-					if (signedHash.equals(hash)){
-						result = Boolean.TRUE;
-					}
-				}
-				
-				//set up the result
+				Boolean result = verify(sr, dig, enc, key);
 				ServiceResponse sresp = new ServiceResponse(CallStatus.succeeded);
 				sresp.addOutput(new ProcessOutput(SignVerifyProfile.RESULT, result));
 				return sresp;
@@ -159,30 +137,120 @@ public class SignVerifyCallee extends ServiceCallee {
 		return r;
 	}
 
-	static Base64Binary decrypt(AsymmetricEncryption enc, Base64Binary key,
-			Base64Binary cleartext) throws GeneralSecurityException {
-		String alg = EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc);
-		Cipher cipher = Cipher.getInstance(alg);
+	static SignedResource sign(Resource r, Digest dig, AsymmetricEncryption enc, Base64Binary privateKey) throws GeneralSecurityException{
+		r = strip4specialCase(r);
+		// Serialize Resource
+		String message = ProjectActivator.serializer.getObject().serialize(r);
+				
+		//prepare Java Signature
+		Signature s = getSignature(dig, enc);
+		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey.getVal());
+		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc));
+		PrivateKey prKey = keyFactory.generatePrivate(keySpec);
+		s.initSign(prKey);	
+		s.update(message.getBytes());
+		
 
-		// configure cipher
-		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getVal(),
-				alg));
-		// Encrypt
-		byte[] byteCipherText = cipher.doFinal(cleartext.getVal());
+		//set up the result
+		SignedResource sr = new SignedResource();
+		sr.setSignedResource(r);
+		sr.setSignature(new Base64Binary[]{new Base64Binary(s.sign())});
+		sr.setDigest(dig);
 
-		return new Base64Binary(byteCipherText);
+		//create copy without the keyring
+		AsymmetricEncryption method = (AsymmetricEncryption) enc.deepCopy();
+		method.changeProperty(AsymmetricEncryption.PROP_KEY_RING, null);
+		method.changeProperty(AsymmetricEncryption.PROP_KEY, null);
+		sr.setAsymmetric(method);
+		return sr;
 	}
-
-	static Base64Binary encrypt(Encryption enc, Base64Binary key, Base64Binary cleartext) throws GeneralSecurityException{
-		String alg = EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc);
-		Cipher cipher = Cipher.getInstance(alg);
-
-		// configure cipher
-		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getVal(),
-				alg));
-		// Encrypt
-		byte[] byteCipherText = cipher.doFinal(cleartext.getVal());
-
-		return new Base64Binary(byteCipherText);
+	
+	static Boolean verify(SignedResource sr, Digest dig,AsymmetricEncryption enc, Base64Binary publicKey) throws GeneralSecurityException{
+		//Digest
+		Resource r = strip4specialCase(sr.getSignedResource());
+		// Serialize Resource
+		String message = ProjectActivator.serializer.getObject().serialize(r);
+				
+		//prepare Java Verification
+		Signature s = getSignature(dig, enc);
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey.getVal());
+		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc));
+		PublicKey pubKey = keyFactory.generatePublic(keySpec);
+		s.initVerify(pubKey);	
+		s.update(message.getBytes());
+		
+		
+		//check signatures
+		Boolean result = Boolean.FALSE;
+		List signatures = sr.getSignature();
+		for (Object sign : signatures) {
+			if (s.verify(((Base64Binary)sign).getVal())){
+				result = Boolean.TRUE;
+			}
+		}
+		return result;
 	}
+	
+	static Signature getSignature(Digest dig, AsymmetricEncryption asy) throws NoSuchAlgorithmException{
+		String dName = "";
+		String aName = "";
+		if (dig == null){
+			dName = "NONE";
+		}else if (dig.equals(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2)) {
+			dName ="MD2";
+		}
+		if (dig.equals(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD5)) {
+			dName ="MD5";
+		}
+		if (dig.equals(SecureHashAlgorithm.IND_SHA)) {
+			dName ="SHA1";
+		}
+		if (dig.equals(SecureHashAlgorithm.IND_SHA256)) {
+			dName ="SHA256";
+		}
+		if (dig.equals(SecureHashAlgorithm.IND_SHA384)) {
+			dName ="SHA384";
+		}
+		if (dig.equals(SecureHashAlgorithm.IND_SHA512)) {
+			dName ="SHA512";
+		} 
+		if (ManagedIndividual.checkMembership(RSA.MY_URI, asy)){
+			aName = "RSA";
+		}
+		
+		return Signature.getInstance(dName+"with"+aName);
+	}
+	
+//	static Base64Binary encrypt(AsymmetricEncryption enc, Base64Binary privateKey, Base64Binary cleartext) throws GeneralSecurityException{
+//		String alg = EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc);
+//		Cipher cipher = Cipher.getInstance(alg);
+//
+//		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey.getVal());
+//		KeyFactory keyFactory = KeyFactory.getInstance(alg);
+//		PrivateKey prKey = keyFactory.generatePrivate(keySpec);
+//		
+//		// configure cipher
+//		cipher.init(Cipher.ENCRYPT_MODE, prKey);
+//		// Encrypt
+//		byte[] byteCipherText = cipher.doFinal(cleartext.getVal());
+//
+//		return new Base64Binary(byteCipherText);
+//	}
+//
+//	static Base64Binary decrypt(AsymmetricEncryption enc, Base64Binary publickey,
+//			Base64Binary ciphertext) throws GeneralSecurityException {
+//		String alg = EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc);
+//		Cipher cipher = Cipher.getInstance(alg);
+//		
+//		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publickey.getVal());
+//		KeyFactory keyFactory = KeyFactory.getInstance(alg);
+//		PublicKey prKey = keyFactory.generatePublic(keySpec);
+//		
+//		// configure cipher
+//		cipher.init(Cipher.DECRYPT_MODE, prKey);
+//		// Encrypt
+//		byte[] byteCipherText = cipher.doFinal(ciphertext.getVal());
+//	
+//		return new Base64Binary(byteCipherText);
+//	}
 }
