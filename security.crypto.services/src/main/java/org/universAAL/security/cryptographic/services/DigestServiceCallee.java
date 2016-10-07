@@ -102,22 +102,22 @@ public class DigestServiceCallee extends ServiceCallee {
 	
 	static private MessageDigest getMD(Digest digestAlgorithm)
 			throws NoSuchAlgorithmException {
-		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2) {
+		if (digestAlgorithm.equals(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2)) {
 			return MessageDigest.getInstance("MD2");
 		}
-		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD5) {
+		if (digestAlgorithm.equals(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD5)) {
 			return MessageDigest.getInstance("MD5");
 		}
-		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA) {
+		if (digestAlgorithm.equals(SecureHashAlgorithm.IND_SHA)) {
 			return MessageDigest.getInstance("SHA");
 		}
-		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA256) {
+		if (digestAlgorithm.equals(SecureHashAlgorithm.IND_SHA256)) {
 			return MessageDigest.getInstance("SHA-256");
 		}
-		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA384) {
+		if (digestAlgorithm.equals(SecureHashAlgorithm.IND_SHA384)) {
 			return MessageDigest.getInstance("SHA-384");
 		}
-		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA512) {
+		if (digestAlgorithm.equals(SecureHashAlgorithm.IND_SHA512)) {
 			return MessageDigest.getInstance("SHA-512");
 		}
 		throw new NoSuchAlgorithmException();
