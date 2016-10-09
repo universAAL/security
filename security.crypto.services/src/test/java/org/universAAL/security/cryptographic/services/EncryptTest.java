@@ -182,10 +182,11 @@ public class EncryptTest extends CommonTest {
 	
 	public void testRSA() throws Exception{
 		AsymmetricEncryption rsa = new RSA();
-		KeyRing kr = EncryptionServiceCallee.generateKeyRing(new RSA(), null);
+		KeyRing kr = EncryptionServiceCallee.generateKeyRing(new RSA(), 2048);
 		rsa.addKeyRing(kr);
 		
-		Resource testR = RandomResourceGenerator.randomResource();
+//		Resource testR = RandomResourceGenerator.randomResource(); // This generates a resource TOO long TODO: RSA should encrypt using session key?
+		Resource testR = new Resource("http://uaal.org/Test.owl#rsaT"); testR.setProperty("a", "test");
 		
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, kr.getPublicKey(), rsa);
 		

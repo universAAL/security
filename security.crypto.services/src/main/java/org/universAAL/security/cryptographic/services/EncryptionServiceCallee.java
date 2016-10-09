@@ -271,13 +271,15 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		return out;
 	}
 	
-	static EncryptedResource doEncryption(Resource ir, Base64Binary privatekey,
+	static EncryptedResource doEncryption(Resource ir, Base64Binary publickey,
 			AsymmetricEncryption algorithm) throws GeneralSecurityException {
-		String alg = getJavaCipherProviderFromEncryption(algorithm);
+//		String alg = getJavaCipherProviderFromEncryption(algorithm);
+	    	String alg = "RSA/ECB/PKCS1Padding";
 		Cipher cipher = Cipher.getInstance(alg);
-		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privatekey.getVal());
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publickey.getVal());
 		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(algorithm));
-		PrivateKey prKey = keyFactory.generatePrivate(keySpec);
+		PublicKey prKey = keyFactory.generatePublic(keySpec);
+
 		
 		// Serialize Resource
 		String message = ProjectActivator.serializer.getObject().serialize(ir);
@@ -296,16 +298,16 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		return or;
 	}
 
-	static Resource doDecryption(EncryptedResource ir, Base64Binary publickey,
-			AsymmetricEncryption encrytionAlgorithm) throws GeneralSecurityException {
-		String alg = getJavaCipherProviderFromEncryption(encrytionAlgorithm);
+	static Resource doDecryption(EncryptedResource ir, Base64Binary privatekey,
+			AsymmetricEncryption algorithm) throws GeneralSecurityException {
+//		String alg = getJavaCipherProviderFromEncryption(algorithm);
+	    	String alg = "RSA/ECB/PKCS1Padding";
 		Cipher cipher = Cipher.getInstance(alg);
-		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publickey.getVal());
-		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(encrytionAlgorithm));
-		PublicKey pubKey = keyFactory.generatePublic(keySpec);
-
+		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privatekey.getVal());
+		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(algorithm));
+		PrivateKey prKey = keyFactory.generatePrivate(keySpec);
 		// configure cipher
-		cipher.init(Cipher.DECRYPT_MODE, pubKey);
+		cipher.init(Cipher.DECRYPT_MODE, prKey);
 		// Encrypt
 		byte[] clearText = cipher.doFinal(ir.getCypheredText().getVal());
 

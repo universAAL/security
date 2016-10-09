@@ -221,36 +221,4 @@ public class SignVerifyCallee extends ServiceCallee {
 		return Signature.getInstance(dName+"with"+aName);
 	}
 	
-//	static Base64Binary encrypt(AsymmetricEncryption enc, Base64Binary privateKey, Base64Binary cleartext) throws GeneralSecurityException{
-//		String alg = EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc);
-//		Cipher cipher = Cipher.getInstance(alg);
-//
-//		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey.getVal());
-//		KeyFactory keyFactory = KeyFactory.getInstance(alg);
-//		PrivateKey prKey = keyFactory.generatePrivate(keySpec);
-//		
-//		// configure cipher
-//		cipher.init(Cipher.ENCRYPT_MODE, prKey);
-//		// Encrypt
-//		byte[] byteCipherText = cipher.doFinal(cleartext.getVal());
-//
-//		return new Base64Binary(byteCipherText);
-//	}
-//
-//	static Base64Binary decrypt(AsymmetricEncryption enc, Base64Binary publickey,
-//			Base64Binary ciphertext) throws GeneralSecurityException {
-//		String alg = EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc);
-//		Cipher cipher = Cipher.getInstance(alg);
-//		
-//		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publickey.getVal());
-//		KeyFactory keyFactory = KeyFactory.getInstance(alg);
-//		PublicKey prKey = keyFactory.generatePublic(keySpec);
-//		
-//		// configure cipher
-//		cipher.init(Cipher.DECRYPT_MODE, prKey);
-//		// Encrypt
-//		byte[] byteCipherText = cipher.doFinal(ciphertext.getVal());
-//	
-//		return new Base64Binary(byteCipherText);
-//	}
 }
