@@ -18,6 +18,7 @@ package org.universAAL.security.cryptographic.services;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
+import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -51,6 +52,7 @@ import org.universAAL.ontology.cryptographic.asymmetric.RSA;
 import org.universAAL.ontology.cryptographic.symmetric.AES;
 import org.universAAL.ontology.cryptographic.symmetric.Blowfish;
 import org.universAAL.ontology.cryptographic.symmetric.DES;
+import org.universAAL.security.cryptographic.services.utils.BlockChipher;
 
 /**
  * @author amedrano
@@ -225,6 +227,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		EncryptedResource or = new EncryptedResource();
 		Encryption cleanE = (Encryption) algorithm.copy(false);
 		cleanE.changeProperty(Encryption.PROP_KEY, null);
+		cleanE.changeProperty(SymmetricEncryption.PROP_SIMPLE_KEY, null);
 		or.setEncryption(cleanE);
 		or.setCypheredText(new Base64Binary(byteCipherText));
 		return or;
@@ -272,49 +275,45 @@ public class EncryptionServiceCallee extends ServiceCallee {
 	}
 	
 	static EncryptedResource doEncryption(Resource ir, Base64Binary publickey,
-			AsymmetricEncryption algorithm) throws GeneralSecurityException {
-//		String alg = getJavaCipherProviderFromEncryption(algorithm);
-	    	String alg = "RSA/ECB/PKCS1Padding";
-		Cipher cipher = Cipher.getInstance(alg);
+			AsymmetricEncryption algorithm) throws Exception {
+		String alg = getJavaCipherProviderFromEncryption(algorithm);
 		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publickey.getVal());
-		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(algorithm));
-		PublicKey prKey = keyFactory.generatePublic(keySpec);
+		KeyFactory keyFactory = KeyFactory.getInstance(alg);
+		PublicKey puKey = keyFactory.generatePublic(keySpec);
 
 		
 		// Serialize Resource
 		String message = ProjectActivator.serializer.getObject().serialize(ir);
 
-		// configure cipher
-		cipher.init(Cipher.ENCRYPT_MODE, prKey);
+		BlockChipher bc = new BlockChipher(Cipher.getInstance(alg));
 		// Encrypt
-		byte[] byteCipherText = cipher.doFinal(message.getBytes());
+		byte[] byteCipherText = bc.encrypt(message, puKey);
 
 		// Collect result
 		EncryptedResource or = new EncryptedResource();
 		Encryption cleanE = (Encryption) algorithm.copy(false);
 		cleanE.changeProperty(Encryption.PROP_KEY, null);
+		cleanE.changeProperty(AsymmetricEncryption.PROP_KEY_RING, null);
 		or.setEncryption(cleanE);
 		or.setCypheredText(new Base64Binary(byteCipherText));
 		return or;
 	}
 
 	static Resource doDecryption(EncryptedResource ir, Base64Binary privatekey,
-			AsymmetricEncryption algorithm) throws GeneralSecurityException {
-//		String alg = getJavaCipherProviderFromEncryption(algorithm);
-	    	String alg = "RSA/ECB/PKCS1Padding";
-		Cipher cipher = Cipher.getInstance(alg);
+			AsymmetricEncryption algorithm) throws Exception {
+		String alg = getJavaCipherProviderFromEncryption(algorithm);
 		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privatekey.getVal());
-		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(algorithm));
+		KeyFactory keyFactory = KeyFactory.getInstance(alg);
 		PrivateKey prKey = keyFactory.generatePrivate(keySpec);
 		// configure cipher
-		cipher.init(Cipher.DECRYPT_MODE, prKey);
-		// Encrypt
-		byte[] clearText = cipher.doFinal(ir.getCypheredText().getVal());
+		BlockChipher bc = new BlockChipher(Cipher.getInstance(alg));
+		// Decrypt
+		String clearText = bc.decrypt(ir.getCypheredText().getVal(), prKey);
 
 		// Collect result
 		// deserialize Resource
 		Resource or = (Resource) ProjectActivator.serializer.getObject()
-				.deserialize(new String(clearText, Charset.forName("UTF8")));
+				.deserialize(clearText);
 
 		return or;
 	}
@@ -322,14 +321,15 @@ public class EncryptionServiceCallee extends ServiceCallee {
 	static KeyRing generateKeyRing (AsymmetricEncryption algorithm, Object preferredKeyLength) throws NoSuchAlgorithmException{
 		int keyLength;
 		if (preferredKeyLength == null || !(preferredKeyLength instanceof Integer) ||  ((Integer)preferredKeyLength).intValue() == 0){
-			keyLength = 512;
+			keyLength = 1024;
 		} else {
 			keyLength = ((Integer)preferredKeyLength).intValue();
 		}
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(getJavaCipherProviderFromEncryption(algorithm));
 		keyGen.initialize(keyLength);
-		byte[] publicKey = keyGen.genKeyPair().getPublic().getEncoded();
-		byte[] privateKey = keyGen.genKeyPair().getPrivate().getEncoded();
+		KeyPair kp = keyGen.generateKeyPair();
+		byte[] publicKey = kp.getPublic().getEncoded();
+		byte[] privateKey = kp.getPrivate().getEncoded();
 		
 		//generate Keyring
 		KeyRing out = new KeyRing();

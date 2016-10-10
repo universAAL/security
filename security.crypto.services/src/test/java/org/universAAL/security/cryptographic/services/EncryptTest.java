@@ -17,7 +17,6 @@ package org.universAAL.security.cryptographic.services;
 
 import java.security.InvalidKeyException;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
 
 import javax.crypto.BadPaddingException;
@@ -86,6 +85,8 @@ public class EncryptTest extends CommonTest {
 		
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, key.getKeyText(), aes);
 		
+		assertEquals(0, enc.getEncryption().getKey().length);
+		
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), aes);
 		
 		assertNotNull(detestR);
@@ -119,6 +120,8 @@ public class EncryptTest extends CommonTest {
 		Resource testR = RandomResourceGenerator.randomResource();
 		
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, key.getKeyText(), blo);
+
+		assertEquals(0, enc.getEncryption().getKey().length);
 		
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), blo);
 		
@@ -153,6 +156,8 @@ public class EncryptTest extends CommonTest {
 		Resource testR = RandomResourceGenerator.randomResource();
 		
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, key.getKeyText(), des);
+
+		assertEquals(0, enc.getEncryption().getKey().length);
 		
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), des);
 		
@@ -182,14 +187,16 @@ public class EncryptTest extends CommonTest {
 	
 	public void testRSA() throws Exception{
 		AsymmetricEncryption rsa = new RSA();
-		KeyRing kr = EncryptionServiceCallee.generateKeyRing(new RSA(), 2048);
+		KeyRing kr = EncryptionServiceCallee.generateKeyRing(new RSA(), 1024); //FIXME only 1024 byte keys supported!!!
 		rsa.addKeyRing(kr);
 		
-//		Resource testR = RandomResourceGenerator.randomResource(); // This generates a resource TOO long TODO: RSA should encrypt using session key?
-		Resource testR = new Resource("http://uaal.org/Test.owl#rsaT"); testR.setProperty("a", "test");
+		Resource testR = RandomResourceGenerator.randomResource(); 
 		
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, kr.getPublicKey(), rsa);
+
+		assertEquals(0, enc.getEncryption().getKey().length);
 		
+//		System.out.println(Arrays.toString(enc.getCypheredText().getVal()));
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, kr.getPrivateKey(), rsa);
 		
 		assertNotNull(detestR);
