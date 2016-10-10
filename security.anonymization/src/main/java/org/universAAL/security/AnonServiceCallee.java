@@ -48,7 +48,7 @@ public class AnonServiceCallee extends ServiceCallee {
 
 	private static final String PARAM_ENCRY_RESOURCE_OUT = AnonServiceProfile.NAMESPACE + "paramOutEncryptedResource";
 
-	static final String PROTOCOL = "activeAnon://";
+	public static final String PROTOCOL = "activeAnon://";
 	
 	static PassiveDependencyProxy<MessageContentSerializer> serializer;
 
@@ -95,7 +95,8 @@ public class AnonServiceCallee extends ServiceCallee {
 			Resource propvalue =  (Resource) call.getInputValue(AnonServiceProfile.PARAM_PROPERTY);
 			Resource method = (Resource) call.getInputValue(AnonServiceProfile.PARAM_METHOD);
 			//create dummy resource to be encrypted
-			Resource newPropValue = new Resource(propvalue.getURI());
+			Resource newPropValue = Resource.getResource(propvalue.getType(), propvalue.getURI());
+			//TODO: add option to encrypt the full resource?
 			
 			//call Multidestination Encryption Service
 			EncryptionService encSrv = new EncryptionService();
@@ -115,32 +116,28 @@ public class AnonServiceCallee extends ServiceCallee {
 			EncryptedResource er = (EncryptedResource) sresp.getOutput(PARAM_ENCRY_RESOURCE_OUT).get(0);
 			// serialize to create newURI
 			
-			String newURI = serializer.getObject().serialize(er);
-			newURI = newURI.replaceAll("\\s+", " ");
 			try {
-				newURI = URLEncoder.encode(newURI, "UTF-8");
+				String newURI = flatten2URI(serializer.getObject().serialize(er));
+				newPropValue = Resource.getResource(propvalue.getType(), newURI);
 			} catch (UnsupportedEncodingException e) {
-				LogUtils.logWarn(owner, getClass(), "Anonymize", new String[]{"unable to enconde. It seems Your system does not support UTF-8... from when is your system? darkages?"}, e);
+				LogUtils.logError(owner, getClass(), "attemptDecryption", new String[]{"unable to encode. It seems Your system does not support UTF-8... from when is your system? darkages? "}, e);
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			}
-			newURI = PROTOCOL + newURI;
-			newPropValue = new Resource(newURI);
 			
 			// substitute property in anonymizable
-			Resource newanon = anonymizable.deepCopy();
-			Enumeration en = newanon.getPropertyURIs();
-			boolean replaced = false;
-			while (en.hasMoreElements() && !replaced) {
-				String prop = (String) en.nextElement();
-				if (newanon.getProperty(prop).equals(propvalue)){
-					newanon.changeProperty(prop, newPropValue);
-					replaced = true;
-				}
-			}
-			
+			Resource newanon = copyWreplacedProperty(anonymizable, propvalue, newPropValue);
+
 			//construct response
-			ServiceResponse mysrvresp = new ServiceResponse(CallStatus.succeeded);
-			mysrvresp.addOutput(AnonServiceProfile.PARAM_OUT_ANONYMIZABLE, newanon);
-			return mysrvresp;
+			if (newanon != null) {
+				ServiceResponse mysrvresp = new ServiceResponse(CallStatus.succeeded);
+				mysrvresp.addOutput(AnonServiceProfile.PARAM_OUT_ANONYMIZABLE, newanon);
+				return mysrvresp;
+			}
+			else {
+				ServiceResponse mysrvresp = new ServiceResponse(CallStatus.serviceSpecificFailure);
+				mysrvresp. setProperty(ServiceResponse.PROP_SERVICE_SPECIFIC_ERROR, "Unable to add new Anonymised property value");
+				return mysrvresp;
+			}
 		}
 		if (call.getProcessURI().contains(AnonServiceProfile.PROC_DEANON)){
 			/*
@@ -170,13 +167,43 @@ public class AnonServiceCallee extends ServiceCallee {
 		}
 		return new ServiceResponse(CallStatus.noMatchingServiceFound);
 	}
+	
+	static Resource copyWreplacedProperty(Resource root, Object orig, Object newPropValue){
+		// substitute property in anonymizable
+		Resource newanon = root.deepCopy();
+		Enumeration en = newanon.getPropertyURIs();
+		boolean replaced = false;
+		while (en.hasMoreElements() && !replaced) {
+			String prop = (String) en.nextElement();
+			if (newanon.getProperty(prop).equals(orig)){
+				//WARN: This checks the membership of the newPropvalue
+				replaced = newanon.changeProperty(prop, newPropValue);
+			}
+		}
+		if (replaced){
+			return newanon;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	static String flatten2URI(String s) throws UnsupportedEncodingException {
+		String newURI = s.replaceAll("\\s+", " ");
+		newURI = URLEncoder.encode(newURI, "UTF-8");
+		return  AnonServiceCallee.PROTOCOL + newURI;
+	}
+	
+	static String unflattenFromURI(String uri) throws UnsupportedEncodingException{
+		String serialized = uri.substring(AnonServiceCallee.PROTOCOL.length(), uri.length());
+		return URLDecoder.decode(serialized, "UTF-8");
+	}
 
 	private Resource attemptDecryption(AsymmetricEncryption method, Resource encryptedValue, Resource involvedUser){
 		//reconstruct original MDER
 		String serialized = encryptedValue.getURI();
-		serialized = serialized.substring(PROTOCOL.length()-1, serialized.length()-1); //XXX do unit test
 		try {
-			serialized = URLDecoder.decode(serialized, "UTF-8");
+			serialized = unflattenFromURI(serialized);
 		} catch (UnsupportedEncodingException e) {
 			LogUtils.logWarn(owner, getClass(), "attemptDecryption", new String[]{"unable to deconde. It seems Your system does not support UTF-8... from when is your system? darkages? "}, e);
 		}
