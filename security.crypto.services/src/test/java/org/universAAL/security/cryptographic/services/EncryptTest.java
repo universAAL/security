@@ -59,7 +59,7 @@ public class EncryptTest extends CommonTest {
 	 * @param detestR
 	 * @return
 	 */
-	private boolean fullResourceEquals(Resource a, Resource b) {
+	static boolean fullResourceEquals(Resource a, Resource b) {
 		HashSet aSet = new HashSet(Collections.list(a.getPropertyURIs()));
 		HashSet bSet = new HashSet(Collections.list(b.getPropertyURIs()));
 		if (!aSet.equals(bSet)){

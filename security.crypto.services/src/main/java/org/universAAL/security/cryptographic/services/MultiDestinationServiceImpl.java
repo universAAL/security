@@ -15,8 +15,15 @@
  ******************************************************************************/
 package org.universAAL.security.cryptographic.services;
 
+import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,11 +47,13 @@ import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.DestinataryEncryptedSessionKey;
 import org.universAAL.ontology.cryptographic.EncryptedResource;
+import org.universAAL.ontology.cryptographic.Encryption;
 import org.universAAL.ontology.cryptographic.EncryptionKey;
 import org.universAAL.ontology.cryptographic.KeyRing;
 import org.universAAL.ontology.cryptographic.MultidestinationEncryptedResource;
 import org.universAAL.ontology.cryptographic.SimpleKey;
 import org.universAAL.ontology.cryptographic.SymmetricEncryption;
+import org.universAAL.ontology.cryptographic.symmetric.AES;
 
 /**
  * @author amedrano
@@ -99,7 +108,7 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 				ael = Collections.EMPTY_LIST;
 			}
 			
-			MultidestinationEncryptedResource res = createMDER(r, keyring, se, ael);
+			MultidestinationEncryptedResource res = createMDER(r, se, ael);
 			ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
 			sr.addOutput(new ProcessOutput(MultiDestinationProfiles.PARAM_ENCRYPTED_RESOURCE,res));
 			return sr;
@@ -107,13 +116,13 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 		if (proc.contains(MultiDestinationProfiles.PROCESS_ADD_DEST)){
 			MultidestinationEncryptedResource mder = (MultidestinationEncryptedResource) call.getInputValue(MultiDestinationProfiles.PARAM_ENCRYPTED_RESOURCE);
 			
-			List<KeyRing> destinations;
-			Object in = call.getInputValue(MultiDestinationProfiles.PARAM_DEST_KEYS);
+			List<AsymmetricEncryption> destinations;
+			Object in = call.getInputValue(MultiDestinationProfiles.PARAM_METHOD_LVL2);
 			if (in instanceof List) {
-				destinations = (List<KeyRing>) in;
-			} else if (in instanceof KeyRing){
-				destinations = new ArrayList<KeyRing>();
-				destinations.add((KeyRing) in);
+				destinations = (List<AsymmetricEncryption>) in;
+			} else if (in instanceof AsymmetricEncryption){
+				destinations = new ArrayList<AsymmetricEncryption>();
+				destinations.add((AsymmetricEncryption) in);
 			} else {
 				destinations = Collections.EMPTY_LIST;
 			}
@@ -151,13 +160,16 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 		return new ServiceResponse(CallStatus.noMatchingServiceFound);
 	}
 
-	MultidestinationEncryptedResource createMDER(Resource r, KeyRing keyring, SymmetricEncryption se, List<AsymmetricEncryption> ael){
+	static MultidestinationEncryptedResource createMDER(Resource r, SymmetricEncryption se, List<AsymmetricEncryption> ael){
 		
 		try {
 			/*
 			 * Resolve Session key
 			 */
 			SimpleKey sessionKey;
+			if (se == null){
+				se = new AES(); // default symmetric encryption.
+			}
 			EncryptionKey[] propsed = se.getKey();
 			if (propsed.length > 0){
 				//try using the given key
@@ -180,16 +192,17 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 			List<DestinataryEncryptedSessionKey> destinations = new ArrayList<DestinataryEncryptedSessionKey>();
 			for (AsymmetricEncryption ae : ael) {
 				AsymmetricEncryption cleanAE = (AsymmetricEncryption) ae.deepCopy();
+				cleanAE.changeProperty(Encryption.PROP_KEY, null);
 				cleanAE.changeProperty(AsymmetricEncryption.PROP_KEY_RING, null);
 				KeyRing[] krs = ae.getKeyRing();
 				for (int i = 0; i < krs.length; i++) {
 					try {
 						DestinataryEncryptedSessionKey td = new DestinataryEncryptedSessionKey();
 						td.setEncryption(cleanAE);
-						td.setCypheredText(encryptSessionKey(Cipher.ENCRYPT_MODE, sessionKey.getKeyText(), cleanAE, krs[i].getPublicKey()));
+						td.setCypheredText(encryptSessionKey(sessionKey.getKeyText(), cleanAE, krs[i].getPublicKey()));
 						destinations.add(td);
 					} catch (Exception e) {
-						LogUtils.logError(owner, getClass(), "createMDER", new String[]{"Could not process one desinatary"}, e);
+						LogUtils.logError(ProjectActivator.context, MultiDestinationServiceImpl.class, "createMDER", new String[]{"Could not process one desinatary"}, e);
 					}
 				}
 			}
@@ -208,12 +221,51 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 			
 			return mder;
 		} catch (Exception e) {
-			LogUtils.logError(owner, getClass(), "createMDER", new String[]{"Could not encrypt Resource"}, e);
+			LogUtils.logError(ProjectActivator.context, MultiDestinationServiceImpl.class, "createMDER", new String[]{"Could not encrypt Resource"}, e);
 			return null;
 		} 
 	}
 	
+	static void addToMDERDest(MultidestinationEncryptedResource mder, KeyRing requesterKr, List<AsymmetricEncryption> newDests){
+		//TODO: TO be completed
+		// REMEMBER TO CHECK each destination is not already added.
+	}
+	
+	static void removeDESK(MultidestinationEncryptedResource mder,
+			KeyRing keyring, List<DestinataryEncryptedSessionKey> destinations) {
+		//TODO: To be Completed
+	}
+
+	static Resource decrypt(MultidestinationEncryptedResource mder, KeyRing keyring){
+		SimpleKey sk = decryptSessionKey(mder, keyring);
+		if (sk != null) {
+			try {
+				return EncryptionServiceCallee.doDecryption(mder, sk.getKeyText(), (SymmetricEncryption) mder.getEncryption());
+			} catch (Exception e) {
+				LogUtils.logError(ProjectActivator.context, MultiDestinationServiceImpl.class, "decrypt", new String[]{"unable to decrypt"}, e);
+			} 
+		}
+		return null;
+	}
+	
+	static Base64Binary encryptSessionKey(Base64Binary mes, AsymmetricEncryption algorithm, Base64Binary publicKey) throws GeneralSecurityException 
+			{
+		String alg = EncryptionServiceCallee.getJavaCipherProviderFromEncryption(algorithm);
+		Cipher cipher = Cipher.getInstance(alg);
+		
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey.getVal());
+		KeyFactory keyFactory = KeyFactory.getInstance(alg);
+		PublicKey puKey = keyFactory.generatePublic(keySpec);
+
+		// configure cipher
+		cipher.init(Cipher.ENCRYPT_MODE, puKey);
+		// Encrypt
+		return new Base64Binary(cipher.doFinal(mes.getVal()));
+
+	}
+
 	static SimpleKey decryptSessionKey(MultidestinationEncryptedResource mder, KeyRing keyring){
+
 		List<DestinataryEncryptedSessionKey> lodesk;
 		Object tmp = mder.getProperty(MultidestinationEncryptedResource.PROP_DESTINATARIES);
 		if (tmp instanceof DestinataryEncryptedSessionKey){
@@ -226,7 +278,15 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 		}
 		for (DestinataryEncryptedSessionKey desk : lodesk) {
 			try {
-				Base64Binary sk = encryptSessionKey(Cipher.DECRYPT_MODE, desk.getCypheredText(), (AsymmetricEncryption) desk.getEncryption(), keyring.getPrivateKey());
+				//TODO: for more flexible asymmetric decryption call service.
+				String alg = EncryptionServiceCallee.getJavaCipherProviderFromEncryption(desk.getEncryption());
+				PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyring.getPrivateKey().getVal());
+				KeyFactory keyFactory = KeyFactory.getInstance(alg);
+				PrivateKey prKey = keyFactory.generatePrivate(keySpec);
+				Cipher cipher = Cipher.getInstance(alg);
+				cipher.init(Cipher.DECRYPT_MODE, prKey);
+				Base64Binary sk = new Base64Binary(cipher.doFinal(desk.getCypheredText().getVal()));
+//				Base64Binary sk = encryptSessionKey(Cipher.DECRYPT_MODE, desk.getCypheredText(), (AsymmetricEncryption) desk.getEncryption(), keyring.getPrivateKey());
 				if (sk != null) {
 					SimpleKey ssk = new SimpleKey();
 					ssk.setKeyText(sk);
@@ -238,39 +298,5 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 		}
 		
 		return null;
-	}
-	
-	static void addToMDERDest(MultidestinationEncryptedResource mder, KeyRing requesterKr, List<KeyRing> newDests){
-		//TODO: TO be completed
-	}
-	
-	static void removeDESK(MultidestinationEncryptedResource mder,
-			KeyRing keyring, List<DestinataryEncryptedSessionKey> destinations) {
-		//TODO: To be Completed
-	}
-
-	Resource decrypt(MultidestinationEncryptedResource mder, KeyRing keyring){
-		SimpleKey sk = decryptSessionKey(mder, keyring);
-		if (sk != null) {
-			try {
-				return EncryptionServiceCallee.doDecryption(mder, sk.getKeyText(), (SymmetricEncryption) mder.getEncryption());
-			} catch (Exception e) {
-				LogUtils.logError(owner, getClass(), "decrypt", new String[]{"unable to decrypt"}, e);
-			} 
-		}
-		return null;
-	}
-	
-	static Base64Binary encryptSessionKey(int cypherMode, Base64Binary mes, AsymmetricEncryption algorithm, Base64Binary key)
-			throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException{
-		String alg = EncryptionServiceCallee.getJavaCipherProviderFromEncryption(algorithm);
-		Cipher cipher = Cipher.getInstance(alg);
-
-		// configure cipher
-		cipher.init(cypherMode, new SecretKeySpec(key.getVal(),
-				alg));
-		// Encrypt
-		return new Base64Binary(cipher.doFinal(mes.getVal()));
-
 	}
 }

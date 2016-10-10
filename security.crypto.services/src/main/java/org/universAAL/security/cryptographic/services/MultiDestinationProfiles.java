@@ -29,7 +29,6 @@ import org.universAAL.ontology.cryptographic.EncryptionService;
 import org.universAAL.ontology.cryptographic.KeyRing;
 import org.universAAL.ontology.cryptographic.MultidestinationEncryptedResource;
 import org.universAAL.ontology.cryptographic.SymmetricEncryption;
-import org.universAAL.ontology.cryptographic.asymmetric.RSA;
 
 /**
  * @author amedrano
@@ -58,8 +57,6 @@ static final ServiceProfile[] profs = new ServiceProfile[4];
 	static final String PARAM_ENCRYPTED_RESOURCE = NAMESPACE + "encryptedMultidestinationResource";
 
 	static final String PARAM_DESTINATION =NAMESPACE + "destinationSessionKey";
-
-	static final String PARAM_DEST_KEYS = NAMESPACE + "destinataryKeyRing";
 
     public MultiDestinationProfiles() {
 		// TODO Auto-generated constructor stub
@@ -103,7 +100,7 @@ static final ServiceProfile[] profs = new ServiceProfile[4];
 		create.addOutput(PARAM_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 		profs[0] = create.myProfile;
 		
-		//add new Destination to MDR
+		//add new Destinations to MDR
 		MultiDestinationProfiles add = new MultiDestinationProfiles(PROCESS_ADD_DEST);
 		add.addFilteringInput(PARAM_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 		//Key ring to decrypt session key TODO: requires private Key
@@ -111,13 +108,14 @@ static final ServiceProfile[] profs = new ServiceProfile[4];
 		//Effect is to add a new DestinataryEncryptionSessionKey
 		add.addInputWithAddEffect(PARAM_DESTINATION, DestinataryEncryptedSessionKey.MY_URI, 1, -1, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.PROP_DESTINATARIES});
 		//For the destination, we need the corresponding keyrings TODO: all these need public keys
-		add.addFilteringInput(PARAM_DEST_KEYS, KeyRing.MY_URI, 1, -1, 
-				new String[]{EncryptionService.PROP_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.PROP_DESTINATARIES,DestinataryEncryptedSessionKey.PROP_ENCRYPTION,AsymmetricEncryption.PROP_KEY_RING});
+		add.addFilteringInput(PARAM_METHOD_LVL2, AsymmetricEncryption.MY_URI, 1, -1, 
+				new String[]{EncryptionService.PROP_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.PROP_DESTINATARIES,DestinataryEncryptedSessionKey.PROP_ENCRYPTION});
 		add.addOutput(PARAM_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI, 1, -1, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 		profs[1] = add.myProfile;
 		//TODO: keyrings can be used with different AsymmetricEncryptions, create similar pattern as for cheate with LVL2.
 		
 		//remove Destination from MDR
+		//TODO: is it really practical??
 		MultiDestinationProfiles rem = new MultiDestinationProfiles(PROCESS_REMOVE_DEST);
 		rem.addFilteringInput(PARAM_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 		//Key ring to decrypt session key (for security reasons) TODO: requires private Key
