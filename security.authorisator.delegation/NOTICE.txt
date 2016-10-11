@@ -1,4 +1,4 @@
-universAAL Module
+universAAL Delegation Module
 
 Copyright 2016 Universidad Politécnica de Madrid http://www.upm.es
  				Life Supporting Technologies
