@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package org.universAAL.security;
+package org.universAAL.security.delegation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,7 @@ import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.AuthorizationService;
 import org.universAAL.ontology.security.DelegationForm;
 import org.universAAL.ontology.security.SecuritySubprofile;
+import org.universAAL.security.CHeQuerrier;
 
 /**
  * @author amedrano

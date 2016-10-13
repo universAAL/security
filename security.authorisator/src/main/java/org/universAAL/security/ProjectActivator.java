@@ -3,8 +3,9 @@ package org.universAAL.security;
 import org.universAAL.middleware.container.ModuleActivator;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
+import org.universAAL.middleware.owl.OntClassInfoSetup;
+import org.universAAL.middleware.owl.Ontology;
 import org.universAAL.middleware.owl.OntologyManagement;
-import org.universAAL.middleware.owl.SimpleOntology;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.rdf.ResourceFactory;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
@@ -48,9 +49,11 @@ public class ProjectActivator implements ModuleActivator {
 
 	
 	public static ModuleContext context;
-	ServiceProfile[] profs = new ServiceProfile[15];
+	ServiceProfile[] profs = new ServiceProfile[14];
 
 	private AuthorisatorCallee callee;
+
+	private Ontology ontology;
 	
 	public void start(ModuleContext ctxt) throws Exception {	
 		context = ctxt;
@@ -62,32 +65,45 @@ public class ProjectActivator implements ModuleActivator {
 		 */
 		//definining profiles
 		
-		OntologyManagement.getInstance().register(context, 
-				new SimpleOntology(RoleMngServiceProfile.MY_URI, RoleManagementService.MY_URI, new ResourceFactory() {
-			    
-			    public Resource createInstance(String classURI, String instanceURI,
-				    int factoryIndex) {
-				return new RoleMngServiceProfile(instanceURI);
-			    }
-			}));
+		ontology = new Ontology(NAMESPACE) {
+			
+			ResourceFactory fact = new ResourceFactory() {
+				
+				public Resource createInstance(String classURI, String instanceURI,
+						int factoryIndex) {
+					switch (factoryIndex) {
+					case 0:
+						return new AuthorisationServiceProfile(instanceURI);
+					case 1:
+						return new RoleMngServiceProfile(instanceURI);
+					case 2:
+						return new SecuritySubProfileRoleManagement(instanceURI);
+					default:
+						break;
+					}
+					return null;
+				}
+			};
+			
+			@Override
+			public void create() {
+				OntClassInfoSetup oci_asp = createNewOntClassInfo(AuthorisationServiceProfile.MY_URI, fact,0);
+				oci_asp.addSuperClass(AuthorizationService.MY_URI);
+
+				OntClassInfoSetup oci_rmsp = createNewOntClassInfo(RoleMngServiceProfile.MY_URI, fact,1);
+				oci_rmsp.addSuperClass(RoleManagementService.MY_URI);
+
+				OntClassInfoSetup oci_ssprm = createNewOntClassInfo(SecuritySubProfileRoleManagement.MY_URI, fact,2);
+				oci_ssprm.addSuperClass(ProfilingService.MY_URI);
+				
+			}
+		};
 		
-		OntologyManagement.getInstance().register(context, 
-				new SimpleOntology(AuthorisationServiceProfile.MY_URI, AuthorizationService.MY_URI, new ResourceFactory() {
-			    
-			    public Resource createInstance(String classURI, String instanceURI,
-				    int factoryIndex) {
-				return new AuthorisationServiceProfile(instanceURI);
-			    }
-			}));
 		
-		OntologyManagement.getInstance().register(context, 
-				new SimpleOntology(SecuritySubProfileRoleManagement.MY_URI, ProfilingService.MY_URI, new ResourceFactory() {
-			    
-			    public Resource createInstance(String classURI, String instanceURI,
-				    int factoryIndex) {
-				return new SecuritySubProfileRoleManagement(instanceURI);
-			    }
-			}));
+		//registering service Ontology
+		OntologyManagement.getInstance().register(context, ontology);
+		
+		
 		/* 
 		 * Role Management
 		 */
@@ -118,12 +134,12 @@ public class ProjectActivator implements ModuleActivator {
 		//change Role
 		RoleMngServiceProfile changeR = new RoleMngServiceProfile(CHANGE_ROLE);
 		changeR.addInputWithChangeEffect(ROLE, Role.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE});
-		profs[12] = changeR.getProfile();
+		profs[11] = changeR.getProfile();
 		
 		//get all Roles
 		RoleMngServiceProfile getR = new RoleMngServiceProfile(GET_ROLES);
 		getR.addOutput(ROLE, Role.MY_URI, 0, -1, new String [] {RoleManagementService.PROP_ROLE});
-		profs[13] = getR.getProfile();
+		profs[12] = getR.getProfile();
 		
 		//add AccessRight to role
 		RoleMngServiceProfile addAR = new RoleMngServiceProfile(ADD_AR_ROLE);
@@ -145,7 +161,7 @@ public class ProjectActivator implements ModuleActivator {
 		//get all Access Rights
 		RoleMngServiceProfile getAR = new RoleMngServiceProfile(GET_AR);
 		getAR.addOutput(ACCESS_RIGHT, AccessRight.MY_URI, 0, -1, new String [] {RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
-		profs[14] = getAR.getProfile();
+		profs[13] = getAR.getProfile();
 		
 		/* 
 		 * Access information
@@ -174,7 +190,7 @@ public class ProjectActivator implements ModuleActivator {
 		remCheckCU.addInputWithRemoveEffect(ASSET, Asset.MY_URI, 1, 1, new String[]{AuthorizationService.PROP_ASSET_ACCESS});
 		profs[10] = remCheckCU.getProfile();
 		
-		callee = new AuthorisatorCallee(ctxt, profs);
+		callee = new AuthorisatorCallee(context, profs);
 		
 		//TODO: create a context publisher which publishes user access to assets for accountability (combined with CHe)
 		
@@ -188,6 +204,8 @@ public class ProjectActivator implements ModuleActivator {
 		 * close uAAL stuff
 		 */
 		callee.close();
+		
+		OntologyManagement.getInstance().unregister(context, ontology);
 		
 		LogUtils.logDebug(context, getClass(), "stop", "Stopped.");
 

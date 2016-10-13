@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package org.universAAL.security;
+package org.universAAL.security.delegation;
 
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.owl.MergedRestriction;
@@ -39,7 +39,7 @@ import org.universAAL.ontology.security.SecuritySubprofile;
  *
  */
 public class DelegationService extends ProfilingService {
-	static final ServiceProfile[] profs = new ServiceProfile[2];
+	static final ServiceProfile[] profs = new ServiceProfile[3];
 	
 	static final String NAMESPACE = "http://security.universAAL.org/Delegation#";
 	static final String MY_URI = NAMESPACE + "DelegationService";

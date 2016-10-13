@@ -39,7 +39,7 @@
 	<feature name="uAAL-Security.Authorisator.Delegation" description="Module Extending Authorisation with delegation and some delegation services."
 		version="${pom.version}" resolver='(obr)'>
 		<feature>uAAL-Security.Authorisator</feature> 
-		<bundle start-level='71' start='true'>wrap:mvn:org.universAAL.security/security.authorisator.delegation/${security.authorisator.delegation.version}</bundle>
+		<bundle start-level='71' start='true'>mvn:org.universAAL.security/security.authorisator.delegation/${security.authorisator.delegation.version}</bundle>
 	</feature>
 	
 	<feature name="uAAL-Security.Anonymization" description="Module to encrypt certain properties so that only authorised actors can access the real object."

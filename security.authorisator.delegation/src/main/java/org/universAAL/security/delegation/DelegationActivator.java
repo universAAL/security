@@ -1,8 +1,9 @@
-package org.universAAL.security;
+package org.universAAL.security.delegation;
 
 import org.universAAL.middleware.container.ModuleActivator;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
+import org.universAAL.security.AuthorisatorCallee;
 import org.universAAL.security.access_checkers.DelegationAccessChecker;
 
 public class DelegationActivator implements ModuleActivator {
