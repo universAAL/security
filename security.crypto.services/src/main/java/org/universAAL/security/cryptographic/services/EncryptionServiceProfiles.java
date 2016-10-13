@@ -40,8 +40,8 @@ import org.universAAL.ontology.cryptographic.symmetric.DES;
 public class EncryptionServiceProfiles extends EncryptionService {
 	static final ServiceProfile[] profs = new ServiceProfile[20];
 	
-	static final String NAMESPACE = "http://security.universAAL.org/Cryposervices#";
-    public static String MY_URI = NAMESPACE + "SomeDe-EcryptionSerives";
+	static private final String NAMESPACE = "http://security.universAAL.org/JavaEncryptionservices#";
+    public static String MY_URI = NAMESPACE + "SomeDe-EncryptionServices";
     
     //AES	
     static final String ENCRYPT_AES = NAMESPACE + "encrypt-AES";

@@ -37,7 +37,7 @@ public class DigestServiceImpl extends DigestService {
 
 	static final ServiceProfile[] profs = new ServiceProfile[6];
 	
-	static final String NAMESPACE = "http://security.universAAL.org/Cryposervices#";
+	static private final String NAMESPACE = "http://security.universAAL.org/JavaDigestServices#";
     public static String MY_URI = NAMESPACE + "JavaDigestAlgorithms";
 	static final String DIGEST_MD2 = NAMESPACE + "digestWithMD2";
 	static final String DIGEST_MD5 = NAMESPACE + "digestWithMD5";

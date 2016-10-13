@@ -38,7 +38,7 @@ public class SignVerifyProfile extends SignAndVerifyService {
 
 static final ServiceProfile[] profs = new ServiceProfile[3];
 	
-	static final String NAMESPACE = "http://security.universAAL.org/Cryposervices#";
+static private final String NAMESPACE = "http://security.universAAL.org/JavaDigitalSignatureServices#";
     public static String MY_URI = NAMESPACE + "SignVerifySerive";
     
     //PARAMETERS

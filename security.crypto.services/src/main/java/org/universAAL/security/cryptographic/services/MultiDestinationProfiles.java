@@ -35,9 +35,9 @@ import org.universAAL.ontology.cryptographic.SymmetricEncryption;
  *
  */
 public class MultiDestinationProfiles extends EncryptionService {
-static final ServiceProfile[] profs = new ServiceProfile[4];
+	static final ServiceProfile[] profs = new ServiceProfile[4];
 	
-	static final String NAMESPACE = EncryptionServiceProfiles.NAMESPACE;
+	static private final String NAMESPACE = "http://security.universAAL.org/MultiDestinationServices#";
     
 	public static String MY_URI = NAMESPACE + "MultiDestinationEncryptionSerives";
 
