@@ -33,7 +33,7 @@ import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
  * @author amedrano
  *
  */
-public class DigestServiceImpl extends DigestService {
+public class DigestServiceProfiles extends DigestService {
 
 	static final ServiceProfile[] profs = new ServiceProfile[6];
 	
@@ -52,13 +52,13 @@ public class DigestServiceImpl extends DigestService {
 	/**
 	 * 
 	 */
-	public DigestServiceImpl() {
+	public DigestServiceProfiles() {
 	}
 
 	/**
 	 * @param uri
 	 */
-	public DigestServiceImpl(String uri) {
+	public DigestServiceProfiles(String uri) {
 		super(uri);
 	}
 	
@@ -72,7 +72,7 @@ public class DigestServiceImpl extends DigestService {
 		    
 		    public Resource createInstance(String classURI, String instanceURI,
 			    int factoryIndex) {
-			return new DigestServiceImpl(instanceURI);
+			return new DigestServiceProfiles(instanceURI);
 		    }
 		}));
 		
@@ -83,7 +83,7 @@ public class DigestServiceImpl extends DigestService {
 		
 		
 		// MD2 Hash
-		DigestServiceImpl md2 = new DigestServiceImpl(DIGEST_MD2);
+		DigestServiceProfiles md2 = new DigestServiceProfiles(DIGEST_MD2);
 		md2.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		md2.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
 		md2.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
@@ -92,7 +92,7 @@ public class DigestServiceImpl extends DigestService {
 		profs[0] = md2.myProfile;
 		
 		// MD5 Hash
-		DigestServiceImpl md5 = new DigestServiceImpl(DIGEST_MD5);
+		DigestServiceProfiles md5 = new DigestServiceProfiles(DIGEST_MD5);
 		md5.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		md5.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
 		md5.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
@@ -101,7 +101,7 @@ public class DigestServiceImpl extends DigestService {
 		profs[1] = md5.myProfile;
 		
 		// SHA Hash
-		DigestServiceImpl sha = new DigestServiceImpl(DIGEST_SHA);
+		DigestServiceProfiles sha = new DigestServiceProfiles(DIGEST_SHA);
 		sha.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		sha.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
 		sha.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
@@ -110,7 +110,7 @@ public class DigestServiceImpl extends DigestService {
 		profs[2] = sha.myProfile;
 		
 		// SHA256 Hash
-		DigestServiceImpl sha2 = new DigestServiceImpl(DIGEST_SHA256);
+		DigestServiceProfiles sha2 = new DigestServiceProfiles(DIGEST_SHA256);
 		sha2.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		sha2.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
 		sha2.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
@@ -119,7 +119,7 @@ public class DigestServiceImpl extends DigestService {
 		profs[3] = sha2.myProfile;
 		
 		// SHA384 Hash
-		DigestServiceImpl sha3 = new DigestServiceImpl(DIGEST_SHA384);
+		DigestServiceProfiles sha3 = new DigestServiceProfiles(DIGEST_SHA384);
 		sha3.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		sha3.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
 		sha3.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
@@ -128,7 +128,7 @@ public class DigestServiceImpl extends DigestService {
 		profs[4] = sha3.myProfile;
 		
 		// SHA512 Hash
-		DigestServiceImpl sha5 = new DigestServiceImpl(DIGEST_SHA512);
+		DigestServiceProfiles sha5 = new DigestServiceProfiles(DIGEST_SHA512);
 		sha5.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		sha5.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
 		sha5.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});

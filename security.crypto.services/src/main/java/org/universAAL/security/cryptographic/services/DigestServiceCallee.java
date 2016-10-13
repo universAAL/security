@@ -65,8 +65,8 @@ public class DigestServiceCallee extends ServiceCallee {
 	/**{@inheritDoc} */
 	@Override
 	public ServiceResponse handleCall(ServiceCall call) {
-		Resource r = (Resource) call.getInputValue(DigestServiceImpl.IN_RESOURCE);
-		Digest d = (Digest) call.getInputValue(DigestServiceImpl.IN_METHOD);
+		Resource r = (Resource) call.getInputValue(DigestServiceProfiles.IN_RESOURCE);
+		Digest d = (Digest) call.getInputValue(DigestServiceProfiles.IN_METHOD);
 		
 		
 		
@@ -80,7 +80,7 @@ public class DigestServiceCallee extends ServiceCallee {
 			return sr;
 		}
 		
-		ProcessOutput out = new ProcessOutput(DigestServiceImpl.OUT_DIGEST, digest);
+		ProcessOutput out = new ProcessOutput(DigestServiceProfiles.OUT_DIGEST, digest);
 		
 		ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
 		sr.addOutput(out);

@@ -52,13 +52,13 @@ import org.universAAL.ontology.cryptographic.symmetric.AES;
  * @author amedrano
  *
  */
-public class MultiDestinationServiceImpl extends ServiceCallee {
+public class MultiDestinationCallee extends ServiceCallee {
 
 	/**
 	 * @param context
 	 * @param realizedServices
 	 */
-	public MultiDestinationServiceImpl(ModuleContext context,
+	public MultiDestinationCallee(ModuleContext context,
 			ServiceProfile[] realizedServices) {
 		super(context, realizedServices);
 	}
@@ -68,7 +68,7 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 	 * @param realizedServices
 	 * @param throwOnError
 	 */
-	public MultiDestinationServiceImpl(ModuleContext context,
+	public MultiDestinationCallee(ModuleContext context,
 			ServiceProfile[] realizedServices, boolean throwOnError) {
 		super(context, realizedServices, throwOnError);
 	}
@@ -195,7 +195,7 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 						td.setCypheredText(encryptSessionKey(sessionKey.getKeyText(), cleanAE, krs[i].getPublicKey()));
 						destinations.add(td);
 					} catch (Exception e) {
-						LogUtils.logError(ProjectActivator.context, MultiDestinationServiceImpl.class, "createMDER", new String[]{"Could not process one desinatary"}, e);
+						LogUtils.logError(ProjectActivator.context, MultiDestinationCallee.class, "createMDER", new String[]{"Could not process one desinatary"}, e);
 					}
 				}
 			}
@@ -214,7 +214,7 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 			
 			return mder;
 		} catch (Exception e) {
-			LogUtils.logError(ProjectActivator.context, MultiDestinationServiceImpl.class, "createMDER", new String[]{"Could not encrypt Resource"}, e);
+			LogUtils.logError(ProjectActivator.context, MultiDestinationCallee.class, "createMDER", new String[]{"Could not encrypt Resource"}, e);
 			return null;
 		} 
 	}
@@ -235,7 +235,7 @@ public class MultiDestinationServiceImpl extends ServiceCallee {
 			try {
 				return EncryptionServiceCallee.doDecryption(mder, sk.getKeyText(), (SymmetricEncryption) mder.getEncryption());
 			} catch (Exception e) {
-				LogUtils.logError(ProjectActivator.context, MultiDestinationServiceImpl.class, "decrypt", new String[]{"unable to decrypt"}, e);
+				LogUtils.logError(ProjectActivator.context, MultiDestinationCallee.class, "decrypt", new String[]{"unable to decrypt"}, e);
 			} 
 		}
 		return null;

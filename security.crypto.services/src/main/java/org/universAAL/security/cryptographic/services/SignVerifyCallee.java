@@ -77,15 +77,15 @@ public class SignVerifyCallee extends ServiceCallee {
 	@Override
 	public ServiceResponse handleCall(ServiceCall call) {
 		if (call.getProcessURI().contains("sign")){
-			Resource r = (Resource) call.getInputValue(SignVerifyProfile.CLEAR_RESOURCE);
-			AsymmetricEncryption enc = (AsymmetricEncryption) call.getInputValue(SignVerifyProfile.ENC_METHOD);
-			Digest dig = (Digest) call.getInputValue(SignVerifyProfile.DIG_METHOD);
+			Resource r = (Resource) call.getInputValue(SignVerifyProfiles.CLEAR_RESOURCE);
+			AsymmetricEncryption enc = (AsymmetricEncryption) call.getInputValue(SignVerifyProfiles.ENC_METHOD);
+			Digest dig = (Digest) call.getInputValue(SignVerifyProfiles.DIG_METHOD);
 			Base64Binary key = EncryptionServiceCallee.resolveKey(enc.getKeyRing()[0]);
 			try {
 				SignedResource sr = sign(r, dig, enc, key);
 				
 				ServiceResponse sresp = new ServiceResponse(CallStatus.succeeded);
-				sresp.addOutput(new ProcessOutput(SignVerifyProfile.SIGNED_RESOURCE, sr));
+				sresp.addOutput(new ProcessOutput(SignVerifyProfiles.SIGNED_RESOURCE, sr));
 				return sresp;
 			} catch (Exception e) {
 				LogUtils.logError(owner, getClass(), "serviceResponse", new String[]{"un expected error."}, e);
@@ -93,14 +93,14 @@ public class SignVerifyCallee extends ServiceCallee {
 			}
 		}
 		else {
-			SignedResource sr = (SignedResource) call.getInputValue(SignVerifyProfile.SIGNED_RESOURCE);
-			AsymmetricEncryption enc = (AsymmetricEncryption) call.getInputValue(SignVerifyProfile.ENC_METHOD);
-			Digest dig = (Digest) call.getInputValue(SignVerifyProfile.DIG_METHOD);
+			SignedResource sr = (SignedResource) call.getInputValue(SignVerifyProfiles.SIGNED_RESOURCE);
+			AsymmetricEncryption enc = (AsymmetricEncryption) call.getInputValue(SignVerifyProfiles.ENC_METHOD);
+			Digest dig = (Digest) call.getInputValue(SignVerifyProfiles.DIG_METHOD);
 			
 			Base64Binary key;
-			if (call.getProcessURI().contains(SignVerifyProfile.VERIFY_EMBEDDED)){
+			if (call.getProcessURI().contains(SignVerifyProfiles.VERIFY_EMBEDDED)){
 				key = EncryptionServiceCallee.resolveKey(sr.getAsymmetric().getKeyRing()[0]);
-			}else if (call.getProcessURI().contains(SignVerifyProfile.VERIFY_EXTERNAL)){
+			}else if (call.getProcessURI().contains(SignVerifyProfiles.VERIFY_EXTERNAL)){
 				key = EncryptionServiceCallee.resolveKey(enc.getKeyRing()[0]);
 			}
 			else {
@@ -112,7 +112,7 @@ public class SignVerifyCallee extends ServiceCallee {
 			try {
 				Boolean result = verify(sr, dig, enc, key);
 				ServiceResponse sresp = new ServiceResponse(CallStatus.succeeded);
-				sresp.addOutput(new ProcessOutput(SignVerifyProfile.RESULT, result));
+				sresp.addOutput(new ProcessOutput(SignVerifyProfiles.RESULT, result));
 				return sresp;
 			} catch (Exception e) {
 				LogUtils.logError(owner, getClass(), "serviceResponse", new String[]{"un expected error."}, e);

@@ -49,24 +49,24 @@ public class MDERTest extends CommonTest {
 		
 		List<AsymmetricEncryption> ael = new ArrayList<AsymmetricEncryption>();
 		
-		MultidestinationEncryptedResource mder = MultiDestinationServiceImpl.createMDER(r, null, ael);
+		MultidestinationEncryptedResource mder = MultiDestinationCallee.createMDER(r, null, ael);
 		
 		ael.add(enc1);
 		ael.add(enc2);
 		
-		mder = MultiDestinationServiceImpl.createMDER(r, null, ael);
+		mder = MultiDestinationCallee.createMDER(r, null, ael);
 		
 		System.out.println(new TurtleSerializer().serialize(mder));
 		
-		Resource r2 = MultiDestinationServiceImpl.decrypt(mder, ku1);
+		Resource r2 = MultiDestinationCallee.decrypt(mder, ku1);
 		assertEquals(r, r2);
 		assertTrue(EncryptTest.fullResourceEquals(r, r2));
 		
-		r2 = MultiDestinationServiceImpl.decrypt(mder, ku2);
+		r2 = MultiDestinationCallee.decrypt(mder, ku2);
 		assertEquals(r, r2);
 		assertTrue(EncryptTest.fullResourceEquals(r, r2));
 		
-		r2 = MultiDestinationServiceImpl.decrypt(mder, ku3);
+		r2 = MultiDestinationCallee.decrypt(mder, ku3);
 		assertNull(r2);
 		
 //		ael.clear();

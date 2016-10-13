@@ -34,7 +34,7 @@ import org.universAAL.ontology.cryptographic.SignedResource;
  * @author amedrano
  *
  */
-public class SignVerifyProfile extends SignAndVerifyService {
+public class SignVerifyProfiles extends SignAndVerifyService {
 
 static final ServiceProfile[] profs = new ServiceProfile[3];
 	
@@ -56,13 +56,13 @@ static private final String NAMESPACE = "http://security.universAAL.org/JavaDigi
 	/**
 	 * 
 	 */
-	public SignVerifyProfile() {
+	public SignVerifyProfiles() {
 	}
 
 	/**
 	 * @param uri
 	 */
-	public SignVerifyProfile(String uri) {
+	public SignVerifyProfiles(String uri) {
 		super(uri);
 	}
 
@@ -78,7 +78,7 @@ static private final String NAMESPACE = "http://security.universAAL.org/JavaDigi
 		    
 		    public Resource createInstance(String classURI, String instanceURI,
 			    int factoryIndex) {
-			return new SignVerifyProfile(instanceURI);
+			return new SignVerifyProfiles(instanceURI);
 		    }
 		}));
 		
@@ -87,7 +87,7 @@ static private final String NAMESPACE = "http://security.universAAL.org/JavaDigi
 		 * Service Profiles
 		 */
 		//Sign with given AsymmetricEncryption (should include Keyring) and given Digest Methods
-		SignVerifyProfile sign = new SignVerifyProfile(SIGN);
+		SignVerifyProfiles sign = new SignVerifyProfiles(SIGN);
 		sign.addFilteringInput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[]{PROP_SIGN});
 		sign.addFilteringInput(ENC_METHOD, AsymmetricEncryption.MY_URI, 1, 1, new String[]{PROP_ASYMMETRIC});
 		sign.addFilteringInput(DIG_METHOD, Digest.MY_URI, 1, 1, new String[]{PROP_DIGEST});
@@ -106,7 +106,7 @@ static private final String NAMESPACE = "http://security.universAAL.org/JavaDigi
 		profs[0] = sign.myProfile;
 		
 		//Verify Given Signed Resource (public key should be provided through AsymmetricEncryption.key)
-		SignVerifyProfile emVerify = new SignVerifyProfile(VERIFY_EMBEDDED);
+		SignVerifyProfiles emVerify = new SignVerifyProfiles(VERIFY_EMBEDDED);
 		emVerify.addOutput(RESULT, TypeMapper.getDatatypeURI(Boolean.class), 1, 1, new String[]{PROP_VERIFICATION_RESULT});
 		emVerify.addFilteringInput(SIGNED_RESOURCE, SignedResource.MY_URI, 1, 1, new String[]{PROP_SIGN});
 		emVerify.addFilteringInput(ENC_METHOD, AsymmetricEncryption.MY_URI, 1, 1, new String[]{PROP_SIGNED_RESOURCE,SignedResource.PROP_ASYMMETRIC});
@@ -123,7 +123,7 @@ static private final String NAMESPACE = "http://security.universAAL.org/JavaDigi
 		profs[1] = emVerify.myProfile;
 		
 		//Verify Given Signed Resource using given AsymmetricEncryption (wKey)
-		SignVerifyProfile exVerify = new SignVerifyProfile(VERIFY_EMBEDDED);
+		SignVerifyProfiles exVerify = new SignVerifyProfiles(VERIFY_EMBEDDED);
 		exVerify.addOutput(RESULT, TypeMapper.getDatatypeURI(Boolean.class), 1, 1, new String[]{PROP_VERIFICATION_RESULT});
 		exVerify.addFilteringInput(SIGNED_RESOURCE, SignedResource.MY_URI, 1, 1, new String[]{PROP_SIGN});
 		exVerify.addFilteringInput(ENC_METHOD, AsymmetricEncryption.MY_URI, 1, 1, new String[]{PROP_ASYMMETRIC});

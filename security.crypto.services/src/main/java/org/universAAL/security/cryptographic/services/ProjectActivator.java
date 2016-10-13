@@ -39,12 +39,12 @@ public class ProjectActivator implements ModuleActivator {
 				context,
 				new Object[] { MessageContentSerializer.class.getName() });
 		
-		DigestServiceImpl.initialize(context);
+		DigestServiceProfiles.initialize(context);
 		EncryptionServiceProfiles.initialize(context);
-		SignVerifyProfile.initialize(context);
-		digestCallee = new DigestServiceCallee(context, DigestServiceImpl.profs);
+		SignVerifyProfiles.initialize(context);
+		digestCallee = new DigestServiceCallee(context, DigestServiceProfiles.profs);
 		encrypCallee = new EncryptionServiceCallee(context, EncryptionServiceProfiles.profs);
-		signCallee = new SignVerifyCallee(context, SignVerifyProfile.profs);
+		signCallee = new SignVerifyCallee(context, SignVerifyProfiles.profs);
 		
 		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
