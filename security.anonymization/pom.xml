@@ -44,7 +44,7 @@
 			<extensions>true</extensions>
 			<configuration>
 				<instructions>
-					<Export-Package>org.universAAL.security</Export-Package>
+					<Export-Package>org.universAAL.security.anonymization</Export-Package>
 				</instructions>
 			</configuration>
 		</plugin>

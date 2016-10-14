@@ -51,8 +51,8 @@
 			<extensions>true</extensions>
 			<configuration>
 				<instructions>
-					<Export-Package>org.universAAL.security.delegation</Export-Package>
-					<Import-Package>!org.universAAL.security.profiles,*</Import-Package>
+					<Export-Package>org.universAAL.security.authorisator.delegation</Export-Package>
+					<Import-Package>!org.universAAL.security.authorisator.profiles,*</Import-Package>
 				</instructions>
 			</configuration>
 		</plugin>

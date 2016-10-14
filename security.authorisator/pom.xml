@@ -51,9 +51,9 @@
 			<extensions>true</extensions>
 			<configuration>
 				<instructions>
-					<Export-Package>org.universAAL.security,
-					org.universAAL.security.interfaces,
-					org.universAAL.security.access_checkers</Export-Package>
+					<Export-Package>org.universAAL.security.authorisator,
+					org.universAAL.security.authorisator.interfaces,
+					org.universAAL.security.authorisator.access_checkers</Export-Package>
 				</instructions>
 			</configuration>
 		</plugin>

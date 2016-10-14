@@ -43,7 +43,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>org.universAAL.security.security.authenticator.dummy</Export-Package>
+            <Export-Package>org.universAAL.security.authenticator.dummy</Export-Package>
           </instructions>
         </configuration>
       </plugin>
