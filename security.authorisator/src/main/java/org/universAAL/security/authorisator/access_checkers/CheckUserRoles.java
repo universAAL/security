@@ -20,12 +20,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.owl.TypeExpression;
 import org.universAAL.middleware.rdf.Resource;
-import org.universAAL.middleware.serialization.MessageContentSerializer;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.AccessRight;
 import org.universAAL.ontology.security.AccessType;
@@ -96,16 +94,25 @@ public class CheckUserRoles implements AccessChecker {
 	protected SecuritySubprofile getSecuritySubProfile(ModuleContext mc, User usr){
 		Object o = querier.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("getSecuritySubProfileForUser.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP,usr.getURI()}));
 		SecuritySubprofile ssp;
-		if (o instanceof SecuritySubprofile){
-			ssp = (SecuritySubprofile) o;
-		} else if (o instanceof List){
-			LogUtils.logWarn(mc, getClass(), "checkAccess", "WTF mode: More than one SecuritySubprofile found for the given user: " + usr.getURI());
-			ssp = (SecuritySubprofile) ((List)o).get(0);
-		} else {
-			LogUtils.logError(mc, getClass(), "checkAccess", "No SecuritySubprofile found for the given user: " + usr.getURI());
+		if (o instanceof Resource){ 
+			//"o" should be the resource AUX_BAG_OBJECT
+			o = ((Resource)o).getProperty(AUX_BAG_PROP);
+			if (o instanceof List){
+				LogUtils.logWarn(mc, getClass(), "checkAccess", "WTF mode: More than one SecuritySubprofile found for the given user: " + usr.getURI());
+				o = ((List)o).get(0);
+				ssp = (SecuritySubprofile) querier.getFullResourceGraph(((Resource)o).getURI());
+			} else if (o != null ){
+				// not a list and not null => must be a Resource representing the SSP
+				ssp = (SecuritySubprofile) querier.getFullResourceGraph(((Resource)o).getURI());
+			}else {
+				LogUtils.logError(mc, getClass(), "checkAccess", "No SecuritySubprofile found for the given user: " + usr.getURI());
+				ssp = null;
+			}
+			return ssp;
+		}else {
+			LogUtils.logError(mc, getClass(), "getAllObjectsOfType", "Wrong querry response, should get a Resource and we didn't");
 			return null;
 		}
-		return ssp;
 	}
 	
 }

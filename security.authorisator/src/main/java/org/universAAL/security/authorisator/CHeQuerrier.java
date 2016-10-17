@@ -16,6 +16,7 @@
 package org.universAAL.security.authorisator;
 
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,6 +24,7 @@ import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.owl.MergedRestriction;
 import org.universAAL.middleware.rdf.PropertyPath;
+import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.serialization.MessageContentSerializer;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceCaller;
@@ -133,5 +135,22 @@ public class CHeQuerrier {
 	result[1] = serialized.substring(lastprefixuri + lastprefixdot
 		+ lastprefix + 1);
 	return result;
+    }
+    
+    public Resource getFullResourceGraph(String uri){
+    	Object o = query("DESCRIBE <" + uri + ">");
+    	if (!(o instanceof Resource)){
+    		return null;
+    	}
+    	Resource r = (Resource) o;
+    	Enumeration pe = r.getPropertyURIs();
+    	while (pe.hasMoreElements()) {
+			String prop = (String) pe.nextElement();
+			Object pv = r.getProperty(prop);
+			if (pv instanceof Resource){
+				r.changeProperty(prop, getFullResourceGraph(((Resource) pv).getURI()));
+			}
+		}
+    	return r;
     }
 }

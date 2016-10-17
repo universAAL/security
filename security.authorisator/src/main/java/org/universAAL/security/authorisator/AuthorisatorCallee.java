@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
+import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.owl.ManagedIndividual;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.serialization.MessageContentSerializer;
@@ -220,7 +221,23 @@ public class AuthorisatorCallee extends ServiceCallee {
 	}
 
 	private Object getAllObjectsOfType(String classuri){
-		return query.query( CHeQuerrier.getQuery(CHeQuerrier.getResource("getObjectType.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP, classuri}));
+		List val = new ArrayList();
+		Object o = query.query( CHeQuerrier.getQuery(CHeQuerrier.getResource("getObjectType.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP, classuri}));
+		if (o instanceof Resource){
+			o = ((Resource)o).getProperty(AUX_BAG_PROP);
+			if (o instanceof List){
+				List ol = (List) o;
+				for (Object res : ol) {
+					val.add(query.getFullResourceGraph(((Resource)o).getURI()));
+				}
+				return val;
+			} else {
+				return query.getFullResourceGraph(((Resource)o).getURI());
+			}
+		}else {
+			LogUtils.logError(owner, getClass(), "getAllObjectsOfType", "Wrong querry response, should get a Resource and we didn't");
+			return null;
+		}
 	}
 	
 	
