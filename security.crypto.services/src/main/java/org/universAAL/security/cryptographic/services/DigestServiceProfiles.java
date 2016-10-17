@@ -22,6 +22,7 @@ import org.universAAL.middleware.owl.SimpleOntology;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.rdf.ResourceFactory;
 import org.universAAL.middleware.rdf.TypeMapper;
+import org.universAAL.middleware.service.owls.process.ProcessInput;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.ontology.cryptographic.Digest;
@@ -47,7 +48,9 @@ public class DigestServiceProfiles extends DigestService {
 	static final String DIGEST_SHA512 = NAMESPACE + "digestWithSHA512";
 	static final String OUT_DIGEST = NAMESPACE + "digestedOutput";
 	static final String IN_RESOURCE = NAMESPACE + "resourceToBeDigested";
-	static final String IN_METHOD = NAMESPACE + "digestMethodToUse";;
+	static final String IN_METHOD = NAMESPACE + "digestMethodToUse";
+
+	private static final String PROCESS_INPUT = NAMESPACE + "processInput";;
 
 	/**
 	 * 
@@ -86,8 +89,10 @@ public class DigestServiceProfiles extends DigestService {
 		DigestServiceProfiles md2 = new DigestServiceProfiles(DIGEST_MD2);
 		md2.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		md2.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
-		md2.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
-		md2.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, MessageDigest.IND_MD2), new String [] {DigestService.PROP_DIGEST_METHOD});
+		//Method restricted to MD2 instance
+		ProcessInput pi = md2.createInput(IN_METHOD, Digest.MY_URI, 1, 1);
+		pi.setParameterValue(MessageDigest.IND_MD2);
+		md2.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, pi), new String [] {DigestService.PROP_DIGEST_METHOD});
 		
 		profs[0] = md2.myProfile;
 		
@@ -95,8 +100,10 @@ public class DigestServiceProfiles extends DigestService {
 		DigestServiceProfiles md5 = new DigestServiceProfiles(DIGEST_MD5);
 		md5.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		md5.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
-		md5.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
-		md5.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, MessageDigest.IND_MD5), new String [] {DigestService.PROP_DIGEST_METHOD});
+		//Method restricted to MD5 instance
+		pi = md5.createInput(IN_METHOD, Digest.MY_URI, 1, 1);
+		pi.setParameterValue(MessageDigest.IND_MD5);
+		md5.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, pi), new String [] {DigestService.PROP_DIGEST_METHOD});
 		
 		profs[1] = md5.myProfile;
 		
@@ -104,8 +111,10 @@ public class DigestServiceProfiles extends DigestService {
 		DigestServiceProfiles sha = new DigestServiceProfiles(DIGEST_SHA);
 		sha.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		sha.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
-		sha.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
-		sha.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, SecureHashAlgorithm.IND_SHA), new String [] {DigestService.PROP_DIGEST_METHOD});
+		//Method restricted to SHA instance
+		pi = sha.createInput(IN_METHOD, Digest.MY_URI, 1, 1);
+		pi.setParameterValue(SecureHashAlgorithm.IND_SHA);
+		sha.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, pi), new String [] {DigestService.PROP_DIGEST_METHOD});
 		
 		profs[2] = sha.myProfile;
 		
@@ -113,8 +122,10 @@ public class DigestServiceProfiles extends DigestService {
 		DigestServiceProfiles sha2 = new DigestServiceProfiles(DIGEST_SHA256);
 		sha2.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		sha2.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
-		sha2.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
-		sha2.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, SecureHashAlgorithm.IND_SHA256), new String [] {DigestService.PROP_DIGEST_METHOD});
+		//Method restricted to SHA256 instance
+		pi = sha2.createInput(IN_METHOD, Digest.MY_URI, 1, 1);
+		pi.setParameterValue(SecureHashAlgorithm.IND_SHA256);
+		sha2.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, pi), new String [] {DigestService.PROP_DIGEST_METHOD});
 		
 		profs[3] = sha2.myProfile;
 		
@@ -122,8 +133,10 @@ public class DigestServiceProfiles extends DigestService {
 		DigestServiceProfiles sha3 = new DigestServiceProfiles(DIGEST_SHA384);
 		sha3.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		sha3.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
-		sha3.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
-		sha3.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, SecureHashAlgorithm.IND_SHA384), new String [] {DigestService.PROP_DIGEST_METHOD});
+		//Method restricted to SHA384 instance
+		pi = sha3.createInput(IN_METHOD, Digest.MY_URI, 1, 1);
+		pi.setParameterValue(SecureHashAlgorithm.IND_SHA384);
+		sha3.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, pi), new String [] {DigestService.PROP_DIGEST_METHOD});
 		
 		profs[4] = sha3.myProfile;
 		
@@ -131,8 +144,10 @@ public class DigestServiceProfiles extends DigestService {
 		DigestServiceProfiles sha5 = new DigestServiceProfiles(DIGEST_SHA512);
 		sha5.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		sha5.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
-		sha5.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String[] {DigestService.PROP_DIGEST_METHOD});
-		sha5.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, SecureHashAlgorithm.IND_SHA512), new String [] {DigestService.PROP_DIGEST_METHOD});
+		//Method restricted to SHA512 instance
+		pi = sha5.createInput(IN_METHOD, Digest.MY_URI, 1, 1);
+		pi.setParameterValue(SecureHashAlgorithm.IND_SHA512);
+		sha5.addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(DigestService.PROP_DIGEST_METHOD, pi), new String [] {DigestService.PROP_DIGEST_METHOD});
 		
 		profs[5] = sha5.myProfile;
 		
