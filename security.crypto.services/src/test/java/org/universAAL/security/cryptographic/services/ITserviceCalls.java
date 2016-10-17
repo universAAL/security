@@ -18,6 +18,7 @@ package org.universAAL.security.cryptographic.services;
 import org.universAAL.middleware.bus.junit.BusTestCase;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.rdf.Resource;
+import org.universAAL.middleware.service.AggregatingFilter;
 import org.universAAL.middleware.service.CallStatus;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
@@ -25,8 +26,15 @@ import org.universAAL.middleware.service.ServiceResponse;
 import org.universAAL.ontology.cryptographic.CryptographicOntology;
 import org.universAAL.ontology.cryptographic.Digest;
 import org.universAAL.ontology.cryptographic.DigestService;
+import org.universAAL.ontology.cryptographic.EncryptionService;
+import org.universAAL.ontology.cryptographic.SimpleKey;
+import org.universAAL.ontology.cryptographic.SymmetricEncryption;
+import org.universAAL.ontology.cryptographic.asymmetric.RSA;
 import org.universAAL.ontology.cryptographic.digest.MessageDigest;
 import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
+import org.universAAL.ontology.cryptographic.symmetric.AES;
+import org.universAAL.ontology.cryptographic.symmetric.Blowfish;
+import org.universAAL.ontology.cryptographic.symmetric.DES;
 
 
 /**
@@ -75,6 +83,11 @@ public class ITserviceCalls extends BusTestCase {
 //		callWDigest(SecureHashAlgorithm.IND_SHA256);
 //		callWDigest(SecureHashAlgorithm.IND_SHA384);
 //		callWDigest(SecureHashAlgorithm.IND_SHA512);
+		
+		//Key Generation
+		simpleKeygen(new AES(),128);
+		simpleKeygen(new Blowfish(),128);
+		simpleKeygen(new DES(),56); 
 	}
 
 	private void callWDigest(Digest method) {
@@ -87,6 +100,18 @@ public class ITserviceCalls extends BusTestCase {
 		
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+	}
+	private SimpleKey simpleKeygen(SymmetricEncryption se, int keylength){
+		ServiceRequest sreq = new ServiceRequest(new EncryptionService(), null);
+		
+		sreq.addValueFilter(new String [] {EncryptionService.PROP_ENCRYPTION}, se );
+		sreq.addValueFilter(new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY,SimpleKey.PROP_KEY_LENGTH}, Integer.valueOf(keylength) );
+		//if previous statement is left out, even the propfile having cardinality 0,1 it will not match.
+		sreq.addRequiredOutput(MY_OUTPUT, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY});
+		
+		ServiceResponse sres = scaller.call(sreq);
+		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		return (SimpleKey) sres.getOutput(MY_OUTPUT).get(0);
 	}
 
 }
