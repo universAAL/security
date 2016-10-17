@@ -23,10 +23,12 @@ import org.universAAL.middleware.service.CallStatus;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
 import org.universAAL.middleware.service.ServiceResponse;
+import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.CryptographicOntology;
 import org.universAAL.ontology.cryptographic.Digest;
 import org.universAAL.ontology.cryptographic.DigestService;
 import org.universAAL.ontology.cryptographic.EncryptionService;
+import org.universAAL.ontology.cryptographic.KeyRing;
 import org.universAAL.ontology.cryptographic.SimpleKey;
 import org.universAAL.ontology.cryptographic.SymmetricEncryption;
 import org.universAAL.ontology.cryptographic.asymmetric.RSA;
@@ -88,6 +90,9 @@ public class ITserviceCalls extends BusTestCase {
 		simpleKeygen(new AES(),128);
 		simpleKeygen(new Blowfish(),128);
 		simpleKeygen(new DES(),56); 
+		keringKeygen(new RSA(),1024);
+		
+		
 	}
 
 	private void callWDigest(Digest method) {
@@ -112,6 +117,20 @@ public class ITserviceCalls extends BusTestCase {
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
 		return (SimpleKey) sres.getOutput(MY_OUTPUT).get(0);
+	}
+
+	private KeyRing keringKeygen(AsymmetricEncryption ae, int keylength) {
+		ServiceRequest sreq = new ServiceRequest(new EncryptionService(), null);
+		
+		sreq.addValueFilter(new String [] {EncryptionService.PROP_ENCRYPTION}, ae );
+		sreq.addValueFilter(new String[]{EncryptionService.PROP_ENCRYPTION,RSA.PROP_KEY_RING,KeyRing.PROP_KEY_LENGTH}, Integer.valueOf(keylength) );
+		//if previous statement is left out, even the propfile having cardinality 0,1 it will not match.
+		sreq.addRequiredOutput(MY_OUTPUT, new String[]{EncryptionService.PROP_ENCRYPTION,RSA.PROP_KEY_RING});
+		
+		ServiceResponse sres = scaller.call(sreq);
+		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		return (KeyRing) sres.getOutput(MY_OUTPUT).get(0);
+		
 	}
 
 }
