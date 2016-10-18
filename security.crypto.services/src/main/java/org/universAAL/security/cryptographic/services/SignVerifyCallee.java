@@ -38,6 +38,7 @@ import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.Digest;
+import org.universAAL.ontology.cryptographic.KeyRing;
 import org.universAAL.ontology.cryptographic.SignedResource;
 import org.universAAL.ontology.cryptographic.asymmetric.RSA;
 import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
@@ -80,7 +81,8 @@ public class SignVerifyCallee extends ServiceCallee {
 			Resource r = (Resource) call.getInputValue(SignVerifyProfiles.CLEAR_RESOURCE);
 			AsymmetricEncryption enc = (AsymmetricEncryption) call.getInputValue(SignVerifyProfiles.ENC_METHOD);
 			Digest dig = (Digest) call.getInputValue(SignVerifyProfiles.DIG_METHOD);
-			Base64Binary key = EncryptionServiceCallee.resolveKey(enc.getKeyRing()[0]);
+			
+			Base64Binary key = ((KeyRing)enc.getKeyRing()[0]).getPrivateKey();
 			try {
 				SignedResource sr = sign(r, dig, enc, key);
 				
@@ -97,11 +99,12 @@ public class SignVerifyCallee extends ServiceCallee {
 			AsymmetricEncryption enc = (AsymmetricEncryption) call.getInputValue(SignVerifyProfiles.ENC_METHOD);
 			Digest dig = (Digest) call.getInputValue(SignVerifyProfiles.DIG_METHOD);
 			
-			Base64Binary key;
+			
+			KeyRing keyring;
 			if (call.getProcessURI().contains(SignVerifyProfiles.VERIFY_EMBEDDED)){
-				key = EncryptionServiceCallee.resolveKey(sr.getAsymmetric().getKeyRing()[0]);
+				keyring = sr.getAsymmetric().getKeyRing()[0];
 			}else if (call.getProcessURI().contains(SignVerifyProfiles.VERIFY_EXTERNAL)){
-				key = EncryptionServiceCallee.resolveKey(enc.getKeyRing()[0]);
+				keyring = enc.getKeyRing()[0];
 			}
 			else {
 				//PANIC!
@@ -110,6 +113,7 @@ public class SignVerifyCallee extends ServiceCallee {
 			}
 			
 			try {
+				Base64Binary key = keyring.getPublicKey();
 				Boolean result = verify(sr, dig, enc, key);
 				ServiceResponse sresp = new ServiceResponse(CallStatus.succeeded);
 				sresp.addOutput(new ProcessOutput(SignVerifyProfiles.RESULT, result));

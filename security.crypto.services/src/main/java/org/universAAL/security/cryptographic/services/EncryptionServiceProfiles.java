@@ -24,6 +24,7 @@ import org.universAAL.middleware.rdf.TypeMapper;
 import org.universAAL.middleware.service.owls.profile.ServiceProfile;
 import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.EncryptedResource;
+import org.universAAL.ontology.cryptographic.Encryption;
 import org.universAAL.ontology.cryptographic.EncryptionService;
 import org.universAAL.ontology.cryptographic.KeyRing;
 import org.universAAL.ontology.cryptographic.SimpleKey;
@@ -111,6 +112,7 @@ public class EncryptionServiceProfiles extends EncryptionService {
 			// Encrypt resource using given method
 		EncryptionServiceProfiles eAES = new EncryptionServiceProfiles(ENCRYPT_AES);
 		eAES.addFilteringInput(KEY, SimpleKey.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION, SymmetricEncryption.PROP_SIMPLE_KEY});
+//		eAES.addFilteringInput(KEY, SimpleKey.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION, Encryption.PROP_KEY}); // TODO Possible uAAL bug!
 		eAES.addFilteringInput(METHOD, AES.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTION});
 		eAES.addFilteringInput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
 		eAES.addOutput(ENCRYPTED_RESOURCE, EncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});

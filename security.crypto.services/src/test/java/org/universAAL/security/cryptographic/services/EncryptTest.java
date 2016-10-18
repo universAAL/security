@@ -35,25 +35,9 @@ import org.universAAL.ontology.cryptographic.symmetric.DES;
 
 /**
  * @author amedrano
- *
- */
+ * */
 public class EncryptTest extends CommonTest {
 
-	public void testResolveKey() throws Exception{
-		KeyRing kr = EncryptionServiceCallee.generateKeyRing(new RSA(), null);
-		Base64Binary key = EncryptionServiceCallee.resolveKey(kr);
-		assertEquals(kr.getPrivateKey(), key);
-		
-		kr.setPrivateKey(null);
-		key = EncryptionServiceCallee.resolveKey(kr);
-		assertEquals(kr.getPublicKey(), key);
-		
-		kr = EncryptionServiceCallee.generateKeyRing(new RSA(), null);
-		kr.setPublicKey(null);
-		key = EncryptionServiceCallee.resolveKey(kr);
-		assertEquals(kr.getPrivateKey(), key);
-	}
-	
 	/**
 	 * @param testR
 	 * @param detestR

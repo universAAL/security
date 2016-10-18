@@ -27,6 +27,8 @@ import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.CryptographicOntology;
 import org.universAAL.ontology.cryptographic.Digest;
 import org.universAAL.ontology.cryptographic.DigestService;
+import org.universAAL.ontology.cryptographic.Encryption;
+import org.universAAL.ontology.cryptographic.EncryptionKey;
 import org.universAAL.ontology.cryptographic.EncryptionService;
 import org.universAAL.ontology.cryptographic.KeyRing;
 import org.universAAL.ontology.cryptographic.SimpleKey;
@@ -87,12 +89,16 @@ public class ITserviceCalls extends BusTestCase {
 //		callWDigest(SecureHashAlgorithm.IND_SHA512);
 		
 		//Key Generation
-		simpleKeygen(new AES(),128);
-		simpleKeygen(new Blowfish(),128);
-		simpleKeygen(new DES(),56); 
-		keringKeygen(new RSA(),1024);
+		SimpleKey keyAES = simpleKeygen(new AES(),128);
+		SimpleKey keyBlow = simpleKeygen(new Blowfish(),128);
+		SimpleKey keyDES = simpleKeygen(new DES(),56); 
+		KeyRing keyring = keringKeygen(new RSA(),1024);
 		
-		
+		//Encryption
+		encryptionCycle(new AES(), keyAES);
+		encryptionCycle(new Blowfish(), keyBlow);
+		encryptionCycle(new DES(), keyDES);
+		encryptionCycle(new RSA(), keyring);
 	}
 
 	private void callWDigest(Digest method) {
@@ -133,4 +139,47 @@ public class ITserviceCalls extends BusTestCase {
 		
 	}
 
+	private void encryptionCycle(Encryption se, EncryptionKey k) {
+		
+		String keyprop = null;
+		if (se instanceof SymmetricEncryption){
+			keyprop = SymmetricEncryption.PROP_SIMPLE_KEY;
+		}else {
+			keyprop = AsymmetricEncryption.PROP_KEY_RING;
+		}
+		
+		
+		Resource clearResource = RandomResourceGenerator.randomResource();
+		
+		ServiceRequest sreq = new ServiceRequest(new EncryptionService(), null);
+
+		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION, keyprop}, k);
+		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION}, se);
+		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTS}, clearResource);
+		sreq.addRequiredOutput(MY_OUTPUT, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
+		
+		ServiceResponse sres = scaller.call(sreq);
+		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		
+		Resource cryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
+		
+		System.out.println(serialize(cryptedResource));
+		
+		// decrypt
+		ServiceRequest sreq2 = new ServiceRequest(new EncryptionService(), null);
+		
+		sreq2.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION, keyprop}, k);
+		sreq2.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION}, se);
+		sreq2.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE}, cryptedResource);
+		sreq2.addRequiredOutput(MY_OUTPUT, new String[] {EncryptionService.PROP_ENCRYPTS});
+		
+		sres = scaller.call(sreq2);
+		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		
+		Resource decryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
+		
+		System.out.println(serialize(decryptedResource));
+		
+		assertTrue(EncryptTest.fullResourceEquals(clearResource, decryptedResource));
+	}
 }

@@ -112,15 +112,22 @@ public class EncryptionServiceCallee extends ServiceCallee {
 			//if it is an asymmetrical operation resolve the Key to use
 			KeyRing keyring = (KeyRing) call
 					.getInputValue(EncryptionServiceProfiles.KEY);
-			key = resolveKey(keyring);
+//			key = resolveKey(keyring); 
+			if (call.getProcessURI().contains("encrypt")) {
+				key = keyring.getPublicKey();
+			}else if (call.getProcessURI().contains("decrypt")) {
+				key = keyring.getPrivateKey();
+			}
+			
 			if (key == null){
 				ServiceResponse sr =  new ServiceResponse(CallStatus.serviceSpecificFailure);
 				sr.setResourceComment("MAN! I need at least one key; public or private does not matter!");
 				return sr;
 			}
 		} else {
-			key = (Base64Binary) call
+			SimpleKey sk = (SimpleKey) call
 					.getInputValue(EncryptionServiceProfiles.KEY);
+			key = sk.getKeyText();
 		}
 		if (call.getProcessURI().contains("encrypt")) {
 			Resource ir = (Resource) call
@@ -182,7 +189,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 
 
 			ProcessOutput po = new ProcessOutput(
-					EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
+					EncryptionServiceProfiles.CLEAR_RESOURCE,
 					r);
 			ServiceResponse sr = new ServiceResponse(
 					CallStatus.succeeded);
@@ -193,20 +200,6 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		}
 
 		return new ServiceResponse(CallStatus.noMatchingServiceFound);
-	}
-	
-	static Base64Binary resolveKey(KeyRing keyring) {
-		
-		Base64Binary key = null;
-		
-		if (keyring.hasProperty(KeyRing.PROP_PRIVATE_KEY) && !keyring.hasProperty(KeyRing.PROP_PUBLIC_KEY)){
-			key = keyring.getPrivateKey();
-		}else if (!keyring.hasProperty(KeyRing.PROP_PRIVATE_KEY) && keyring.hasProperty(KeyRing.PROP_PUBLIC_KEY)){
-			key = keyring.getPublicKey();
-		} else if (keyring.hasProperty(KeyRing.PROP_PRIVATE_KEY) && keyring.hasProperty(KeyRing.PROP_PUBLIC_KEY)){
-			key = keyring.getPrivateKey();
-		}
-		return key;
 	}
 
 	static EncryptedResource doEncryption(Resource ir, Base64Binary key,
