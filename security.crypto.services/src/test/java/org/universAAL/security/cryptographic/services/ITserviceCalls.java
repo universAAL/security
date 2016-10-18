@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.universAAL.security.cryptographic.services;
 
+import java.util.ArrayList;
+
 import org.universAAL.middleware.bus.junit.BusTestCase;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.rdf.Resource;
@@ -27,6 +29,7 @@ import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.CryptographicOntology;
 import org.universAAL.ontology.cryptographic.Digest;
 import org.universAAL.ontology.cryptographic.DigestService;
+import org.universAAL.ontology.cryptographic.EncryptedResource;
 import org.universAAL.ontology.cryptographic.Encryption;
 import org.universAAL.ontology.cryptographic.EncryptionKey;
 import org.universAAL.ontology.cryptographic.EncryptionService;
@@ -105,6 +108,12 @@ public class ITserviceCalls extends BusTestCase {
 		//digital signature
 		signatureCycle(keyring);
 		
+		//Multidestination Encryption
+		KeyRing keyring2 = keringKeygen(new RSA(),1024);
+		ArrayList<KeyRing> krl = new ArrayList<KeyRing>();
+		krl.add(keyring);
+		krl.add(keyring2);
+		multidestinationEncryptionCycle(krl);
 	}
 
 	private void callWDigest(Digest method) {
@@ -219,6 +228,43 @@ public class ITserviceCalls extends BusTestCase {
 		Boolean result = (Boolean) sres.getOutput(MY_OUTPUT).get(0);
 		assertEquals(Boolean.TRUE, result);
 		
+		
+	}
+
+	private void multidestinationEncryptionCycle(ArrayList<KeyRing> krl) {
+		Resource clearResource = RandomResourceGenerator.randomResource();
+		
+		AsymmetricEncryption ae = new RSA();
+		for (KeyRing kr : krl) {
+			ae.addKeyRing(kr);
+		}
+		
+		ServiceRequest sreq = new ServiceRequest(new EncryptionService(), null);
+
+		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE, EncryptedResource.PROP_ENCRYPTION}, new AES());
+		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION}, ae);
+		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTS}, clearResource);
+		sreq.addRequiredOutput(MY_OUTPUT, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
+		
+		ServiceResponse sres = scaller.call(sreq);
+		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		
+		Resource cryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
+		
+		System.out.println(serialize(cryptedResource));
+		
+		sreq = new ServiceRequest(new EncryptionService(), null);
+		
+		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION, AsymmetricEncryption.PROP_KEY_RING}, krl.get(0));
+		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE}, cryptedResource);
+		sreq.addRequiredOutput(MY_OUTPUT, new String[] {EncryptionService.PROP_ENCRYPTS});
+		
+		sres = scaller.call(sreq);
+		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		
+		Resource decryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
+				
+		assertTrue(EncryptTest.fullResourceEquals(clearResource, decryptedResource));
 		
 	}
 }

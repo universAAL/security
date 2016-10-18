@@ -163,13 +163,10 @@ public class MultiDestinationCallee extends ServiceCallee {
 			if (se == null){
 				se = new AES(); // default symmetric encryption.
 			}
-			EncryptionKey[] propsed = se.getKey();
-			if (propsed.length > 0){
-				//try using the given key
-				sessionKey = (SimpleKey) propsed[0];
-				if (!sessionKey.hasProperty(SimpleKey.PROP_KEY_TEXT))
-					// generate a new session key using the given keylength as guide
-					sessionKey = EncryptionServiceCallee.generateSymmetricKey(se, sessionKey.getProperty(SimpleKey.PROP_KEY_LENGTH));
+			sessionKey = se.getSimpleKey();
+			if (sessionKey != null && !sessionKey.hasProperty(SimpleKey.PROP_KEY_TEXT)) {
+				// generate a new session key using the given keylength as guide
+				sessionKey = EncryptionServiceCallee.generateSymmetricKey(se, sessionKey.getProperty(SimpleKey.PROP_KEY_LENGTH));
 			} else {
 				sessionKey = EncryptionServiceCallee.generateSymmetricKey(se, null);
 			}

@@ -94,7 +94,8 @@ public class MultiDestinationProfiles extends EncryptionService {
 		MultiDestinationProfiles create = new MultiDestinationProfiles(PROCESS_CREATE);
 		create.addFilteringInput(PARAM_METHOD_LVL1, SymmetricEncryption.MY_URI, 0, 1, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE,EncryptedResource.PROP_ENCRYPTION});
 		create.addFilteringInput(PARAM_METHOD_LVL2, AsymmetricEncryption.MY_URI, 1, -1, new String [] {EncryptionService.PROP_ENCRYPTION});
-		create.addFilteringInput(PARAM_KEY_RING, KeyRing.MY_URI, 1, -1, new String [] {EncryptionService.PROP_ENCRYPTION,AsymmetricEncryption.PROP_KEY_RING});
+		//create.addFilteringInput(PARAM_KEY_RING, KeyRing.MY_URI, 1, -1, new String [] {EncryptionService.PROP_ENCRYPTION,AsymmetricEncryption.PROP_KEY_RING});
+		//TODO: Asymmetric(s) should have keyring(s)
 		//TODO: restriction all Keyrings must have PublicKey
 		create.addFilteringInput(PARAM_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {EncryptionService.PROP_ENCRYPTS});
 		create.addOutput(PARAM_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI, 1, 1, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
@@ -132,5 +133,6 @@ public class MultiDestinationProfiles extends EncryptionService {
 		decrypt.addFilteringInput(PARAM_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI, 1, 1, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 		decrypt.addOutput(PARAM_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[] {EncryptionService.PROP_ENCRYPTS});
 		
+		profs[3] = decrypt.myProfile;
 	}
 }

@@ -27,6 +27,7 @@ public class ProjectActivator implements ModuleActivator {
 	private DigestServiceCallee digestCallee;
 	private EncryptionServiceCallee encrypCallee;
 	private SignVerifyCallee signCallee;
+	private MultiDestinationCallee mderCallee;
 	static PassiveDependencyProxy<MessageContentSerializer> serializer;
 	
 	public void start(ModuleContext ctxt) throws Exception {	
@@ -42,9 +43,11 @@ public class ProjectActivator implements ModuleActivator {
 		DigestServiceProfiles.initialize(context);
 		EncryptionServiceProfiles.initialize(context);
 		SignVerifyProfiles.initialize(context);
+		MultiDestinationProfiles.initialize(context);
 		digestCallee = new DigestServiceCallee(context, DigestServiceProfiles.profs);
 		encrypCallee = new EncryptionServiceCallee(context, EncryptionServiceProfiles.profs);
 		signCallee = new SignVerifyCallee(context, SignVerifyProfiles.profs);
+		mderCallee = new MultiDestinationCallee(context, MultiDestinationProfiles.profs);
 		
 		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
