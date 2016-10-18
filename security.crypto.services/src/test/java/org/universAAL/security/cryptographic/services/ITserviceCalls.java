@@ -31,6 +31,8 @@ import org.universAAL.ontology.cryptographic.Encryption;
 import org.universAAL.ontology.cryptographic.EncryptionKey;
 import org.universAAL.ontology.cryptographic.EncryptionService;
 import org.universAAL.ontology.cryptographic.KeyRing;
+import org.universAAL.ontology.cryptographic.SignAndVerifyService;
+import org.universAAL.ontology.cryptographic.SignedResource;
 import org.universAAL.ontology.cryptographic.SimpleKey;
 import org.universAAL.ontology.cryptographic.SymmetricEncryption;
 import org.universAAL.ontology.cryptographic.asymmetric.RSA;
@@ -99,6 +101,10 @@ public class ITserviceCalls extends BusTestCase {
 		encryptionCycle(new Blowfish(), keyBlow);
 		encryptionCycle(new DES(), keyDES);
 		encryptionCycle(new RSA(), keyring);
+		
+		//digital signature
+		signatureCycle(keyring);
+		
 	}
 
 	private void callWDigest(Digest method) {
@@ -181,5 +187,38 @@ public class ITserviceCalls extends BusTestCase {
 		System.out.println(serialize(decryptedResource));
 		
 		assertTrue(EncryptTest.fullResourceEquals(clearResource, decryptedResource));
+	}
+
+	private void signatureCycle(KeyRing keyring) {
+		Resource res = RandomResourceGenerator.randomResource();
+		
+		ServiceRequest sreq = new ServiceRequest(new SignAndVerifyService(), null);
+		AsymmetricEncryption ae = new RSA();
+		ae.addKeyRing(keyring);
+
+		sreq.addValueFilter(new String [] {SignAndVerifyService.PROP_SIGN}, res );
+		sreq.addValueFilter(new String []{SignAndVerifyService.PROP_ASYMMETRIC}, ae);
+		sreq.addValueFilter(new String []{SignAndVerifyService.PROP_DIGEST}, SecureHashAlgorithm.IND_SHA256);
+		sreq.addRequiredOutput(MY_OUTPUT, new String[]{SignAndVerifyService.PROP_SIGNED_RESOURCE});
+		
+		ServiceResponse sres = scaller.call(sreq);
+		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		SignedResource sr = (SignedResource) sres.getOutput(MY_OUTPUT).get(0);
+		
+		//System.out.println(serialize(sr));
+		
+		System.out.println("Verifying");
+		
+		sreq = new ServiceRequest(new SignAndVerifyService(), null);
+		sreq.addValueFilter(new String[]{SignAndVerifyService.PROP_SIGNED_RESOURCE}, sr);
+		sreq.addValueFilter(new String []{SignAndVerifyService.PROP_ASYMMETRIC}, ae);
+		
+		sreq.addRequiredOutput(MY_OUTPUT, new String[]{SignAndVerifyService.PROP_VERIFICATION_RESULT});
+		sres = scaller.call(sreq);
+		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		Boolean result = (Boolean) sres.getOutput(MY_OUTPUT).get(0);
+		assertEquals(Boolean.TRUE, result);
+		
+		
 	}
 }

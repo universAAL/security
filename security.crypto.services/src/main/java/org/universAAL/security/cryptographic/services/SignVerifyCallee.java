@@ -97,16 +97,14 @@ public class SignVerifyCallee extends ServiceCallee {
 		else {
 			SignedResource sr = (SignedResource) call.getInputValue(SignVerifyProfiles.SIGNED_RESOURCE);
 			AsymmetricEncryption enc = (AsymmetricEncryption) call.getInputValue(SignVerifyProfiles.ENC_METHOD);
-			Digest dig = (Digest) call.getInputValue(SignVerifyProfiles.DIG_METHOD);
-			
-			
-			KeyRing keyring;
-			if (call.getProcessURI().contains(SignVerifyProfiles.VERIFY_EMBEDDED)){
-				keyring = sr.getAsymmetric().getKeyRing()[0];
-			}else if (call.getProcessURI().contains(SignVerifyProfiles.VERIFY_EXTERNAL)){
-				keyring = enc.getKeyRing()[0];
+			if (enc == null){
+				enc = sr.getAsymmetric();
 			}
-			else {
+			Digest dig = sr.getDigest();
+			
+			
+			KeyRing keyring = enc.getKeyRing()[0];
+			if (keyring == null) {
 				//PANIC!
 				LogUtils.logError(owner, getClass(), "handleCall", "Should not reach here this");
 				return new ServiceResponse(CallStatus.noMatchingServiceFound);
