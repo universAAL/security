@@ -81,7 +81,7 @@ public class AnonServiceProfile extends AnonymizationService {
 		
 		//Deanonymize Service Profile
 		AnonServiceProfile deanon = new AnonServiceProfile(PROC_DEANON);
-		anon.addFilteringInput(PARAM_METHOD, AsymmetricEncryption.MY_URI, 1, -1, new String[]{PROP_ASYMMETRIC_ENCRYPTION});
+		deanon.addFilteringInput(PARAM_METHOD, AsymmetricEncryption.MY_URI, 1, -1, new String[]{PROP_ASYMMETRIC_ENCRYPTION});
 		//TODO add restriction to force all Asymmetric Keyrings to have private keys
 		deanon.addFilteringInput(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
 		deanon.addOutput(PARAM_OUT_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});

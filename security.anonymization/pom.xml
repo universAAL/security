@@ -21,6 +21,16 @@
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
 	</dependency>  	 	
+	<dependency>
+		<groupId>org.universAAL.middleware</groupId>
+		<artifactId>mw.bus.junit</artifactId>
+		<scope>test</scope>
+	</dependency>	
+	<dependency>
+		<groupId>org.universAAL.security</groupId>
+		<artifactId>security.crypto.services</artifactId>
+		<scope>test</scope>
+	</dependency>
     <dependency>
       <groupId>org.universAAL.middleware</groupId>
       <artifactId>mw.data.serialization.core</artifactId>
