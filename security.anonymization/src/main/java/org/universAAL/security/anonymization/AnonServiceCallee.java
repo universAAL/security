@@ -99,7 +99,7 @@ public class AnonServiceCallee extends ServiceCallee {
 			if (newPropValue == null){
 				newPropValue = new Resource(propvalue.getURI());
 				//propertySoThatItSerializesCorrectly
-				newPropValue.setResourceComment("this is an anonymousResource, It's URI is encrypted use the deanonymzation service to get to the actual URI, and then the actual full Resource.");
+				newPropValue.setResourceComment("This is a Resource Placeholder, you must query to find the full Resource with this URI.");
 			}
 			//TODO: add option to encrypt the full resource?
 			
@@ -123,6 +123,11 @@ public class AnonServiceCallee extends ServiceCallee {
 			try {
 				String newURI = flatten2URI(serializer.getObject().serialize(er));
 				newPropValue = Resource.getResource(propvalue.getType(), newURI);
+				if (newPropValue == null){
+					newPropValue = new Resource(newURI);
+					//propertySoThatItSerializesCorrectly
+					newPropValue.setResourceComment("this is an anonymousResource, It's URI is encrypted use the deanonymzation service to get to the actual URI, and then the actual full Resource.");
+				}
 			} catch (UnsupportedEncodingException e) {
 				LogUtils.logError(owner, getClass(), "attemptDecryption", new String[]{"unable to encode. It seems Your system does not support UTF-8... from when is your system? darkages? "}, e);
 				return new ServiceResponse(CallStatus.serviceSpecificFailure);

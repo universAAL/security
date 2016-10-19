@@ -94,8 +94,7 @@ public class ITserviceCalls extends BusTestCase {
 		AsymmetricEncryption ae = new RSA();
 		ae.addKeyRing(keyringKeygen(ae, 1024));
 		
-		System.out.println(serialize(AnonServiceProfile.profs[0]));
-		
+		// Anonymize
 		ServiceRequest sreq = new ServiceRequest(new AnonymizationService(), null);
 		
 		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ASYMMETRIC_ENCRYPTION}, ae);
@@ -104,9 +103,32 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE,Anonymizable.PROP_ANNONYMOUS_RESOURCE}, r);
 		sreq.addRequiredOutput(MY_OUTPUT, new String[]{AnonymizationService.PROP_ANONYMIZABLE});
 		
-		System.out.println(serialize(sreq));
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		
+		Resource anonymized = (Resource) sres.getOutput(MY_OUTPUT).get(0);
+		
+		assertEquals(a, anonymized); //only checks URI
+		assertFalse(RandomResourceGenerator.fullResourceEquals(a, anonymized)); //there must be a property which is changed
+		
+		System.out.println(serialize(anonymized));
+		
+		// Deanonymize
+		sreq = new ServiceRequest(new AnonymizationService(), null);
+		
+		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ASYMMETRIC_ENCRYPTION}, ae);
+		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE}, anonymized);
+		sreq.addRequiredOutput(MY_OUTPUT, new String[]{AnonymizationService.PROP_ANONYMIZABLE});
+		
+		sres = scaller.call(sreq);
+		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		
+		Resource deanonymized = (Resource) sres.getOutput(MY_OUTPUT).get(0);
+		
+//		System.out.println(serialize(anonymized));
+		assertEquals(a, deanonymized);
+		
+		assertEquals(a.getProperty(Anonymizable.PROP_ANNONYMOUS_RESOURCE), deanonymized.getProperty(Anonymizable.PROP_ANNONYMOUS_RESOURCE));
 	}
 
 	private KeyRing keyringKeygen(AsymmetricEncryption ae, int keylength) {

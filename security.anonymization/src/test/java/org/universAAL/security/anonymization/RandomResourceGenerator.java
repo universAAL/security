@@ -17,6 +17,8 @@ package org.universAAL.security.anonymization;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Collections;
+import java.util.HashSet;
 
 import org.universAAL.middleware.rdf.Resource;
 
@@ -65,6 +67,24 @@ public class RandomResourceGenerator {
 			}
 		}
 		return r;
+	}
+	
+	static boolean fullResourceEquals(Resource a, Resource b) {
+		HashSet aSet = new HashSet(Collections.list(a.getPropertyURIs()));
+		HashSet bSet = new HashSet(Collections.list(b.getPropertyURIs()));
+		if (!aSet.equals(bSet)){
+			return false;
+		}
+		for (Object prop : aSet) {
+			Object val = a.getProperty((String) prop);
+			if (val instanceof Resource && !fullResourceEquals((Resource) val, (Resource) b.getProperty((String) prop))){
+				return false;
+			} else if (!val.equals(b.getProperty((String) prop))){
+				return false;
+			}
+		}
+	
+		return true;
 	}
 	
 }
