@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.universAAL.security.anonymization;
 
+import java.util.Hashtable;
+
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.owl.SimpleOntology;
@@ -42,6 +44,8 @@ public class AnonServiceProfile extends AnonymizationService {
 	static final String PARAM_IN_ANONYMIZABLE = NAMESPACE + "anonymizableInput";
 	static final String PARAM_PROPERTY = NAMESPACE + "property2Banonized";
 	static final String PARAM_OUT_ANONYMIZABLE = NAMESPACE + "anonymizableOutput";
+
+	private static Hashtable restrictions = new Hashtable();
 	/**
 	 * 
 	 */
@@ -70,12 +74,17 @@ public class AnonServiceProfile extends AnonymizationService {
 		    }
 		}));
 		
+		addRestriction(getClassRestrictionsOnProperty(
+				AnonymizationService.MY_URI, PROP_ANONYMIZABLE),
+				new String []{PROP_ANONYMIZABLE}, restrictions );
+		
 		//Anonymize Service Profile
 		AnonServiceProfile anon = new AnonServiceProfile(PROC_ANON);
 		anon.addFilteringInput(PARAM_METHOD, AsymmetricEncryption.MY_URI, 1, -1, new String[]{PROP_ASYMMETRIC_ENCRYPTION});
 		//TODO add restriction to force all Asymmetric Keyrings to have public keys
-		anon.addFilteringInput(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
-		anon.addInputWithChangeEffect(PARAM_PROPERTY, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[]{PROP_ANONYMIZABLE,Anonymizable.PROP_ANNONYMOUS_RESOURCE});
+		anon.addInputWithChangeEffect(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
+//		anon.addFilteringInput(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
+		anon.addFilteringInput(PARAM_PROPERTY, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[]{PROP_ANONYMIZABLE,Anonymizable.PROP_ANNONYMOUS_RESOURCE});
 		anon.addOutput(PARAM_OUT_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
 		profs[0] = anon.myProfile;
 		

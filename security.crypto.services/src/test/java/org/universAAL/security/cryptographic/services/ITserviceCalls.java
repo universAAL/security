@@ -18,6 +18,7 @@ package org.universAAL.security.cryptographic.services;
 import java.util.ArrayList;
 
 import org.universAAL.middleware.bus.junit.BusTestCase;
+import org.universAAL.middleware.owl.ManagedIndividual;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.service.CallStatus;
@@ -33,6 +34,7 @@ import org.universAAL.ontology.cryptographic.Encryption;
 import org.universAAL.ontology.cryptographic.EncryptionKey;
 import org.universAAL.ontology.cryptographic.EncryptionService;
 import org.universAAL.ontology.cryptographic.KeyRing;
+import org.universAAL.ontology.cryptographic.MultidestinationEncryptedResource;
 import org.universAAL.ontology.cryptographic.SignAndVerifyService;
 import org.universAAL.ontology.cryptographic.SignedResource;
 import org.universAAL.ontology.cryptographic.SimpleKey;
@@ -250,6 +252,9 @@ public class ITserviceCalls extends BusTestCase {
 		
 		Resource cryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
 		
+
+		assertTrue(ManagedIndividual.checkMembership(MultidestinationEncryptedResource.MY_URI, cryptedResource));
+		
 		System.out.println(serialize(cryptedResource));
 		
 		sreq = new ServiceRequest(new EncryptionService(), null);
@@ -262,7 +267,7 @@ public class ITserviceCalls extends BusTestCase {
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
 		
 		Resource decryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
-				
+						
 		assertTrue(EncryptTest.fullResourceEquals(clearResource, decryptedResource));
 		
 	}

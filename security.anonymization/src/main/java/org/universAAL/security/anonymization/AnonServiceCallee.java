@@ -96,21 +96,34 @@ public class AnonServiceCallee extends ServiceCallee {
 			Resource method = (Resource) call.getInputValue(AnonServiceProfile.PARAM_METHOD);
 			//create dummy resource to be encrypted
 			Resource newPropValue = Resource.getResource(propvalue.getType(), propvalue.getURI());
+			if (newPropValue == null){
+				newPropValue = new Resource(propvalue.getURI());
+				//propertySoThatItSerializesCorrectly
+				newPropValue.setResourceComment("this is an anonymousResource, It's URI is encrypted use the deanonymzation service to get to the actual URI, and then the actual full Resource.");
+			}
 			//TODO: add option to encrypt the full resource?
 			
 			//call Multidestination Encryption Service
-			EncryptionService encSrv = new EncryptionService();
-			encSrv.setEncryption((Encryption) method);
-			encSrv.setEncrypts(newPropValue);
-			encSrv.addInstanceLevelRestriction(MergedRestriction.getAllValuesRestriction(
-					EncryptionService.PROP_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI), 
-					new String[]{EncryptionService.PROP_ENCRYPTED_RESOURCE});
-			ServiceRequest sr = new ServiceRequest(encSrv, call.getInvolvedUser());
-			sr.addValueFilter(new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE,EncryptedResource.PROP_ENCRYPTION}, new AES());
-			sr.addRequiredOutput(PARAM_ENCRY_RESOURCE_OUT, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
+//			EncryptionService encSrv = new EncryptionService();
+//			encSrv.setEncryption((Encryption) method);
+//			encSrv.setEncrypts(newPropValue);
+//			encSrv.addInstanceLevelRestriction(MergedRestriction.getAllValuesRestriction(
+//					EncryptionService.PROP_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI), 
+//					new String[]{EncryptionService.PROP_ENCRYPTED_RESOURCE});
+//			ServiceRequest sr = new ServiceRequest(encSrv, call.getInvolvedUser());
+//			sr.addValueFilter(new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE,EncryptedResource.PROP_ENCRYPTION}, new AES());
+//			sr.addRequiredOutput(PARAM_ENCRY_RESOURCE_OUT, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 			
+			ServiceRequest sreq = new ServiceRequest(new EncryptionService(), call.getInvolvedUser());
+
+			sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE, EncryptedResource.PROP_ENCRYPTION}, new AES());
+			sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION}, method);
+			sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTS}, newPropValue);
+			sreq.addRequiredOutput(PARAM_ENCRY_RESOURCE_OUT, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
+			
+			System.out.println(serializer.getObject().serialize(sreq));
 			DefaultServiceCaller caller = new DefaultServiceCaller(owner);
-			ServiceResponse sresp = caller.call(sr);
+			ServiceResponse sresp = caller.call(sreq);
 			caller.close();
 			
 			EncryptedResource er = (EncryptedResource) sresp.getOutput(PARAM_ENCRY_RESOURCE_OUT).get(0);

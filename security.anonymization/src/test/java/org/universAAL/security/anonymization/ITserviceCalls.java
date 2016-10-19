@@ -17,6 +17,7 @@ package org.universAAL.security.anonymization;
 
 import org.universAAL.container.JUnit.JUnitModuleContext;
 import org.universAAL.middleware.bus.junit.BusTestCase;
+import org.universAAL.middleware.owl.ManagedIndividual;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.service.CallStatus;
@@ -86,7 +87,8 @@ public class ITserviceCalls extends BusTestCase {
 		
 		Resource r = RandomResourceGenerator.randomResource();
 		
-		UserProfile a = new UserProfile(NAMESPACE+"testUP");
+//		Resource a = ManagedIndividual.getResource(UserProfile.MY_URI, NAMESPACE+"testUP");
+		Resource a = ManagedIndividual.getResource(Anonymizable.MY_URI, NAMESPACE+"testUP");
 		assertTrue(a.changeProperty(Anonymizable.PROP_ANNONYMOUS_RESOURCE, r));
 		
 		AsymmetricEncryption ae = new RSA();
@@ -97,8 +99,9 @@ public class ITserviceCalls extends BusTestCase {
 		ServiceRequest sreq = new ServiceRequest(new AnonymizationService(), null);
 		
 		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ASYMMETRIC_ENCRYPTION}, ae);
-		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE}, a);
-		sreq.addChangeEffect(new String[]{AnonymizationService.PROP_ANONYMIZABLE,Anonymizable.PROP_ANNONYMOUS_RESOURCE}, r);
+//		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE}, a);
+		sreq.addChangeEffect(new String[]{AnonymizationService.PROP_ANONYMIZABLE}, a);
+		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE,Anonymizable.PROP_ANNONYMOUS_RESOURCE}, r);
 		sreq.addRequiredOutput(MY_OUTPUT, new String[]{AnonymizationService.PROP_ANONYMIZABLE});
 		
 		System.out.println(serialize(sreq));
