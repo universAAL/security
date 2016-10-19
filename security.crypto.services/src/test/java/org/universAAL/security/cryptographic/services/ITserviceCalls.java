@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import org.universAAL.middleware.bus.junit.BusTestCase;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.rdf.Resource;
-import org.universAAL.middleware.service.AggregatingFilter;
 import org.universAAL.middleware.service.CallStatus;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
@@ -87,11 +86,11 @@ public class ITserviceCalls extends BusTestCase {
 		
 		//Digest tests
 		callWDigest(MessageDigest.IND_MD2);
-//		callWDigest(MessageDigest.IND_MD5);
-//		callWDigest(SecureHashAlgorithm.IND_SHA);
-//		callWDigest(SecureHashAlgorithm.IND_SHA256);
-//		callWDigest(SecureHashAlgorithm.IND_SHA384);
-//		callWDigest(SecureHashAlgorithm.IND_SHA512);
+		callWDigest(MessageDigest.IND_MD5);
+		callWDigest(SecureHashAlgorithm.IND_SHA);
+		callWDigest(SecureHashAlgorithm.IND_SHA256);
+		callWDigest(SecureHashAlgorithm.IND_SHA384);
+		callWDigest(SecureHashAlgorithm.IND_SHA512);
 		
 		//Key Generation
 		SimpleKey keyAES = simpleKeygen(new AES(),128);
