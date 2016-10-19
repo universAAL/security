@@ -104,15 +104,6 @@ public class AnonServiceCallee extends ServiceCallee {
 			//TODO: add option to encrypt the full resource?
 			
 			//call Multidestination Encryption Service
-//			EncryptionService encSrv = new EncryptionService();
-//			encSrv.setEncryption((Encryption) method);
-//			encSrv.setEncrypts(newPropValue);
-//			encSrv.addInstanceLevelRestriction(MergedRestriction.getAllValuesRestriction(
-//					EncryptionService.PROP_ENCRYPTED_RESOURCE, MultidestinationEncryptedResource.MY_URI), 
-//					new String[]{EncryptionService.PROP_ENCRYPTED_RESOURCE});
-//			ServiceRequest sr = new ServiceRequest(encSrv, call.getInvolvedUser());
-//			sr.addValueFilter(new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE,EncryptedResource.PROP_ENCRYPTION}, new AES());
-//			sr.addRequiredOutput(PARAM_ENCRY_RESOURCE_OUT, new String [] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
 			
 			ServiceRequest sreq = new ServiceRequest(new EncryptionService(), call.getInvolvedUser());
 
