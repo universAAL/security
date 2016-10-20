@@ -11,6 +11,8 @@
   <artifactId>security.crypto.services</artifactId>
   <version>3.4.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
+  <name>universAAL Basic Cryptographic Services</name>
+  <description>Offers universAALized Java security services for hashing, encrypting, signing and verifying</description>
 
   <properties>
     <separatedGroupIds>org.universAAL.middleware</separatedGroupIds>

@@ -11,6 +11,8 @@
   <artifactId>security.authorisator</artifactId>
   <version>3.4.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
+  <name>universAAL Security Authorisator</name>
+  <description>Offers Role-based security access management services</description>
 
   <properties>
     <separatedGroupIds>org.universAAL.middleware</separatedGroupIds>

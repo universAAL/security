@@ -11,6 +11,8 @@
   <artifactId>security.anonymization</artifactId>
   <version>3.4.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
+  <name>universAAL Security Anonymization</name>
+  <description>Offers RDF reference scrambling services</description>
 
   <properties>
     <separatedGroupIds>org.universAAL.middleware</separatedGroupIds>

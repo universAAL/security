@@ -11,6 +11,8 @@
   <artifactId>security.authorisator.delegation</artifactId>
   <version>3.4.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
+  <name>universAAL Security Authorisator Delegation Extension</name>
+  <description>Extends Authorisation serivces with the capability of users delegating roles to other users</description>
 
   <properties>
     <separatedGroupIds>org.universAAL.middleware</separatedGroupIds>
