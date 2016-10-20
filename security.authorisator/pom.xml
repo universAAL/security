@@ -18,11 +18,33 @@
     <separatedGroupIds>org.universAAL.middleware</separatedGroupIds>
   </properties>
 
+<dependencyManagement>
+	<dependencies>
+      <dependency>
+        <groupId>org.universAAL.context</groupId>
+        <artifactId>ctxt.pom</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>		
+	</dependencies>
+</dependencyManagement>
+
   <dependencies>
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
 	</dependency>  	 	
+	<dependency>
+	<groupId>org.universAAL.support</groupId>
+		<artifactId>itests</artifactId>
+		<scope>test</scope>
+	</dependency>	  	 	
+	<dependency>
+	<groupId>org.universAAL.middleware</groupId>
+		<artifactId>mw.container.osgi</artifactId>
+		<scope>test</scope>
+	</dependency>	
   	<dependency>
   		<groupId>org.universAAL.middleware</groupId>
   		<artifactId>mw.bus.context.core</artifactId>
@@ -61,5 +83,21 @@
 		</plugin>
 	</plugins>
   </build>
-  
+  <profiles>
+    <profile>
+      <id>uAAL-Runtime</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.universAAL.context</groupId>
+          <artifactId>ctxt.che</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.universAAL.context</groupId>
+          <artifactId>ctxt.prof.server</artifactId>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 </project>
