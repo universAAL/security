@@ -115,8 +115,8 @@ public class ProjectActivator implements ModuleActivator {
 		
 		//remove role from SubProfile
 		SecuritySubProfileRoleManagement remRoleSP = new SecuritySubProfileRoleManagement(REMOVE_ROLE_SP);
-		addRoleSP.addFilteringInput(SUBPROFILE, SecuritySubprofile.MY_URI, 1, 1, SecuritySubProfileRoleManagement.pp_subprofile);
-		addRoleSP.addInputWithRemoveEffect(ROLE, Role.MY_URI, 1, 1, SecuritySubProfileRoleManagement.pp_roles);
+		remRoleSP.addFilteringInput(SUBPROFILE, SecuritySubprofile.MY_URI, 1, 1, SecuritySubProfileRoleManagement.pp_subprofile);
+		remRoleSP.addInputWithRemoveEffect(ROLE, Role.MY_URI, 1, 1, SecuritySubProfileRoleManagement.pp_roles);
 		profs[1] = remRoleSP.getProfile();
 		
 		//add role as subrole
@@ -127,8 +127,8 @@ public class ProjectActivator implements ModuleActivator {
 		
 		//remove role as subrole
 		RoleMngServiceProfile remRole = new RoleMngServiceProfile(REMOVE_ROLE_ROLE);
-		addRole.addFilteringInput(ROLE, Role.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE});
-		addRole.addInputWithRemoveEffect(SUBROLE, Role.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE,Role.PROP_SUB_ROLES});
+		remRole.addFilteringInput(ROLE, Role.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE});
+		remRole.addInputWithRemoveEffect(SUBROLE, Role.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE,Role.PROP_SUB_ROLES});
 		profs[3] = remRole.getProfile();
 		
 		//change Role
@@ -143,19 +143,19 @@ public class ProjectActivator implements ModuleActivator {
 		
 		//add AccessRight to role
 		RoleMngServiceProfile addAR = new RoleMngServiceProfile(ADD_AR_ROLE);
-		addRole.addFilteringInput(ROLE, Role.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE});
-		addRole.addInputWithAddEffect(ACCESS_RIGHT, AccessRight.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
+		addAR.addFilteringInput(ROLE, Role.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE});
+		addAR.addInputWithAddEffect(ACCESS_RIGHT, AccessRight.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
 		profs[4] = addAR.getProfile();
 		
 		//remove AccessRight from role
 		RoleMngServiceProfile remAR = new RoleMngServiceProfile(REMOVE_AR_ROLE);
-		addRole.addFilteringInput(ROLE, Role.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE});
-		addRole.addInputWithRemoveEffect(ACCESS_RIGHT, AccessRight.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
+		remAR.addFilteringInput(ROLE, Role.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE});
+		remAR.addInputWithRemoveEffect(ACCESS_RIGHT, AccessRight.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
 		profs[5] = remAR.getProfile();
 		
 		//change AccessRight
 		RoleMngServiceProfile changeAR = new RoleMngServiceProfile(CHANGE_AR);
-		addRole.addInputWithChangeEffect(ACCESS_RIGHT, AccessRight.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
+		changeAR.addInputWithChangeEffect(ACCESS_RIGHT, AccessRight.MY_URI, 1, 1, new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
 		profs[6] = changeAR.getProfile();
 		
 		//get all Access Rights
@@ -163,6 +163,8 @@ public class ProjectActivator implements ModuleActivator {
 		getAR.addOutput(ACCESS_RIGHT, AccessRight.MY_URI, 0, -1, new String [] {RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
 		profs[13] = getAR.getProfile();
 		
+		//TODO all the previous service should check authorisation for the user doing those operations...
+		//TODO bootstraping??
 		/* 
 		 * Access information
 		 */

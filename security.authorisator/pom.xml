@@ -39,7 +39,12 @@
 	<groupId>org.universAAL.support</groupId>
 		<artifactId>itests</artifactId>
 		<scope>test</scope>
-	</dependency>	  	 	
+	</dependency>
+	<dependency>
+		<groupId>org.universAAL.middleware</groupId>
+		<artifactId>mw.bus.junit</artifactId>
+		<scope>test</scope>
+	</dependency>		
 	<dependency>
 	<groupId>org.universAAL.middleware</groupId>
 		<artifactId>mw.container.osgi</artifactId>
