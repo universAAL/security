@@ -4,8 +4,10 @@ import org.universAAL.itests.IntegrationTest;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.osgi.uAALBundleContainer;
 import org.universAAL.middleware.owl.TypeURI;
+import org.universAAL.middleware.service.CallStatus;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
+import org.universAAL.middleware.service.ServiceResponse;
 import org.universAAL.middleware.xsd.Base64Binary;
 import org.universAAL.ontology.cryptographic.digest.MessageDigest;
 import org.universAAL.ontology.profile.AssistedPerson;
@@ -14,6 +16,7 @@ import org.universAAL.ontology.profile.UserProfile;
 import org.universAAL.ontology.profile.service.ProfilingService;
 import org.universAAL.ontology.security.AccessRight;
 import org.universAAL.ontology.security.AccessType;
+import org.universAAL.ontology.security.AuthorizationService;
 import org.universAAL.ontology.security.DelegationForm;
 import org.universAAL.ontology.security.Role;
 import org.universAAL.ontology.security.SecuritySubprofile;
@@ -23,7 +26,7 @@ import org.universAAL.security.authorisator.utils.ProfilingServerHelper;
 /**
  * Here developer's of this artifact should code their integration tests.
  * 
- * @author rotgier
+ * @author amedrano
  * 
  */
 public class ArtifactIT extends IntegrationTest {
@@ -52,6 +55,12 @@ public class ArtifactIT extends IntegrationTest {
     }
 
     public void testRoles() {
+
+    	try {
+    	    Thread.sleep(10000L);
+    	} catch (InterruptedException e) {
+    	    e.printStackTrace();
+    	}
     	ModuleContext mc = uAALBundleContainer.THE_CONTAINER
     			.registerModule(new Object[] { bundleContext });
     	
@@ -82,6 +91,46 @@ public class ArtifactIT extends IntegrationTest {
     	sreq.addValueFilter(new String[] {ProfilingService.PROP_CONTROLS,User.PROP_HAS_PROFILE,UserProfile.PROP_HAS_SUB_PROFILE}, sspu1);
     	sreq.addAddEffect(new String[] {ProfilingService.PROP_CONTROLS,User.PROP_HAS_PROFILE,UserProfile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_ROLES}, newRole);
     	
+    	ServiceResponse srep = caller.call(sreq);
+    	assertEquals(CallStatus.succeeded, srep.getCallStatus());
+    	
+    	DelegationForm asset = new DelegationForm();
+    	
+    	//Get all Roles
+    	
+    	/*
+    	 * Possitive check (u1)
+    	 */
+    	//check Read 
+    	sreq = new ServiceRequest(new AuthorizationService(),u1);
+    	sreq.addValueFilter(new String[] {AuthorizationService.PROP_CHALLENGER_USER}, u1);
+    	sreq.addValueFilter(new String[] {AuthorizationService.PROP_ASSET_ACCESS}, asset);
+    	srep = caller.call(sreq);
+     	assertEquals(CallStatus.succeeded, srep.getCallStatus());
+    	
+    	
+    	
+    	//Check change
+    	
+    	//check add
+    	
+    	//check remove
+    	
+    	/*
+    	 * Negative check (u2)
+    	 */
+    	//check Read (positive
+//    	sreq = new ServiceRequest(new AuthorizationService(),u1);
+//    	sreq.addValueFilter(new String[] {AuthorizationService.PROP_CHALLENGER_USER}, u1);
+//    	sreq.addValueFilter(new String[] {AuthorizationService.PROP_ASSET_ACCESS}, asset);
+    	
+    	
+    	
+    	//Check change
+    	
+    	//check add
+    	
+    	//check remove
 	
     }
 
