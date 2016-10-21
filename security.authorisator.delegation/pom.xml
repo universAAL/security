@@ -22,7 +22,12 @@
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
-	</dependency>  	 		
+	</dependency>  	 
+	<dependency>
+		<groupId>org.universAAL.middleware</groupId>
+		<artifactId>mw.bus.junit</artifactId>
+		<scope>test</scope>
+	</dependency>			
   	<dependency>
   		<groupId>org.universAAL.middleware</groupId>
   		<artifactId>mw.bus.service.core</artifactId>
