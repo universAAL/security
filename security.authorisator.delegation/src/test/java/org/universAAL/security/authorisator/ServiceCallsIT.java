@@ -21,7 +21,6 @@ import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
 import org.universAAL.middleware.service.ServiceResponse;
-import org.universAAL.ontology.cryptographic.AsymmetricEncryption;
 import org.universAAL.ontology.cryptographic.CryptographicOntology;
 import org.universAAL.ontology.cryptographic.asymmetric.RSA;
 import org.universAAL.ontology.location.LocationOntology;
@@ -31,20 +30,15 @@ import org.universAAL.ontology.profile.Profilable;
 import org.universAAL.ontology.profile.Profile;
 import org.universAAL.ontology.profile.ProfileOntology;
 import org.universAAL.ontology.profile.User;
-import org.universAAL.ontology.profile.UserProfile;
 import org.universAAL.ontology.profile.service.ProfilingService;
-import org.universAAL.ontology.security.AccessRight;
-import org.universAAL.ontology.security.AuthorizationService;
 import org.universAAL.ontology.security.DelegationForm;
 import org.universAAL.ontology.security.Role;
-import org.universAAL.ontology.security.RoleManagementService;
 import org.universAAL.ontology.security.SecurityOntology;
 import org.universAAL.ontology.security.SecuritySubprofile;
 import org.universAAL.ontology.shape.ShapeOntology;
 import org.universAAL.ontology.space.SpaceOntology;
 import org.universAAL.ontology.vcard.VCardOntology;
 import org.universAAL.security.authorisator.delegation.DelegationActivator;
-import org.universAAL.security.authorisator.delegation.DelegationService;
 
 
 /**
