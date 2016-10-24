@@ -26,6 +26,7 @@
 	<feature name="uAAL-Security.Cryptographic.Services" description="Module implementing basic criptography services."
 		version="${pom.version}" resolver='(obr)'>
 		<feature>uAAL-Ont.Cryptographic</feature> 
+		<feature>uAAL-Support.IoC</feature>
 		<bundle start-level='70' start='true'>wrap:mvn:org.universAAL.security/security.crypto.services/${security.crypto.services.version}</bundle>
 	</feature>
 	
@@ -34,18 +35,21 @@
 		<feature>uAAL-Ont.Profile</feature> 
 		<feature>uAAL-Ont.CHe</feature> 
 		<feature>uAAL-Ont.Security</feature> 
+		<feature>uAAL-Support.IoC</feature>
 		<bundle start-level='70' start='true'>wrap:mvn:org.universAAL.security/security.authorisator/${security.authorisator.version}</bundle>
 	</feature>
 	
 	<feature name="uAAL-Security.Authorisator.Delegation" description="Module Extending Authorisation with delegation and some delegation services."
 		version="${pom.version}" resolver='(obr)'>
 		<feature>uAAL-Security.Authorisator</feature> 
+		<feature>uAAL-Support.IoC</feature>
 		<bundle start-level='71' start='true'>mvn:org.universAAL.security/security.authorisator.delegation/${security.authorisator.delegation.version}</bundle>
 	</feature>
 	
 	<feature name="uAAL-Security.Anonymization" description="Module to encrypt certain properties so that only authorised actors can access the real object."
 		version="${pom.version}" resolver='(obr)'>
 		<feature>uAAL-Ont.Security</feature> 
+		<feature>uAAL-Support.IoC</feature>
 		<bundle start-level='71' start='true'>wrap:mvn:org.universAAL.security/security.anonymization/${security.anonymization.version}</bundle>
 	</feature>
 </features>
