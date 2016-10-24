@@ -47,17 +47,12 @@ public class ArtifactIT extends IntegrationTest {
 
 	public void testComposite() {
 	logAllBundles();
-	try {
-	    Thread.sleep(5000L);
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
-	}
     }
 
     public void testRoles() {
 
     	try {
-    	    Thread.sleep(10000L);
+    	    Thread.sleep(20000L);
     	} catch (InterruptedException e) {
     	    e.printStackTrace();
     	}
@@ -74,6 +69,8 @@ public class ArtifactIT extends IntegrationTest {
     	psh.addUser(u1, upc);
     	
     	SecuritySubprofile sspu1  = psh.getSecuritySubprofileForUser(u1);
+
+    	assertNotNull(sspu1);
     	
     	DefaultServiceCaller caller = new DefaultServiceCaller(mc);
     	

@@ -84,6 +84,10 @@
     <profile>
       <id>uAAL-Runtime</id>
       <dependencies>
+	    <dependency>
+	      <groupId>org.universAAL.middleware</groupId>
+	      <artifactId>mw.data.serialization.osgi</artifactId>
+	    </dependency>
         <dependency>
           <groupId>org.universAAL.context</groupId>
           <artifactId>ctxt.che</artifactId>
