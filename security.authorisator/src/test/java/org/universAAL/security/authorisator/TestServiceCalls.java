@@ -45,7 +45,7 @@ import org.universAAL.ontology.vcard.VCardOntology;
  * @author amedrano
  *
  */
-public class ServiceCallsIT extends BusTestCase {
+public class TestServiceCalls extends BusTestCase {
 	
 	private static final String NAMESPACE = "http://tests.universAAL.org/Anonymization#";
 	
@@ -94,6 +94,7 @@ public class ServiceCallsIT extends BusTestCase {
     	
     	try {
 			ServiceResponse srep = scaller.call(sreq);
+			
 			System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking

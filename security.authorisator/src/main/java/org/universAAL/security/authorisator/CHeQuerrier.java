@@ -20,12 +20,13 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
 
+import org.universAAL.ioc.dependencies.DependencyProxy;
 import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.owl.MergedRestriction;
 import org.universAAL.middleware.rdf.PropertyPath;
 import org.universAAL.middleware.rdf.Resource;
-import org.universAAL.middleware.serialization.MessageContentSerializer;
+import org.universAAL.middleware.serialization.MessageContentSerializerEx;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
@@ -45,9 +46,11 @@ public class CHeQuerrier {
 			+ "outputfromCHE";
 	
 	private ModuleContext owner;
+	private DependencyProxy<MessageContentSerializerEx> serial;
 	
 	public CHeQuerrier(ModuleContext mc){
 		this.owner = mc;
+		serial = new PassiveDependencyProxy<MessageContentSerializerEx>(owner, new Object[] { MessageContentSerializerEx.class.getName() });
 	}
 
 	String unserialisedQuery(String query){
@@ -83,8 +86,8 @@ public class CHeQuerrier {
 		}
 	}
 
-	private MessageContentSerializer getSerializer() {
-		return new PassiveDependencyProxy<MessageContentSerializer>(owner, new Object[] { MessageContentSerializer.class.getName() }).getObject();
+	private MessageContentSerializerEx getSerializer() {
+		return serial.getObject();
 	}
 
 	public static InputStream getResource(String Rfile){
@@ -138,7 +141,9 @@ public class CHeQuerrier {
     }
     
     public Resource getFullResourceGraph(String uri){
-    	Object o = query("DESCRIBE <" + uri + ">");
+    	String query = "DESCRIBE <" + uri + ">";
+    	
+    	Object o = getSerializer().deserialize(unserialisedQuery(query),uri);
     	if (!(o instanceof Resource)){
     		return null;
     	}
