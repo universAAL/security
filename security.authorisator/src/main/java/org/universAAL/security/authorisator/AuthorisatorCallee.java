@@ -16,9 +16,11 @@
 package org.universAAL.security.authorisator;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
@@ -198,15 +200,37 @@ public class AuthorisatorCallee extends ServiceCallee {
 
 	private void updateProperty(Resource r, String prop) {
 		
-		String serialization = serializer.getObject().serialize(r.getProperty(prop));
+		Object propvalue = r.getProperty(prop);
+		String propvalueURI = null;
+		if (propvalue instanceof Resource)
+			if (((Resource)propvalue).isAnon()){
+				//giveit a cool name.
+				propvalueURI = ProjectActivator.NAMESPACE + UUID.randomUUID();
+				propvalue = copy((Resource) propvalue,propvalueURI);
+			}else {
+				propvalueURI = ((Resource)propvalue).getURI();
+			}
+		
+		String serialization = serializer.getObject().serialize(propvalue);
 		
 		String[] split = CHeQuerrier.splitPrefixes(serialization);
 		
 		String prefixes = split[0];
 		String serialValue = split[1];
-		query.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{prefixes,r.getURI(),prop, serialValue}));
+		query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, "<" +propvalueURI + "> ."+ serialValue}));
 		
 	}
+	
+	public static Resource copy(Resource r, String newURI) {
+		Resource copy = Resource.getResource(r.getType(), newURI);
+		if (copy == null)
+		    copy = new Resource(newURI);
+		for (Enumeration e = r.getPropertyURIs(); e.hasMoreElements();) {
+		    String key = (String) e.nextElement();
+		    copy.setProperty(key, r.getProperty(key));
+		}
+		return copy;
+	    }
 	
 	private void updateObject(Resource r) {
 		
@@ -216,7 +240,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		
 		String prefixes = split[0];
 		String serialValue = split[1];
-		query.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateFullObject.sparql"), new String[]{prefixes,r.getURI(), serialValue}));
+		query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateFullObject.sparql"), new String[]{prefixes,r.getURI(), serialValue}));
 		
 	}
 

@@ -17,6 +17,7 @@ package org.universAAL.security.authorisator.delegation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
@@ -40,7 +41,9 @@ import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.AuthorizationService;
 import org.universAAL.ontology.security.DelegationForm;
 import org.universAAL.ontology.security.SecuritySubprofile;
+import org.universAAL.security.authorisator.AuthorisatorCallee;
 import org.universAAL.security.authorisator.CHeQuerrier;
+import org.universAAL.security.authorisator.ProjectActivator;
 
 /**
  * @author amedrano
@@ -54,6 +57,9 @@ public class DelegationServieCallee extends ServiceCallee {
 	private static final String AUX_BAG_PROP =  DelegationService.NAMESPACE + "auxilaryBagProperty";
 
 	private PassiveDependencyProxy<MessageContentSerializer> serializer;
+	
+
+	private CHeQuerrier querier;
 
 	/**
 	 * @param context
@@ -65,6 +71,7 @@ public class DelegationServieCallee extends ServiceCallee {
 		serializer = new PassiveDependencyProxy<MessageContentSerializer>(
 				context,
 				new Object[] { MessageContentSerializer.class.getName() });
+		querier = new CHeQuerrier(owner);
 	}
 
 	/**
@@ -247,7 +254,6 @@ public class DelegationServieCallee extends ServiceCallee {
 	}
 
 	protected SecuritySubprofile getSecuritySubProfile( User usr){
-		CHeQuerrier querier = new CHeQuerrier(owner);
 		Object o = querier.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("getSecuritySubProfileForUser.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP,usr.getURI()}));
 		SecuritySubprofile ssp;
 		if (o instanceof SecuritySubprofile){
@@ -264,14 +270,24 @@ public class DelegationServieCallee extends ServiceCallee {
 	
 	private void updateProperty(Resource r, String prop) {
 		
-		String serialization = serializer.getObject().serialize(r.getProperty(prop));
+		Object propvalue = r.getProperty(prop);
+		String propvalueURI = null;
+		if (propvalue instanceof Resource)
+			if (((Resource)propvalue).isAnon()){
+				//giveit a cool name.
+				propvalueURI = ProjectActivator.NAMESPACE + UUID.randomUUID();
+				propvalue = AuthorisatorCallee.copy((Resource) propvalue,propvalueURI);
+			}else {
+				propvalueURI = ((Resource)propvalue).getURI();
+			}
+		
+		String serialization = serializer.getObject().serialize(propvalue);
 		
 		String[] split = CHeQuerrier.splitPrefixes(serialization);
 		
 		String prefixes = split[0];
 		String serialValue = split[1];
-		CHeQuerrier query = new CHeQuerrier(owner);
-		query.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{prefixes,r.getURI(),prop, serialValue}));
+		querier.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, "<" +propvalueURI + "> ."+ serialValue}));
 		
 	}
 	
