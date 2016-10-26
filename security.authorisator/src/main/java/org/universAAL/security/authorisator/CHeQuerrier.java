@@ -26,6 +26,7 @@ import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.owl.MergedRestriction;
 import org.universAAL.middleware.rdf.PropertyPath;
 import org.universAAL.middleware.rdf.Resource;
+import org.universAAL.middleware.serialization.MessageContentSerializer;
 import org.universAAL.middleware.serialization.MessageContentSerializerEx;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceCaller;
@@ -46,14 +47,14 @@ public class CHeQuerrier {
 			+ "outputfromCHE";
 	
 	private ModuleContext owner;
-	private DependencyProxy<MessageContentSerializerEx> serial;
+	private DependencyProxy<MessageContentSerializer> serial;
 	
 	public CHeQuerrier(ModuleContext mc){
 		this.owner = mc;
-		serial = new PassiveDependencyProxy<MessageContentSerializerEx>(owner, new Object[] { MessageContentSerializerEx.class.getName() });
+		serial = new PassiveDependencyProxy<MessageContentSerializer>(owner, new Object[] { MessageContentSerializer.class.getName() });
 	}
 
-	String unserialisedQuery(String query){
+	public String unserialisedQuery(String query){
 		ServiceRequest getQuery = new ServiceRequest(new ContextHistoryService(
 				null), null);
 
@@ -87,7 +88,7 @@ public class CHeQuerrier {
 	}
 
 	private MessageContentSerializerEx getSerializer() {
-		return serial.getObject();
+		return (MessageContentSerializerEx) serial.getObject();
 	}
 
 	public static InputStream getResource(String Rfile){
