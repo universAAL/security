@@ -15,12 +15,17 @@
  ******************************************************************************/
 package org.universAAL.security.cryptographic.services;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.universAAL.middleware.bus.junit.BusTestCase;
 import org.universAAL.middleware.owl.ManagedIndividual;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.rdf.Resource;
+import org.universAAL.middleware.serialization.turtle.TurtleSerializer;
 import org.universAAL.middleware.service.CallStatus;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
@@ -124,9 +129,10 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addRequiredOutput(MY_OUTPUT, new String[] {DigestService.PROP_DIGESTED_TEXT});
 		sreq.addValueFilter(new String [] {DigestService.PROP_RESOURCE_TO_DIGEST}, example);
 		sreq.addValueFilter(new String[] {DigestService.PROP_DIGEST_METHOD}, method);
-		
+		writeR("CryptoServices/Request", "Digest"+getResName(method),sreq);
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		writeR("CryptoServices/Response", "Digest"+getResName(method),sres);
 	}
 	private SimpleKey simpleKeygen(SymmetricEncryption se, int keylength){
 		ServiceRequest sreq = new ServiceRequest(new EncryptionService(), null);
@@ -135,9 +141,11 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY,SimpleKey.PROP_KEY_LENGTH}, Integer.valueOf(keylength) );
 		//if previous statement is left out, even the propfile having cardinality 0,1 it will not match.
 		sreq.addRequiredOutput(MY_OUTPUT, new String[]{EncryptionService.PROP_ENCRYPTION,SymmetricEncryption.PROP_SIMPLE_KEY});
-		
+
+		writeR("CryptoServices/Request", "Keygen"+getResName(se),sreq);
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		writeR("CryptoServices/Response", "Keygen"+getResName(se),sres);
 		return (SimpleKey) sres.getOutput(MY_OUTPUT).get(0);
 	}
 
@@ -148,9 +156,11 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String[]{EncryptionService.PROP_ENCRYPTION,RSA.PROP_KEY_RING,KeyRing.PROP_KEY_LENGTH}, Integer.valueOf(keylength) );
 		//if previous statement is left out, even the propfile having cardinality 0,1 it will not match.
 		sreq.addRequiredOutput(MY_OUTPUT, new String[]{EncryptionService.PROP_ENCRYPTION,RSA.PROP_KEY_RING});
-		
+
+		writeR("CryptoServices/Request", "Keygen"+getResName(ae),sreq);
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		writeR("CryptoServices/Response", "Keygen"+getResName(ae),sres);
 		return (KeyRing) sres.getOutput(MY_OUTPUT).get(0);
 		
 	}
@@ -173,8 +183,10 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION}, se);
 		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTS}, clearResource);
 		sreq.addRequiredOutput(MY_OUTPUT, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
-		
+
+		writeR("CryptoServices/Request", "Encrypt"+getResName(se),sreq);
 		ServiceResponse sres = scaller.call(sreq);
+		writeR("CryptoServices/Response", "Encrypt"+getResName(se),sres);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
 		
 		Resource cryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
@@ -188,9 +200,11 @@ public class ITserviceCalls extends BusTestCase {
 		sreq2.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION}, se);
 		sreq2.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE}, cryptedResource);
 		sreq2.addRequiredOutput(MY_OUTPUT, new String[] {EncryptionService.PROP_ENCRYPTS});
-		
+
+		writeR("CryptoServices/Request", "Decrypt"+getResName(se),sreq);
 		sres = scaller.call(sreq2);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		writeR("CryptoServices/Response", "Decrypt"+getResName(se),sres);
 		
 		Resource decryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
 		
@@ -210,10 +224,12 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String []{SignAndVerifyService.PROP_ASYMMETRIC}, ae);
 		sreq.addValueFilter(new String []{SignAndVerifyService.PROP_DIGEST}, SecureHashAlgorithm.IND_SHA256);
 		sreq.addRequiredOutput(MY_OUTPUT, new String[]{SignAndVerifyService.PROP_SIGNED_RESOURCE});
-		
+
+		writeR("CryptoServices/Request", "Sign",sreq);
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
 		SignedResource sr = (SignedResource) sres.getOutput(MY_OUTPUT).get(0);
+		writeR("CryptoServices/Response", "Sign",sres);
 		
 		//System.out.println(serialize(sr));
 		
@@ -224,8 +240,12 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String []{SignAndVerifyService.PROP_ASYMMETRIC}, ae);
 		
 		sreq.addRequiredOutput(MY_OUTPUT, new String[]{SignAndVerifyService.PROP_VERIFICATION_RESULT});
+		
+
+		writeR("CryptoServices/Request", "Verify",sreq);
 		sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		writeR("CryptoServices/Response", "Verify",sreq);
 		Boolean result = (Boolean) sres.getOutput(MY_OUTPUT).get(0);
 		assertEquals(Boolean.TRUE, result);
 		
@@ -246,9 +266,11 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION}, ae);
 		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTS}, clearResource);
 		sreq.addRequiredOutput(MY_OUTPUT, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
-		
+
+		writeR("CryptoServices/Request", "MultiDestinationEncryption",sreq);
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		writeR("CryptoServices/Response", "MultiDestinationEncryption",sres);
 		
 		Resource cryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
 		
@@ -262,13 +284,49 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION, AsymmetricEncryption.PROP_KEY_RING}, krl.get(0));
 		sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE}, cryptedResource);
 		sreq.addRequiredOutput(MY_OUTPUT, new String[] {EncryptionService.PROP_ENCRYPTS});
-		
+
+		writeR("CryptoServices/Request", "MultiDestinationDecryption",sreq);
 		sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		writeR("CryptoServices/Response", "MultiDestinationDecryption",sres);
 		
 		Resource decryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
 						
 		assertTrue(EncryptTest.fullResourceEquals(clearResource, decryptedResource));
+		
+	}
+	
+	private void writeR(String folder, String sname, Resource sreq){
+		File dir = new File("./target/" + folder);
+		dir.mkdirs();
+		File out = new File(dir, sname);
+		if (out.exists()){
+			out.delete();
+		}
+		TurtleSerializer s = new TurtleSerializer();
+		String ser = s.serialize(sreq);
+		BufferedWriter w = null;
+		try {
+			w = new BufferedWriter(new FileWriter(out));
+			w.write(ser);
+			w.flush();
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			try {
+				w.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	private static String getResName(ManagedIndividual r){
+		String uri = r.getClassURI();
+		return uri.substring(uri.lastIndexOf('#')+1);
 		
 	}
 }

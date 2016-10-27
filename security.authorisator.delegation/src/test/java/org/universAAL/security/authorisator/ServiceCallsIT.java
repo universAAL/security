@@ -15,9 +15,16 @@
  ******************************************************************************/
 package org.universAAL.security.authorisator;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.universAAL.middleware.bus.junit.BusTestCase;
 import org.universAAL.middleware.owl.MergedRestriction;
 import org.universAAL.middleware.owl.OntologyManagement;
+import org.universAAL.middleware.rdf.Resource;
+import org.universAAL.middleware.serialization.turtle.TurtleSerializer;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
 import org.universAAL.middleware.service.ServiceResponse;
@@ -107,8 +114,10 @@ public class ServiceCallsIT extends BusTestCase {
 		
     	
     	try {
+    		writeR("./target/Delegation/Request", "Create Delegation From", sreq);
 			ServiceResponse srep = scaller.call(sreq);
 			System.out.println(srep.getCallStatus());
+    		writeR("Delegation/Response", "Create Delegation From", srep);
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -121,7 +130,9 @@ public class ServiceCallsIT extends BusTestCase {
 		
     	
     	try {
+    		writeR("Delegation/Request", "Add Delegation From", sreq);
 			ServiceResponse srep = scaller.call(sreq);
+    		writeR("Delegation/Response", "Add Delegation From", srep);
 			System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
@@ -137,10 +148,41 @@ public class ServiceCallsIT extends BusTestCase {
 		
     	
     	try {
+    		writeR("Delegation/Request", "Add Delegation From", sreq);
 			ServiceResponse srep = scaller.call(sreq);
 			System.out.println(srep.getCallStatus());
+    		writeR(".Delegation/Response", "Add Delegation From", srep);
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
+		}
+	}
+	
+	private void writeR(String folder, String sname, Resource sreq){
+		File dir = new File("./target/" + folder);
+		dir.mkdirs();
+		File out = new File(dir, sname);
+		if (out.exists()){
+			out.delete();
+		}
+		TurtleSerializer s = new TurtleSerializer();
+		String ser = s.serialize(sreq);
+		BufferedWriter w = null;
+		try {
+			w = new BufferedWriter(new FileWriter(out));
+			w.write(ser);
+			w.flush();
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			try {
+				w.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

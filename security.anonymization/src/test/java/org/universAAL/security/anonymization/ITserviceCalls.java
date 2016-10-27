@@ -15,11 +15,17 @@
  ******************************************************************************/
 package org.universAAL.security.anonymization;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.universAAL.container.JUnit.JUnitModuleContext;
 import org.universAAL.middleware.bus.junit.BusTestCase;
 import org.universAAL.middleware.owl.ManagedIndividual;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.rdf.Resource;
+import org.universAAL.middleware.serialization.turtle.TurtleSerializer;
 import org.universAAL.middleware.service.CallStatus;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
@@ -32,7 +38,6 @@ import org.universAAL.ontology.cryptographic.asymmetric.RSA;
 import org.universAAL.ontology.location.LocationOntology;
 import org.universAAL.ontology.phThing.PhThingOntology;
 import org.universAAL.ontology.profile.ProfileOntology;
-import org.universAAL.ontology.profile.UserProfile;
 import org.universAAL.ontology.security.Anonymizable;
 import org.universAAL.ontology.security.AnonymizationService;
 import org.universAAL.ontology.security.SecurityOntology;
@@ -80,10 +85,10 @@ public class ITserviceCalls extends BusTestCase {
 		scallee = new ProjectActivator();
 		scallee.start(mc);
 		
+		scaller = new DefaultServiceCaller(mc);
 	}
 	
 	public void testExecution(){
-		scaller = new DefaultServiceCaller(mc);
 		
 		Resource r = RandomResourceGenerator.randomResource();
 		
@@ -103,8 +108,10 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE,Anonymizable.PROP_ANNONYMOUS_RESOURCE}, r);
 		sreq.addRequiredOutput(MY_OUTPUT, new String[]{AnonymizationService.PROP_ANONYMIZABLE});
 		
+		writeR("Anonymization/Requests", "Anonymize", sreq);
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		writeR("Anonymization/Responses", "Anonymize", sres);
 		
 		Resource anonymized = (Resource) sres.getOutput(MY_OUTPUT).get(0);
 		
@@ -120,8 +127,10 @@ public class ITserviceCalls extends BusTestCase {
 		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE}, anonymized);
 		sreq.addRequiredOutput(MY_OUTPUT, new String[]{AnonymizationService.PROP_ANONYMIZABLE});
 		
+		writeR("Anonymization/Requests", "Denonymize", sreq);
 		sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
+		writeR("Anonymization/Responses", "Deanonymize", sres);
 		
 		Resource deanonymized = (Resource) sres.getOutput(MY_OUTPUT).get(0);
 		
@@ -145,4 +154,31 @@ public class ITserviceCalls extends BusTestCase {
 		
 	}
 	
+	
+	
+	private void writeR(String folder, String sname, Resource sreq){
+		File dir = new File("./target/" + folder);
+		dir.mkdirs();
+		File out = new File(dir, sname);
+		TurtleSerializer s = new TurtleSerializer();
+		String ser = s.serialize(sreq);
+		BufferedWriter w = null;
+		try {
+			w = new BufferedWriter(new FileWriter(out));
+			w.write(ser);
+			w.flush();
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			try {
+				w.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
 }
