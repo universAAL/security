@@ -98,13 +98,16 @@ public class ArtifactIT extends IntegrationTest {
     	/*
     	 * Possitive check (u1)
     	 */
+    	
+    	System.out.println("\n\n\n\nAuthorisator Check\n\n\n\n TEST CALLER:" +caller.getMyID());
     	//check Read 
     	sreq = new ServiceRequest(new AuthorizationService(),u1);
     	sreq.addValueFilter(new String[] {AuthorizationService.PROP_CHALLENGER_USER}, u1);
     	sreq.addValueFilter(new String[] {AuthorizationService.PROP_ASSET_ACCESS}, asset);
     	srep = caller.call(sreq);
      	assertEquals(CallStatus.succeeded, srep.getCallStatus());
-    	
+
+    	System.out.println("\n\n\n\nEnd Authorisator Check\n\n\n\n");
     	
     	
     	//Check change

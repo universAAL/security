@@ -188,9 +188,12 @@ public class AuthorisatorCallee extends ServiceCallee {
 			}
 			
 			AccessType requested = AuthorisationServiceProfile.getAccessType(callURI);
+			LogUtils.logDebug(owner, getClass(), "handleCall", "Checking user AccesRight with type:" + requested.getURI());
 			if (compiledAccess.contains(requested)){
+				LogUtils.logDebug(owner, getClass(), "handleCall", "Access Granted!");
 				return new ServiceResponse(CallStatus.succeeded);
 			}else {
+				LogUtils.logDebug(owner, getClass(), "handleCall", "Access Denied!");
 				return new ServiceResponse(CallStatus.denied);
 			}
 		}

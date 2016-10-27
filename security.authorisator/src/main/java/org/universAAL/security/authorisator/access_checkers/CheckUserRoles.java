@@ -42,6 +42,8 @@ public class CheckUserRoles implements AccessChecker {
 
 	private CHeQuerrier querier;
 	
+	protected ModuleContext mc;
+	
 	private static final String AUX_BAG_OBJECT = ProjectActivator.NAMESPACE + "auxilaryBagObject";
 	private static final String AUX_BAG_PROP =  ProjectActivator.NAMESPACE + "auxilaryBagProperty";
 
@@ -54,22 +56,26 @@ public class CheckUserRoles implements AccessChecker {
 		
 		// get the SecuritySubProfile for the user
 		
-
+		LogUtils.logDebug(mc, getClass(), "accessCheck", "Querying for the SecuritySubProfile.");
 		SecuritySubprofile ssp = getSecuritySubProfile(mc, usr);
+		LogUtils.logDebug(mc, getClass(), "accessCheck", "Got the SecuritySubProfile.");
 		if (ssp == null){
 			LogUtils.logInfo(mc, getClass(), "checkAccess", "No SecuritySubprofile found for user:" + usr.getURI());
 			return Collections.EMPTY_SET;
 		}
 		
 		// aggregate all the AccessRights
+		LogUtils.logDebug(mc, getClass(), "accessCheck", "Aggregating AccessRights.");
 		List<Role> roles = ssp.getRoles();
 		Set<AccessRight> finalAccessRights = new HashSet<AccessRight>();
 		for (Role role : roles) {
 			finalAccessRights.addAll(role.getAllAccessRights());
 		}
+		LogUtils.logDebug(mc, getClass(), "accessCheck", "AccessRights aggregated.");
 		
 		//match the asset with all AccessRights
-		
+
+		LogUtils.logDebug(mc, getClass(), "accessCheck", "Matching AccessRights.");
 		return matchAccessRightsWAsset(finalAccessRights, asset);
 	}
 	
@@ -77,17 +83,22 @@ public class CheckUserRoles implements AccessChecker {
 		if (querier == null){
 			querier = new CHeQuerrier(mc);
 		}
+		if (this.mc == null){
+			this.mc = mc;
+		}
 	}
 	
 	protected HashSet<AccessType> matchAccessRightsWAsset(Set<AccessRight> finalAccessRights, Resource asset){
+		LogUtils.logDebug(mc, getClass(), "accessCheck", "Matching AccessRights.");
 		HashSet<AccessType> res = new HashSet<AccessType>();
 		for (AccessRight ar : finalAccessRights) {
-			Object te = ar.getProperty(AccessRight.MY_URI);
+			Object te = ar.getProperty(AccessRight.PROP_ACCESS_TO);
 			if (te instanceof TypeExpression
 					&& ((TypeExpression)te).hasMember(asset)){
 				res.addAll(AssetDefaultAccessChecker.resolveFromValue(ar));
 			}
 		}
+		LogUtils.logDebug(mc, getClass(), "accessCheck", "Done Matching AccessRights.");
 		return res;
 	}
 
