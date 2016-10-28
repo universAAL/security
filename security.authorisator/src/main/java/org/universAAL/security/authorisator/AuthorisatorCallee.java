@@ -204,15 +204,18 @@ public class AuthorisatorCallee extends ServiceCallee {
 	private void updateProperty(Resource r, String prop) {
 		
 		Object propvalue = r.getProperty(prop);
-		String propvalueURI = null;
-		if (propvalue instanceof Resource)
+		String propvalueURI = "";
+		if (propvalue instanceof Resource) {
 			if (((Resource)propvalue).isAnon()){
-				//giveit a cool name.
+				//give it a cool name.
 				propvalueURI = ProjectActivator.NAMESPACE + UUID.randomUUID();
 				propvalue = copy((Resource) propvalue,propvalueURI);
 			}else {
 				propvalueURI = ((Resource)propvalue).getURI();
 			}
+			propvalueURI = "<" + propvalueURI +"> .";
+		}
+		
 		
 		String serialization = serializer.getObject().serialize(propvalue);
 		
@@ -220,7 +223,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		
 		String prefixes = split[0];
 		String serialValue = split[1];
-		query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, "<" +propvalueURI + "> ."+ serialValue}));
+		query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, propvalueURI +  serialValue}));
 		
 	}
 	
