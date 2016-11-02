@@ -221,8 +221,12 @@ public class AuthorisatorCallee extends ServiceCallee {
 		Object propvalue = r.getProperty(prop);
 		String propvalueURI = "";
 		if (propvalue instanceof Resource) {
-				propvalueURI = ((Resource)propvalue).getURI();
-			propvalueURI = "<" + propvalueURI +"> .";
+				if (!((Resource)propvalue).isAnon()) {
+					propvalueURI = ((Resource) propvalue).getURI();
+					propvalueURI = "<" + propvalueURI +"> .";
+				}else {
+					propvalueURI = "_:BN000000 .";
+				}
 		}
 		
 		
@@ -246,9 +250,13 @@ public class AuthorisatorCallee extends ServiceCallee {
 		Object propvalue = r.getProperty(prop);
 		String propvalueURI = "";
 		if (propvalue instanceof Resource) {
-			propvalueURI = ((Resource)propvalue).getURI();
-			propvalueURI = "<" + propvalueURI +"> .";
-		}
+			if (!((Resource)propvalue).isAnon()) {
+				propvalueURI = ((Resource) propvalue).getURI();
+				propvalueURI = "<" + propvalueURI +"> .";
+			}else {
+				propvalueURI = "_:BN000000 .";
+			}
+	}
 		
 		
 		String serialization = serializer.getObject().serialize(propvalue);
