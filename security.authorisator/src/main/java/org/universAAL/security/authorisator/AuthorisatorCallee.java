@@ -201,7 +201,54 @@ public class AuthorisatorCallee extends ServiceCallee {
 		return new ServiceResponse(CallStatus.noMatchingServiceFound);
 	}
 
+	public static Resource copy(Resource r, String newURI) {
+		Resource copy = Resource.getResource(r.getType(), newURI);
+		if (copy == null)
+		    copy = new Resource(newURI);
+		for (Enumeration e = r.getPropertyURIs(); e.hasMoreElements();) {
+		    String key = (String) e.nextElement();
+		    copy.setProperty(key, r.getProperty(key));
+		}
+		return copy;
+	    }
+	
+	private boolean hasProperty(String rURI, String propURI){
+		String out = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("hasProperty.sparql"), new String[]{rURI,propURI}));
+		return Boolean.parseBoolean(out);
+	}
+
+	private void setProperty(Resource r, String prop) {
+		
+		Object propvalue = r.getProperty(prop);
+		String propvalueURI = "";
+		if (propvalue instanceof Resource) {
+			if (((Resource)propvalue).isAnon()){
+				//give it a cool name.
+				propvalueURI = ProjectActivator.NAMESPACE + UUID.randomUUID();
+				propvalue = copy((Resource) propvalue,propvalueURI);
+			}else {
+				propvalueURI = ((Resource)propvalue).getURI();
+			}
+			propvalueURI = "<" + propvalueURI +"> .";
+		}
+		
+		
+		String serialization = serializer.getObject().serialize(propvalue);
+		
+		String[] split = CHeQuerrier.splitPrefixes(serialization);
+		
+		String prefixes = split[0];
+		String serialValue = split[1];
+		query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("setProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, propvalueURI +  serialValue}));
+		
+	}
+	
 	private void updateProperty(Resource r, String prop) {
+		
+		if (!hasProperty(r.getURI(), prop)){
+			setProperty(r, prop);
+			return;
+		}
 		
 		Object propvalue = r.getProperty(prop);
 		String propvalueURI = "";
@@ -226,18 +273,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, propvalueURI +  serialValue}));
 		
 	}
-	
-	public static Resource copy(Resource r, String newURI) {
-		Resource copy = Resource.getResource(r.getType(), newURI);
-		if (copy == null)
-		    copy = new Resource(newURI);
-		for (Enumeration e = r.getPropertyURIs(); e.hasMoreElements();) {
-		    String key = (String) e.nextElement();
-		    copy.setProperty(key, r.getProperty(key));
-		}
-		return copy;
-	    }
-	
+
 	private void updateObject(Resource r) {
 		
 		String serialization = serializer.getObject().serialize(r);

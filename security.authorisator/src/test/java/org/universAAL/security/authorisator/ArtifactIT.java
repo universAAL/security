@@ -75,7 +75,7 @@ public class ArtifactIT extends IntegrationTest {
     	DefaultServiceCaller caller = new DefaultServiceCaller(mc);
     	
     	Role newRole = new Role();
-    	AccessRight ar = new AccessRight();
+    	AccessRight ar = new AccessRight(NAMESPACE+"allAccessRights");
     	ar.addAccessType(AccessType.add);
     	ar.addAccessType(AccessType.change);
     	ar.addAccessType(AccessType.remove);
