@@ -141,7 +141,6 @@ public class ProjectActivator implements ModuleActivator {
 		RoleMngServiceProfile getR = new RoleMngServiceProfile(GET_ROLES);
 		getR.addOutput(ROLE, Role.MY_URI, 0, -1, new String [] {RoleManagementService.PROP_ROLE});
 		profs[12] = getR.getProfile();
-		profs[12].setProperty(ServiceProfile.PROP_uAAL_RESPONSE_TIMEOUT, new ResponseTimeInMilliseconds(10000));
 		
 		//add AccessRight to role
 		RoleMngServiceProfile addAR = new RoleMngServiceProfile(ADD_AR_ROLE);
@@ -164,7 +163,6 @@ public class ProjectActivator implements ModuleActivator {
 		RoleMngServiceProfile getAR = new RoleMngServiceProfile(GET_AR);
 		getAR.addOutput(ACCESS_RIGHT, AccessRight.MY_URI, 0, -1, new String [] {RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
 		profs[13] = getAR.getProfile();
-		profs[13].setProperty(ServiceProfile.PROP_uAAL_RESPONSE_TIMEOUT, new ResponseTimeInMilliseconds(10000));
 		
 		//TODO all the previous service should check authorisation for the user doing those operations...
 		//TODO bootstraping??
@@ -176,28 +174,24 @@ public class ProjectActivator implements ModuleActivator {
 		readCheckCU.addFilteringInput(USER, User.MY_URI, 0, 1, new String[]{AuthorizationService.PROP_CHALLENGER_USER});
 		readCheckCU.addFilteringInput(ASSET, Asset.MY_URI, 1, 1, new String[]{AuthorizationService.PROP_ASSET_ACCESS});
 		profs[7] = readCheckCU.getProfile();
-		profs[7].setProperty(ServiceProfile.PROP_uAAL_RESPONSE_TIMEOUT, new ResponseTimeInMilliseconds(20000));
 		
 		//Check CHANGE Access to asset by Challenger User
 		AuthorisationServiceProfile changeCheckCU = new AuthorisationServiceProfile(CHECK_CHALLENGER_USER_CHANGE);
 		changeCheckCU.addFilteringInput(USER, User.MY_URI, 0, 1, new String[]{AuthorizationService.PROP_CHALLENGER_USER});
 		changeCheckCU.addInputWithChangeEffect(ASSET, Asset.MY_URI, 1, 1, new String[]{AuthorizationService.PROP_ASSET_ACCESS});
 		profs[8] = changeCheckCU.getProfile();
-		profs[8].setProperty(ServiceProfile.PROP_uAAL_RESPONSE_TIMEOUT, new ResponseTimeInMilliseconds(20000));
 		
 		//Check ADD Access to asset by Challenger User
 		AuthorisationServiceProfile addCheckCU = new AuthorisationServiceProfile(CHECK_CHALLENGER_USER_ADD);
 		addCheckCU.addFilteringInput(USER, User.MY_URI, 0, 1, new String[]{AuthorizationService.PROP_CHALLENGER_USER});
 		addCheckCU.addInputWithAddEffect(ASSET, Asset.MY_URI, 1, 1, new String[]{AuthorizationService.PROP_ASSET_ACCESS});
 		profs[9] = addCheckCU.getProfile();
-		profs[9].setProperty(ServiceProfile.PROP_uAAL_RESPONSE_TIMEOUT, new ResponseTimeInMilliseconds(20000));
 		
 		//Check REMOVE Access to asset by Challenger User
 		AuthorisationServiceProfile remCheckCU = new AuthorisationServiceProfile(CHECK_CHALLENGER_USER_REMOVE);
 		remCheckCU.addFilteringInput(USER, User.MY_URI, 0, 1, new String[]{AuthorizationService.PROP_CHALLENGER_USER});
 		remCheckCU.addInputWithRemoveEffect(ASSET, Asset.MY_URI, 1, 1, new String[]{AuthorizationService.PROP_ASSET_ACCESS});
 		profs[10] = remCheckCU.getProfile();
-		profs[10].setProperty(ServiceProfile.PROP_uAAL_RESPONSE_TIMEOUT, new ResponseTimeInMilliseconds(20000));
 		
 		callee = new AuthorisatorCallee(context, profs);
 		
