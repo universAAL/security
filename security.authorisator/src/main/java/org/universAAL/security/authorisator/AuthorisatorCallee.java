@@ -20,7 +20,6 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
@@ -222,13 +221,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		Object propvalue = r.getProperty(prop);
 		String propvalueURI = "";
 		if (propvalue instanceof Resource) {
-			if (((Resource)propvalue).isAnon()){
-				//give it a cool name.
-				propvalueURI = ProjectActivator.NAMESPACE + UUID.randomUUID();
-				propvalue = copy((Resource) propvalue,propvalueURI);
-			}else {
 				propvalueURI = ((Resource)propvalue).getURI();
-			}
 			propvalueURI = "<" + propvalueURI +"> .";
 		}
 		
@@ -253,13 +246,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		Object propvalue = r.getProperty(prop);
 		String propvalueURI = "";
 		if (propvalue instanceof Resource) {
-			if (((Resource)propvalue).isAnon()){
-				//give it a cool name.
-				propvalueURI = ProjectActivator.NAMESPACE + UUID.randomUUID();
-				propvalue = copy((Resource) propvalue,propvalueURI);
-			}else {
-				propvalueURI = ((Resource)propvalue).getURI();
-			}
+			propvalueURI = ((Resource)propvalue).getURI();
 			propvalueURI = "<" + propvalueURI +"> .";
 		}
 		

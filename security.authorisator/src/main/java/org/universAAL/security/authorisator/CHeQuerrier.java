@@ -145,6 +145,18 @@ public class CHeQuerrier {
     	String query = "DESCRIBE <" + uri + ">";
     	
     	Object o = getSerializer().deserialize(unserialisedQuery(query),uri);
+    	return reconstructResource(o);
+    }
+    
+    public Resource getAnonymousResource(String oURI, String propURI){
+    	
+    	String query = "CONSTRUCT { ?b ?p ?o .} WHERE {<" + oURI + "> <" + propURI + "> ?b . ?b ?p ?o . }";
+    	
+    	Object o = getSerializer().deserialize(unserialisedQuery(query));
+    	return reconstructResource(o);
+    }
+    
+    private Resource reconstructResource(Object o){
     	if (!(o instanceof Resource)){
     		return null;
     	}
@@ -154,7 +166,12 @@ public class CHeQuerrier {
 			String prop = (String) pe.nextElement();
 			Object pv = r.getProperty(prop);
 			if (pv instanceof Resource){
-				r.changeProperty(prop, getFullResourceGraph(((Resource) pv).getURI()));
+				Resource rpv = (Resource) pv;
+				if (!rpv.isAnon()) {
+					r.changeProperty(prop, getFullResourceGraph(rpv.getURI()));
+				}else {
+					r.changeProperty(prop, getAnonymousResource(r.getURI(), prop));
+				}
 			}
 		}
     	return r;
