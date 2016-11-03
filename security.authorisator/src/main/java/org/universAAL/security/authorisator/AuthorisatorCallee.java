@@ -16,6 +16,7 @@
 package org.universAAL.security.authorisator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -187,7 +188,8 @@ public class AuthorisatorCallee extends ServiceCallee {
 			}
 			
 			AccessType requested = AuthorisationServiceProfile.getAccessType(callURI);
-			LogUtils.logDebug(owner, getClass(), "handleCall", "Checking user AccesRight with type:" + requested.getURI());
+			LogUtils.logDebug(owner, getClass(), "handleCall", "Checking user AccesRights: " + Arrays.toString(compiledAccess.toArray())
+					+"\n with type:" + requested.getURI());
 			if (compiledAccess.contains(requested)){
 				LogUtils.logDebug(owner, getClass(), "handleCall", "Access Granted!");
 				return new ServiceResponse(CallStatus.succeeded);

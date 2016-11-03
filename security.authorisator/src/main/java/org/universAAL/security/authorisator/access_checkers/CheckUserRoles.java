@@ -71,11 +71,10 @@ public class CheckUserRoles implements AccessChecker {
 		for (Role role : roles) {
 			finalAccessRights.addAll(role.getAllAccessRights());
 		}
-		LogUtils.logDebug(mc, getClass(), "accessCheck", "AccessRights aggregated.");
+		LogUtils.logDebug(mc, getClass(), "accessCheck", finalAccessRights.size() + " AccessRights aggregated.");
 		
 		//match the asset with all AccessRights
 
-		LogUtils.logDebug(mc, getClass(), "accessCheck", "Matching AccessRights.");
 		return matchAccessRightsWAsset(finalAccessRights, asset);
 	}
 	
@@ -89,16 +88,16 @@ public class CheckUserRoles implements AccessChecker {
 	}
 	
 	protected HashSet<AccessType> matchAccessRightsWAsset(Set<AccessRight> finalAccessRights, Resource asset){
-		LogUtils.logDebug(mc, getClass(), "accessCheck", "Matching AccessRights.");
 		HashSet<AccessType> res = new HashSet<AccessType>();
 		for (AccessRight ar : finalAccessRights) {
 			Object te = ar.getProperty(AccessRight.PROP_ACCESS_TO);
 			if (te instanceof TypeExpression
 					&& ((TypeExpression)te).hasMember(asset)){
+				LogUtils.logDebug(mc, getClass(), "matchAccessRightsWAsset", asset.getURI() + " Matched!");
 				res.addAll(AssetDefaultAccessChecker.resolveFromValue(ar));
 			}
 		}
-		LogUtils.logDebug(mc, getClass(), "accessCheck", "Done Matching AccessRights.");
+		LogUtils.logDebug(mc, getClass(), "matchAccessRightsWAsset", res.size() + " Matching AccessRights.");
 		return res;
 	}
 

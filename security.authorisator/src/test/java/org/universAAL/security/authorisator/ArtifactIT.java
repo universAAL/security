@@ -52,7 +52,7 @@ public class ArtifactIT extends IntegrationTest {
     public void testRoles() {
 
     	try {
-    	    Thread.sleep(10000L);
+    	    Thread.sleep(7000L);
     	} catch (InterruptedException e) {
     	    e.printStackTrace();
     	}
@@ -75,7 +75,7 @@ public class ArtifactIT extends IntegrationTest {
     	DefaultServiceCaller caller = new DefaultServiceCaller(mc);
     	
     	Role newRole = new Role();
-    	AccessRight ar = new AccessRight(NAMESPACE+ "accessToAllDelegationForms");
+    	AccessRight ar = new AccessRight();//NAMESPACE+ "accessToAllDelegationForms");
     	ar.addAccessType(AccessType.add);
     	ar.addAccessType(AccessType.change);
     	ar.addAccessType(AccessType.remove);

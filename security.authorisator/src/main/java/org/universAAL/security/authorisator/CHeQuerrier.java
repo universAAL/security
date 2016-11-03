@@ -144,7 +144,9 @@ public class CHeQuerrier {
     }
     
     public Resource getFullResourceGraph(String uri){
-    	String query = "DESCRIBE <" + uri + ">";
+//    	String query = "DESCRIBE <" + uri + ">";
+    	String query = "CONSTRUCT { <" + uri + "> ?p ?o . ?ss ?pp ?oo}\n" +
+    			"WHERE {<" + uri + "> ?p ?o . OPTIONAL {<" + uri + "> ?p ?ss. ?ss ?pp ?oo. }}";
     	
     	Object o = getSerializer().deserialize(unserialisedQuery(query),uri);
     	Resource r = (Resource) o;
@@ -202,9 +204,9 @@ public class CHeQuerrier {
 		}
     	pp.delete(pp.length()-1, pp.length());
     	
-    	String query = "CONSTRUCT { ?s ?p ?o. ?o ?pp ?oo}\n" +
+    	String query = "CONSTRUCT { ?s ?p ?o. ?ss ?pp ?oo}\n" +
     			"WHERE {<"+rootURI+"> " +pp.toString() + " ?s .\n"
-    			+ " ?s ?p ?o. ?o ?pp ?oo. }";
+    			+ "?s ?p ?o. OPTIONAL {?s ?p ?ss. ?ss ?pp ?oo. }}";
     	Object o;
 		try {
 			o = getSerializer().deserialize(unserialisedQuery(query));
