@@ -144,91 +144,13 @@ public class CHeQuerrier {
     }
     
     public Resource getFullResourceGraph(String uri){
-//    	String query = "DESCRIBE <" + uri + ">";
-    	String query = "CONSTRUCT { <" + uri + "> ?p ?o . ?ss ?pp ?oo}\n" +
-    			"WHERE {<" + uri + "> ?p ?o . OPTIONAL {<" + uri + "> ?p ?ss. ?ss ?pp ?oo. }}";
+    	String query = "prefix : <urn:foo:test>\n" +
+    					"CONSTRUCT { ?s ?p ?o }\n" +
+    					"WHERE { <"+ uri +"> (:a|!:a)* ?s . ?s ?p ?o . }";
     	
     	Object o = getSerializer().deserialize(unserialisedQuery(query),uri);
     	Resource r = (Resource) o;
-    	Enumeration pe = r.getPropertyURIs();
-    	while (pe.hasMoreElements()) {
-			String prop = (String) pe.nextElement();
-			Object pv = r.getProperty(prop);
-			if (pv instanceof Resource){
-				Resource rpv = (Resource) pv;
-				ArrayList<String> npp = new ArrayList<String>();
-				npp.add(prop);
-				r.changeProperty(prop, getRDFGraph(uri, npp));
-			}
-		}
     	LogUtils.logDebug(owner, getClass(), "getFullResourceGraph", "result:\n" + getSerializer().serialize(r));
-    	return r;
-    }
-    
-//    public Resource getAnonymousResource(String oURI, String propURI){
-//    	
-//    	String query = "CONSTRUCT { ?b ?p ?o .} WHERE {<" + oURI + "> <" + propURI + "> ?b . ?b ?p ?o . }";
-//    	
-//    	Object o = getSerializer().deserialize(unserialisedQuery(query));
-//    	return reconstructResource(o);
-//    }
-//    
-//    private Resource reconstructResource(Object o){
-//    	if (!(o instanceof Resource)){
-//    		return null;
-//    	}
-//    	Resource r = (Resource) o;
-//    	Enumeration pe = r.getPropertyURIs();
-//    	while (pe.hasMoreElements()) {
-//			String prop = (String) pe.nextElement();
-//			Object pv = r.getProperty(prop);
-//			if (pv instanceof Resource){
-//				Resource rpv = (Resource) pv;
-//				if (!rpv.isAnon()) {
-//					r.changeProperty(prop, getFullResourceGraph(rpv.getURI()));
-//				}else {
-//					r.changeProperty(prop, getAnonymousResource(r.getURI(), prop));
-//				}
-//			}
-//		}
-//    	return r;
-//    }
-    
-    private Resource getRDFGraph(String rootURI, List<String> propPath){
-    	StringBuffer pp = new StringBuffer();
-    	for (String ppp : propPath) {
-    		pp.append("<");
-			pp.append(ppp);
-			pp.append(">");
-			pp.append("/");
-		}
-    	pp.delete(pp.length()-1, pp.length());
-    	
-    	String query = "CONSTRUCT { ?s ?p ?o. ?ss ?pp ?oo}\n" +
-    			"WHERE {<"+rootURI+"> " +pp.toString() + " ?s .\n"
-    			+ "?s ?p ?o. OPTIONAL {?s ?p ?ss. ?ss ?pp ?oo. }}";
-    	Object o;
-		try {
-			o = getSerializer().deserialize(unserialisedQuery(query));
-		} catch (Exception e) {
-			return null;
-		}
-		if (o == null){
-			return null;
-		}
-    	Resource r = (Resource) o;
-    	Enumeration pe = r.getPropertyURIs();
-    	while (pe.hasMoreElements()) {
-			String prop = (String) pe.nextElement();
-			Object pv = r.getProperty(prop);
-			if (pv instanceof Resource){
-				ArrayList<String> npp = new ArrayList<String>(propPath);
-				npp.add(prop);
-				Resource nVal = getRDFGraph(rootURI, npp);
-				if (nVal != null)
-					r.changeProperty(prop, nVal);
-			}
-		}
     	return r;
     }
 }
