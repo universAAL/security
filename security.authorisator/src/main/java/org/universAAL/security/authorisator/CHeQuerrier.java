@@ -21,6 +21,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.management.RuntimeErrorException;
+
 import org.universAAL.ioc.dependencies.DependencyProxy;
 import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
@@ -30,6 +32,7 @@ import org.universAAL.middleware.rdf.PropertyPath;
 import org.universAAL.middleware.rdf.Resource;
 import org.universAAL.middleware.serialization.MessageContentSerializer;
 import org.universAAL.middleware.serialization.MessageContentSerializerEx;
+import org.universAAL.middleware.service.CallStatus;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
@@ -73,6 +76,9 @@ public class CHeQuerrier {
 		ServiceCaller sc = new DefaultServiceCaller(owner);
 		ServiceResponse sr = sc.call(getQuery);
 		sc.close();
+		if (!sr.getCallStatus().equals(CallStatus.succeeded)){
+			throw new RuntimeException("unable to query. Query:\n" + query + "\nReturned:\n"+getSerializer().serialize(sr));
+		}
 		List res = sr.getOutput(OUTPUT_RESULT_STRING);
 		if (res != null && res.size() > 0 && res.get(0) instanceof String) {
 			return (String) res.get(0);
