@@ -49,6 +49,8 @@ public class ArtifactIT extends IntegrationTest {
 	logAllBundles();
     }
 
+	//The following test will only work with V2.9.0+ of Sesame backend.
+	/*
     public void testRoles() {
 
     	try {
@@ -95,9 +97,7 @@ public class ArtifactIT extends IntegrationTest {
     	
     	//Get all Roles
     	
-    	/*
-    	 * Possitive check (u1)
-    	 */
+    	//////// Possitive check (u1)
     	
     	System.out.println("\n\n\n\nAuthorisator Check\n\n\n\n TEST CALLER:" +caller.getMyID());
     	//check Read 
@@ -116,9 +116,7 @@ public class ArtifactIT extends IntegrationTest {
     	
     	//check remove
     	
-    	/*
-    	 * Negative check (u2)
-    	 */
+    	///// Negative check (u2)
     	//check Read (positive
 //    	sreq = new ServiceRequest(new AuthorizationService(),u1);
 //    	sreq.addValueFilter(new String[] {AuthorizationService.PROP_CHALLENGER_USER}, u1);
@@ -134,6 +132,6 @@ public class ArtifactIT extends IntegrationTest {
 	
     }
 
-
+*/
 
 }
