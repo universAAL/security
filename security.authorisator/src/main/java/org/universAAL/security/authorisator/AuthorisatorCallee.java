@@ -86,8 +86,10 @@ public class AuthorisatorCallee extends ServiceCallee {
 			ssp.addrole(r);
 			
 			// update SSP role prop in CHe
-			updateProperty(ssp,SecuritySubprofile.PROP_ROLES);
-			return new ServiceResponse(CallStatus.succeeded);
+			if (updateProperty(ssp,SecuritySubprofile.PROP_ROLES))
+				return new ServiceResponse(CallStatus.succeeded);
+			else 
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 		}
 		if (callURI.contains(ProjectActivator.REMOVE_ROLE_SP)){
 			SecuritySubprofile ssp = (SecuritySubprofile) call.getInputValue(ProjectActivator.SUBPROFILE);
@@ -98,8 +100,10 @@ public class AuthorisatorCallee extends ServiceCallee {
 			ssp.setProperty(SecuritySubprofile.PROP_ROLES, roles);
 			
 			// update SSP role prop in CHe
-			updateProperty(ssp,SecuritySubprofile.PROP_ROLES);
-			return new ServiceResponse(CallStatus.succeeded);
+			if (updateProperty(ssp,SecuritySubprofile.PROP_ROLES))
+				return new ServiceResponse(CallStatus.succeeded);
+			else 
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			
 		}
 		if (callURI.contains(ProjectActivator.ADD_ROLE_ROLE)){
@@ -109,8 +113,10 @@ public class AuthorisatorCallee extends ServiceCallee {
 			r.addSubRole(sr);
 			
 			// update Role subroles in CHe
-			updateProperty(r,Role.PROP_SUB_ROLES);
-			return new ServiceResponse(CallStatus.succeeded);
+			if (updateProperty(r,Role.PROP_SUB_ROLES))
+				return new ServiceResponse(CallStatus.succeeded);
+			else 
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 		}
 		if (callURI.contains(ProjectActivator.REMOVE_ROLE_ROLE)){
 			Role r = (Role) call.getInputValue(ProjectActivator.ROLE);
@@ -119,23 +125,32 @@ public class AuthorisatorCallee extends ServiceCallee {
 			r.removeSubRole(sr);
 			
 			// update Role subroles in CHe
-			updateProperty(r,Role.PROP_SUB_ROLES);
-			return new ServiceResponse(CallStatus.succeeded);
+			if (updateProperty(r,Role.PROP_SUB_ROLES))
+				return new ServiceResponse(CallStatus.succeeded);
+			else 
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			
 		}
 		if (callURI.contains(ProjectActivator.CHANGE_ROLE)){
 			Role r = (Role) call.getInputValue(ProjectActivator.ROLE);
 			
 			// update AR in CHe
-			updateObject(r);
-			return new ServiceResponse(CallStatus.succeeded);
+			if (updateObject(r))
+				return new ServiceResponse(CallStatus.succeeded);
+			else 
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 		}
 		if (callURI.contains(ProjectActivator.GET_ROLES)){
 			Object ret = getAllObjectsOfType(Role.MY_URI);
-			ProcessOutput po = new ProcessOutput(ProjectActivator.ROLE, ret);
-			ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
-			sr.addOutput(po);
-			return sr;
+			if (ret != null){
+				ProcessOutput po = new ProcessOutput(ProjectActivator.ROLE, ret);
+				ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+				sr.addOutput(po);
+				return sr;
+			}
+			else {
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
+			}
 		}
 		if (callURI.contains(ProjectActivator.ADD_AR_ROLE)){
 			Role r = (Role) call.getInputValue(ProjectActivator.ROLE);
@@ -144,8 +159,10 @@ public class AuthorisatorCallee extends ServiceCallee {
 			r.addAccessRight(ar);
 			
 			// update Role accessRights in CHe
-			updateProperty(r,Role.PROP_HAS_ACCESS_RIGHTS);
-			return new ServiceResponse(CallStatus.succeeded);
+			if (updateProperty(r,Role.PROP_HAS_ACCESS_RIGHTS))
+				return new ServiceResponse(CallStatus.succeeded);
+			else 
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 		}
 		if (callURI.contains(ProjectActivator.REMOVE_AR_ROLE)){
 			Role r = (Role) call.getInputValue(ProjectActivator.ROLE);
@@ -154,22 +171,31 @@ public class AuthorisatorCallee extends ServiceCallee {
 			r.removeAccessRight(ar);
 			
 			// update Role accessRights in CHe
-			updateProperty(r,Role.PROP_HAS_ACCESS_RIGHTS);
-			return new ServiceResponse(CallStatus.succeeded);
+			if (updateProperty(r,Role.PROP_HAS_ACCESS_RIGHTS))
+				return new ServiceResponse(CallStatus.succeeded);
+			else 
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 		}
 		if (callURI.contains(ProjectActivator.CHANGE_AR)){
 			AccessRight ar = (AccessRight) call.getInputValue(ProjectActivator.ACCESS_RIGHT);
 			
 			// update AR in CHe
-			updateObject(ar);
-			return new ServiceResponse(CallStatus.succeeded);
+			if (updateObject(ar))
+				return new ServiceResponse(CallStatus.succeeded);
+			else 
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 		}
 		if (callURI.contains(ProjectActivator.GET_AR)){
 			Object ret = getAllObjectsOfType(AccessRight.MY_URI);
-			ProcessOutput po = new ProcessOutput(ProjectActivator.ACCESS_RIGHT, ret);
-			ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
-			sr.addOutput(po);
-			return sr;
+			if (ret != null){
+				ProcessOutput po = new ProcessOutput(ProjectActivator.ACCESS_RIGHT, ret);
+				ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+				sr.addOutput(po);
+				return sr;
+			}
+			else {
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
+			}
 		}
 		if (callURI.contains("check")){
 			
@@ -218,7 +244,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		return Boolean.parseBoolean(out);
 	}
 
-	private void setProperty(Resource r, String prop) {
+	private boolean setProperty(Resource r, String prop) {
 		
 		Object propvalue = r.getProperty(prop);
 		String propvalueURI = "";
@@ -238,15 +264,15 @@ public class AuthorisatorCallee extends ServiceCallee {
 		
 		String prefixes = split[0];
 		String serialValue = split[1];
-		query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("setProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, propvalueURI +  serialValue}));
+		String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("setProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, propvalueURI +  serialValue}));
+		return resp !=null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
 		
 	}
 	
-	private void updateProperty(Resource r, String prop) {
+	private boolean updateProperty(Resource r, String prop) {
 		
 		if (!hasProperty(r.getURI(), prop)){
-			setProperty(r, prop);
-			return;
+			return setProperty(r, prop);
 		}
 		
 		Object propvalue = r.getProperty(prop);
@@ -267,11 +293,11 @@ public class AuthorisatorCallee extends ServiceCallee {
 		
 		String prefixes = split[0];
 		String serialValue = split[1];
-		query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, propvalueURI +  serialValue}));
-		
+		String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"), new String[]{  prefixes,r.getURI(),prop, propvalueURI +  serialValue}));
+		return resp !=null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
 	}
 
-	private void updateObject(Resource r) {
+	private boolean updateObject(Resource r) {
 		
 		String serialization = serializer.getObject().serialize(r);
 		
@@ -279,8 +305,8 @@ public class AuthorisatorCallee extends ServiceCallee {
 		
 		String prefixes = split[0];
 		String serialValue = split[1];
-		query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateFullObject.sparql"), new String[]{prefixes,r.getURI(), serialValue}));
-		
+		String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateFullObject.sparql"), new String[]{prefixes,r.getURI(), serialValue}));
+		return resp !=null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
 	}
 
 	private Object getAllObjectsOfType(String classuri){
