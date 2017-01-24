@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import javax.management.RuntimeErrorException;
 
@@ -59,8 +60,12 @@ public class CHeQuerrier {
 		serial = new PassiveDependencyProxy<MessageContentSerializer>(owner, new Object[] { MessageContentSerializer.class.getName() });
 	}
 
+	private String gURI(){
+		return "http://authorisator.security.universaal.org/CHeCall#" + UUID.randomUUID();
+	}
+	
 	public String unserialisedQuery(String query){
-		ServiceRequest getQuery = new ServiceRequest(new ContextHistoryService(
+		ServiceRequest getQuery = new ServiceRequest(gURI(),new ContextHistoryService(
 				null), null);
 
 		MergedRestriction r = MergedRestriction.getFixedValueRestriction(
