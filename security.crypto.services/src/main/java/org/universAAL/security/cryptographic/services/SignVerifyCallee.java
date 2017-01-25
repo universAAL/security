@@ -103,13 +103,13 @@ public class SignVerifyCallee extends ServiceCallee {
 			Digest dig = sr.getDigest();
 			
 			
-			KeyRing keyring = enc.getKeyRing()[0];
-			if (keyring == null) {
+			
+			if (enc.getKeyRing() == null || enc.getKeyRing().length == 0 || enc.getKeyRing()[0] == null) {
 				//PANIC!
-				LogUtils.logError(owner, getClass(), "handleCall", "Should not reach here this");
+				LogUtils.logError(owner, getClass(), "handleCall", "Should not reach here this, missing keyring for verifying.");
 				return new ServiceResponse(CallStatus.noMatchingServiceFound);
 			}
-			
+			KeyRing keyring = enc.getKeyRing()[0];
 			try {
 				Base64Binary key = keyring.getPublicKey();
 				Boolean result = verify(sr, dig, enc, key);
