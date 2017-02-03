@@ -201,7 +201,7 @@ public class ITserviceCalls extends BusTestCase {
 		sreq2.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE}, cryptedResource);
 		sreq2.addRequiredOutput(MY_OUTPUT, new String[] {EncryptionService.PROP_ENCRYPTS});
 
-		writeR("CryptoServices/Request", "Decrypt"+getResName(se),sreq);
+		writeR("CryptoServices/Request", "Decrypt"+getResName(se),sreq2);
 		sres = scaller.call(sreq2);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
 		writeR("CryptoServices/Response", "Decrypt"+getResName(se),sres);
