@@ -70,6 +70,7 @@ public class EncryptTest extends CommonTest {
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, key.getKeyText(), aes);
 		
 		assertEquals(0, enc.getEncryption().getKey().length);
+		assertNull(((SymmetricEncryption)enc.getEncryption()).getSimpleKey());
 		
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), aes);
 		
@@ -106,6 +107,7 @@ public class EncryptTest extends CommonTest {
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, key.getKeyText(), blo);
 
 		assertEquals(0, enc.getEncryption().getKey().length);
+		assertNull(((SymmetricEncryption)enc.getEncryption()).getSimpleKey());
 		
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), blo);
 		
@@ -142,6 +144,7 @@ public class EncryptTest extends CommonTest {
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, key.getKeyText(), des);
 
 		assertEquals(0, enc.getEncryption().getKey().length);
+		assertNull(((SymmetricEncryption)enc.getEncryption()).getSimpleKey());
 		
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), des);
 		
