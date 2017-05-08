@@ -191,7 +191,7 @@ public class ITserviceCalls extends BusTestCase {
 		
 		Resource cryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
 		
-		System.out.println(serialize(cryptedResource));
+		// System.out.println(serialize(cryptedResource));
 		
 		// decrypt
 		ServiceRequest sreq2 = new ServiceRequest(new EncryptionService(), null);
@@ -208,7 +208,7 @@ public class ITserviceCalls extends BusTestCase {
 		
 		Resource decryptedResource = (Resource) sres.getOutput(MY_OUTPUT).get(0);
 		
-		System.out.println(serialize(decryptedResource));
+		// System.out.println(serialize(decryptedResource));
 		
 		assertTrue(EncryptTest.fullResourceEquals(clearResource, decryptedResource));
 	}
@@ -233,7 +233,7 @@ public class ITserviceCalls extends BusTestCase {
 		
 		//System.out.println(serialize(sr));
 		
-		System.out.println("Verifying");
+		// System.out.println("Verifying");
 		
 		sreq = new ServiceRequest(new SignAndVerifyService(), null);
 		sreq.addValueFilter(new String[]{SignAndVerifyService.PROP_SIGNED_RESOURCE}, sr);
@@ -277,7 +277,7 @@ public class ITserviceCalls extends BusTestCase {
 
 		assertTrue(ManagedIndividual.checkMembership(MultidestinationEncryptedResource.MY_URI, cryptedResource));
 		
-		System.out.println(serialize(cryptedResource));
+		// System.out.println(serialize(cryptedResource));
 		
 		sreq = new ServiceRequest(new EncryptionService(), null);
 		

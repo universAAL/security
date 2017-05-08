@@ -84,10 +84,10 @@ public class URIsTest extends TestCase {
 		String serialised = serializer.getObject().serialize(tr);
 		String newURI = AnonServiceCallee.flatten2URI(serialised);
 		
-		System.out.println(newURI);
+		//System.out.println(newURI);
 		
 		String deserialized = AnonServiceCallee.unflattenFromURI(newURI);
-		System.out.println(deserialized);
+		//System.out.println(deserialized);
 		Resource mder = (Resource) serializer.getObject().deserialize(deserialized);
 		assertEquals(tr, mder);
 	}

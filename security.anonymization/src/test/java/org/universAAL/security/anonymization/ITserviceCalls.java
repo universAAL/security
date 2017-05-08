@@ -118,7 +118,7 @@ public class ITserviceCalls extends BusTestCase {
 		assertEquals(a, anonymized); //only checks URI
 		assertFalse(RandomResourceGenerator.fullResourceEquals(a, anonymized)); //there must be a property which is changed
 		
-		System.out.println(serialize(anonymized));
+		//System.out.println(serialize(anonymized));
 		
 		// Deanonymize
 		sreq = new ServiceRequest(new AnonymizationService(), null);
