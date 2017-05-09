@@ -73,9 +73,9 @@ public class TestMatchMaking extends TestCase {
     	DelegationForm asset = new DelegationForm();
     	
     	Object te = ar.getProperty(AccessRight.PROP_ACCESS_TO);
-    	System.out.println("te of class" + te.getClass().getCanonicalName());
-    	System.out.println("Checking Membership of:"
-		+ serializer.serialize(asset) + "\nwith: " + serializer.serialize(te));
+    	//System.out.println("te of class" + te.getClass().getCanonicalName());
+    	//System.out.println("Checking Membership of:"
+		//+ serializer.serialize(asset) + "\nwith: " + serializer.serialize(te));
 		assertTrue(te instanceof TypeExpression
 				&& ((TypeExpression)te).hasMember(asset));
 	}

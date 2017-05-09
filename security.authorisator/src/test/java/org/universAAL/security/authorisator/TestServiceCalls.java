@@ -112,7 +112,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -129,7 +129,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -144,7 +144,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -161,7 +161,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -175,7 +175,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -189,7 +189,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -205,7 +205,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -222,7 +222,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -236,7 +236,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -250,7 +250,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -266,7 +266,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -281,7 +281,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -296,7 +296,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -311,7 +311,7 @@ public class TestServiceCalls extends BusTestCase {
     		writeR(REQUEST_F,sname, sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR(RESPONSE_F,sname, srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}

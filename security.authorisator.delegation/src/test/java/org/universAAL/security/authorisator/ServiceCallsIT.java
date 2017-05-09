@@ -116,7 +116,7 @@ public class ServiceCallsIT extends BusTestCase {
     	try {
     		writeR("./target/Delegation/Request", "Create Delegation From", sreq);
 			ServiceResponse srep = scaller.call(sreq);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
     		writeR("Delegation/Response", "Create Delegation From", srep);
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
@@ -133,7 +133,7 @@ public class ServiceCallsIT extends BusTestCase {
     		writeR("Delegation/Request", "Add Delegation From", sreq);
 			ServiceResponse srep = scaller.call(sreq);
     		writeR("Delegation/Response", "Add Delegation From", srep);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
@@ -150,7 +150,7 @@ public class ServiceCallsIT extends BusTestCase {
     	try {
     		writeR("Delegation/Request", "Add Delegation From", sreq);
 			ServiceResponse srep = scaller.call(sreq);
-			System.out.println(srep.getCallStatus());
+			//System.out.println(srep.getCallStatus());
     		writeR(".Delegation/Response", "Add Delegation From", srep);
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking

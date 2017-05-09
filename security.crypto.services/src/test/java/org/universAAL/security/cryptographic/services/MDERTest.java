@@ -56,7 +56,7 @@ public class MDERTest extends CommonTest {
 		
 		mder = MultiDestinationCallee.createMDER(r, null, ael);
 		
-		System.out.println(new TurtleSerializer().serialize(mder));
+		// System.out.println(new TurtleSerializer().serialize(mder));
 		
 		Resource r2 = MultiDestinationCallee.decrypt(mder, ku1);
 		assertEquals(r, r2);
