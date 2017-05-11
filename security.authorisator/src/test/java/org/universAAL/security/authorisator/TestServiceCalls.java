@@ -20,22 +20,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.universAAL.middleware.bus.junit.BusTestCase;
+import org.universAAL.middleware.bus.junit.OntTestCase;
+import org.universAAL.middleware.owl.Enumeration;
 import org.universAAL.middleware.owl.MergedRestriction;
-import org.universAAL.middleware.owl.OntologyManagement;
-import org.universAAL.middleware.owl.TypeExpression;
-import org.universAAL.middleware.owl.TypeURI;
 import org.universAAL.middleware.rdf.Resource;
-import org.universAAL.middleware.serialization.MessageContentSerializer;
 import org.universAAL.middleware.serialization.turtle.TurtleSerializer;
 import org.universAAL.middleware.service.DefaultServiceCaller;
 import org.universAAL.middleware.service.ServiceRequest;
 import org.universAAL.middleware.service.ServiceResponse;
-import org.universAAL.ontology.cryptographic.CryptographicOntology;
-import org.universAAL.ontology.location.LocationOntology;
-import org.universAAL.ontology.phThing.PhThingOntology;
 import org.universAAL.ontology.profile.AssistedPerson;
-import org.universAAL.ontology.profile.ProfileOntology;
 import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.profile.UserProfile;
 import org.universAAL.ontology.profile.service.ProfilingService;
@@ -45,18 +38,14 @@ import org.universAAL.ontology.security.AuthorizationService;
 import org.universAAL.ontology.security.DelegationForm;
 import org.universAAL.ontology.security.Role;
 import org.universAAL.ontology.security.RoleManagementService;
-import org.universAAL.ontology.security.SecurityOntology;
 import org.universAAL.ontology.security.SecuritySubprofile;
-import org.universAAL.ontology.shape.ShapeOntology;
-import org.universAAL.ontology.space.SpaceOntology;
-import org.universAAL.ontology.vcard.VCardOntology;
 
 
 /**
  * @author amedrano
  *
  */
-public class TestServiceCalls extends BusTestCase {
+public class TestServiceCalls extends OntTestCase {
 	
 	private static final String NAMESPACE = "http://tests.universAAL.org/Anonymization#";
 	
@@ -74,20 +63,6 @@ public class TestServiceCalls extends BusTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-//		OntologyManagement.getInstance().register(mc, new DataRepOntology());
-//		OntologyManagement.getInstance().register(mc, new ServiceBusOntology());
-//    	OntologyManagement.getInstance().register(mc, new UIBusOntology());
-        OntologyManagement.getInstance().register(mc, new LocationOntology());
-//		OntologyManagement.getInstance().register(mc, new SysinfoOntology());
-        OntologyManagement.getInstance().register(mc, new ShapeOntology());
-        OntologyManagement.getInstance().register(mc, new PhThingOntology());
-        OntologyManagement.getInstance().register(mc, new SpaceOntology());
-        OntologyManagement.getInstance().register(mc, new VCardOntology());
-    	OntologyManagement.getInstance().register(mc, new ProfileOntology());
-//		OntologyManagement.getInstance().register(mc, new MenuProfileOntology());
-		OntologyManagement.getInstance().register(mc, new CryptographicOntology());	
-		OntologyManagement.getInstance().register(mc, new SecurityOntology());
-		
 		
 		scallee = new ProjectActivator();
 		scallee.start(mc);
@@ -196,10 +171,20 @@ public class TestServiceCalls extends BusTestCase {
     	
 
 		//add AccessRight to role
+    	
+    	AccessRight ar = new AccessRight("accessRightURI");
+    	ar.addAccessType(AccessType.add);
+    	ar.addAccessType(AccessType.change);
+    	ar.addAccessType(AccessType.read);
+    	ar.addAccessType(AccessType.remove);
+    	
+//    	ar.setAccessTo(new TypeURI(DoorController.MY_URI, false));
+    	ar.setAccessTo(new Enumeration(new Resource[]{ new Resource("myDoor1"), new Resource("myDoor2")}));
+    	
     	sname = "add AccessRight to role"; 
     	sreq = new ServiceRequest(new RoleManagementService(),u1);
     	sreq.addValueFilter(new String[]{RoleManagementService.PROP_ROLE}, newRole);
-    	sreq.addAddEffect(new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS}, new AccessRight());
+    	sreq.addAddEffect(new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS}, ar);
     	
     	try {
     		writeR(REQUEST_F,sname, sreq);

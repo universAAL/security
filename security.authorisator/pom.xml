@@ -24,11 +24,6 @@
 		<artifactId>junit</artifactId>
 	</dependency>  	 	
 	<dependency>
-	<groupId>org.universAAL.support</groupId>
-		<artifactId>itests</artifactId>
-		<scope>test</scope>
-	</dependency>
-	<dependency>
 		<groupId>org.universAAL.middleware</groupId>
 		<artifactId>mw.bus.junit</artifactId>
 		<scope>test</scope>
@@ -38,6 +33,11 @@
 		<artifactId>mw.container.osgi</artifactId>
 		<scope>test</scope>
 	</dependency>	
+	<dependency>
+		<groupId>org.universAAL.ontology</groupId>
+		<artifactId>ont.device</artifactId>
+		<scope>test</scope>
+	</dependency>
   	<dependency>
   		<groupId>org.universAAL.middleware</groupId>
   		<artifactId>mw.bus.context.core</artifactId>
