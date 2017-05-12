@@ -1,0 +1,60 @@
+
+@prefix pvn: <http://ontology.universAAL.org/uAAL.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ns: <http://www.daml.org/services/owl-s/1.1/Process.owl#> .
+@prefix ns1: <http://ontology.universAAL.org/Profile.owl#> .
+@prefix psn: <http://ontology.universAAL.org/Service.owl#> .
+@prefix ns2: <http://tests.universAAL.org/Anonymization#> .
+@prefix : <http://ontology.universAAL.org/Security.owl#> .
+_:BN000000 a pvn:ServiceRequest ;
+  pvn:theInvolvedHumanUser ns2:user1 ;
+  pvn:requiredResult [
+    a ns:Result ;
+    ns:hasEffect (
+      [
+        psn:affectedProperty [
+          a psn:PropertyPath ;
+          psn:thePath (
+            :managesRole
+            :hasAccessRights
+          )
+        ] ;
+        a psn:AddEffect ;
+        psn:propertyValue <accessRightURI>
+      ]
+    )
+  ] ;
+  pvn:requestedService [
+    a :RoleManagementService ;
+    pvn:instanceLevelRestrictions (
+      [
+        owl:hasValue <mySpecialRole> ;
+        a owl:Restriction ;
+        owl:onProperty :managesRole
+      ]
+    ) ;
+    pvn:numberOfValueRestrictions "1"^^<http://www.w3.org/2001/XMLSchema#int>
+  ] .
+:Remove a :AccessType .
+<accessRightURI> a :AccessRight ;
+  :hasAccessTo """
+    @prefix : <http://www.w3.org/2002/07/owl#> .
+    _:BN000000 a :Class ;
+      :oneOf (
+        <myDoor1>
+        <myDoor2>
+      ) .
+    """^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral> ;
+  :hasAccessType (
+    :Add
+    :Change
+    :Read
+    :Remove
+  ) .
+ns2:user1 a ns1:AssistedPerson ,
+    ns1:User ,
+    <http://ontology.universaal.org/PhThing.owl#PhysicalThing> .
+:Change a :AccessType .
+<mySpecialRole> a :Role .
+:Read a :AccessType .
+:Add a :AccessType .
