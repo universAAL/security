@@ -136,23 +136,25 @@ public class CHeQuerrier {
      *         prefixes, and the second [1] is the string with the triples
      *         content
      */
-    public static String[] splitPrefixes(String serialized) {
-	int lastprefix = 0, lastprefixdot = 0, lastprefixuri = 0;
-	lastprefix = serialized.toLowerCase().lastIndexOf("@prefix");
-	if (lastprefix >= 0) {
-	    lastprefixuri = serialized.substring(lastprefix).indexOf(">");
-	    lastprefixdot = serialized.substring(lastprefix + lastprefixuri)
-		    .indexOf(".");
+	public static String[] splitPrefixes(String serialized) {
+		//Remove Data types, specially XMLLiterals
+		String clean = serialized.replaceAll("\"[^\"]*?\"", "");
+		int lastprefix = 0, lastprefixdot = 0, lastprefixuri = 0;
+		lastprefix = clean.toLowerCase().lastIndexOf("@prefix");
+		if (lastprefix >= 0) {
+			lastprefixuri = clean.substring(lastprefix).indexOf(">");
+			lastprefixdot = clean.substring(lastprefix + lastprefixuri)
+					.indexOf(".");
+		}
+		String[] result = new String[2];
+		result[0] = clean
+				.substring(0, lastprefixuri + lastprefixdot + lastprefix + 1)
+				.replace("@", " ").replace(">.", "> ").replace(" .", " ")
+				.replace(". ", " ");
+		result[1] = serialized.substring(lastprefixuri + lastprefixdot
+				+ lastprefix + 1);
+		return result;
 	}
-	String[] result = new String[2];
-	result[0] = serialized
-		.substring(0, lastprefixuri + lastprefixdot + lastprefix + 1)
-		.replace("@", " ").replace(">.", "> ").replace(" .", " ")
-		.replace(". ", " ");
-	result[1] = serialized.substring(lastprefixuri + lastprefixdot
-		+ lastprefix + 1);
-	return result;
-    }
     
     public Resource getFullResourceGraph(String uri){
     	String query = "prefix : <urn:foo:test>\n" +
