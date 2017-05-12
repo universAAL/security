@@ -75,7 +75,7 @@ public class TestServiceCalls extends OntTestCase {
 		User u1 = new AssistedPerson(NAMESPACE+"user1");
 		SecuritySubprofile sspu1  = new SecuritySubprofile(NAMESPACE + "u1SSP");
 
-    	Role newRole = new Role();
+    	Role newRole = new Role("mySpecialRole");
 
     	//add role to SubProfile
 		String sname = "add role to SubProfile";    	
@@ -113,7 +113,7 @@ public class TestServiceCalls extends OntTestCase {
     	sname = "add role as subrole"; 
     	sreq = new ServiceRequest(new RoleManagementService(),u1);
     	sreq.addValueFilter(new String[]{RoleManagementService.PROP_ROLE}, newRole);
-    	sreq.addAddEffect(new String[]{RoleManagementService.PROP_ROLE,Role.PROP_SUB_ROLES}, new Role());
+    	sreq.addAddEffect(new String[]{RoleManagementService.PROP_ROLE,Role.PROP_SUB_ROLES}, new Role("mySubRole"));
     	
     	try {
     		writeR(REQUEST_F,sname, sreq);
@@ -129,7 +129,7 @@ public class TestServiceCalls extends OntTestCase {
     	sreq = new ServiceRequest(new RoleManagementService(),u1);
     	sreq.addValueFilter(new String[]{RoleManagementService.PROP_ROLE}, newRole);
     	sreq.addRemoveEffect(new String[]{RoleManagementService.PROP_ROLE,Role.PROP_SUB_ROLES});
-    	sreq.getRequestedService().addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(Role.PROP_SUB_ROLES, new Role()), 
+    	sreq.getRequestedService().addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(Role.PROP_SUB_ROLES, new Role("mySubRole")), 
     			new String[]{RoleManagementService.PROP_ROLE,Role.PROP_SUB_ROLES});
     	
     	try {
@@ -200,7 +200,7 @@ public class TestServiceCalls extends OntTestCase {
     	sreq = new ServiceRequest(new RoleManagementService(),u1);
     	sreq.addValueFilter(new String[]{RoleManagementService.PROP_ROLE}, newRole);
     	sreq.addRemoveEffect(new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
-    	sreq.getRequestedService().addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(Role.PROP_HAS_ACCESS_RIGHTS, new AccessRight()), 
+    	sreq.getRequestedService().addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(Role.PROP_HAS_ACCESS_RIGHTS, new AccessRight("accessRightURI")), 
     			new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS});
     	
     	try {
@@ -215,7 +215,7 @@ public class TestServiceCalls extends OntTestCase {
 		//change AccessRight
     	sname = "change AccessRight"; 
     	sreq = new ServiceRequest(new RoleManagementService(),u1);
-    	sreq.addChangeEffect(new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS}, new AccessRight());
+    	sreq.addChangeEffect(new String[]{RoleManagementService.PROP_ROLE,Role.PROP_HAS_ACCESS_RIGHTS}, new AccessRight("accessRightURI"));
     	
     	try {
     		writeR(REQUEST_F,sname, sreq);
