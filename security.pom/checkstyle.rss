@@ -1,0 +1,754 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>universAAL Security Suite - Checkstyle report</title>
+    <link>http://security/security.pom/</link>
+    <description>universAAL Security Suite - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2017 universAAL Consortium</copyright>
+    <item>
+      <title>File: 50,
+             Errors: 670,
+             Warnings: 148,
+             Infos: 2549
+      </title>
+            <link>http://security/security.pom//checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://security/security.pom//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.EncryptionServiceProfiles.java">org/universAAL/security/cryptographic/services/EncryptionServiceProfiles.java</a>
+                </td>
+                <td>
+                  244
+                </td>
+                <td>
+                  22
+                </td>
+                <td>
+                  33
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.AuthorisatorCallee.java">org/universAAL/security/authorisator/AuthorisatorCallee.java</a>
+                </td>
+                <td>
+                  198
+                </td>
+                <td>
+                  20
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.DigestServiceCallee.java">org/universAAL/security/cryptographic/services/DigestServiceCallee.java</a>
+                </td>
+                <td>
+                  36
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.ProjectActivator.java">org/universAAL/security/cryptographic/services/ProjectActivator.java</a>
+                </td>
+                <td>
+                  17
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.anonymization.AnonServiceCallee.java">org/universAAL/security/anonymization/AnonServiceCallee.java</a>
+                </td>
+                <td>
+                  109
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.anonymization.ProjectActivator.java">org/universAAL/security/anonymization/ProjectActivator.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.delegation.DelegationServieCallee.java">org/universAAL/security/authorisator/delegation/DelegationServieCallee.java</a>
+                </td>
+                <td>
+                  146
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  20
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authenticator.profile.UserPasswordProfileService.java">org/universAAL/security/authenticator/profile/UserPasswordProfileService.java</a>
+                </td>
+                <td>
+                  33
+                </td>
+                <td>
+                  9
+                </td>
+                <td>
+                  21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.anonymization.AnonServiceProfile.java">org/universAAL/security/anonymization/AnonServiceProfile.java</a>
+                </td>
+                <td>
+                  36
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.ManagerActivator.java">org/universAAL/security/session/manager/ManagerActivator.java</a>
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.profiles.SecuritySubProfileRoleManagement.java">org/universAAL/security/authorisator/profiles/SecuritySubProfileRoleManagement.java</a>
+                </td>
+                <td>
+                  17
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authenticator.dummy.AuthenticatorActivator.java">org/universAAL/security/authenticator/dummy/AuthenticatorActivator.java</a>
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.access_checkers.CheckUserRoles.java">org/universAAL/security/authorisator/access_checkers/CheckUserRoles.java</a>
+                </td>
+                <td>
+                  66
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.SessionManager.java">org/universAAL/security/session/manager/SessionManager.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.MultiDestinationCallee.java">org/universAAL/security/cryptographic/services/MultiDestinationCallee.java</a>
+                </td>
+                <td>
+                  131
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authenticator.profile.AuthenticatorActivator.java">org/universAAL/security/authenticator/profile/AuthenticatorActivator.java</a>
+                </td>
+                <td>
+                  22
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.context.LocationChangeListener.java">org/universAAL/security/session/manager/context/LocationChangeListener.java</a>
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authenticator.client.AuthenticationPublisher.java">org/universAAL/security/authenticator/client/AuthenticationPublisher.java</a>
+                </td>
+                <td>
+                  21
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.SignVerifyCallee.java">org/universAAL/security/cryptographic/services/SignVerifyCallee.java</a>
+                </td>
+                <td>
+                  100
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.context.Subscriber.java">org/universAAL/security/session/manager/context/Subscriber.java</a>
+                </td>
+                <td>
+                  45
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.CHeQuerrier.java">org/universAAL/security/authorisator/CHeQuerrier.java</a>
+                </td>
+                <td>
+                  62
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.delegation.DelegationService.java">org/universAAL/security/authorisator/delegation/DelegationService.java</a>
+                </td>
+                <td>
+                  56
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.interfaces.AccessChecker.java">org/universAAL/security/authorisator/interfaces/AccessChecker.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.profiles.AuthorisationServiceProfile.java">org/universAAL/security/authorisator/profiles/AuthorisationServiceProfile.java</a>
+                </td>
+                <td>
+                  15
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.EncryptionServiceCallee.java">org/universAAL/security/cryptographic/services/EncryptionServiceCallee.java</a>
+                </td>
+                <td>
+                  130
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.impl.SessionManagerImpl.java">org/universAAL/security/session/manager/impl/SessionManagerImpl.java</a>
+                </td>
+                <td>
+                  50
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  34
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.context.SessionPublisher.java">org/universAAL/security/session/manager/context/SessionPublisher.java</a>
+                </td>
+                <td>
+                  26
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.context.SituationMonitor.java">org/universAAL/security/session/manager/context/SituationMonitor.java</a>
+                </td>
+                <td>
+                  16
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authenticator.dummy.UserPasswordCallee.java">org/universAAL/security/authenticator/dummy/UserPasswordCallee.java</a>
+                </td>
+                <td>
+                  30
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authenticator.profile.UserPasswordCallee.java">org/universAAL/security/authenticator/profile/UserPasswordCallee.java</a>
+                </td>
+                <td>
+                  71
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  19
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.DigestServiceProfiles.java">org/universAAL/security/cryptographic/services/DigestServiceProfiles.java</a>
+                </td>
+                <td>
+                  54
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.helpers.UserLocationTreeRoot.java">org/universAAL/security/session/manager/helpers/UserLocationTreeRoot.java</a>
+                </td>
+                <td>
+                  21
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.utils.BlockChipher.java">org/universAAL/security/cryptographic/services/utils/BlockChipher.java</a>
+                </td>
+                <td>
+                  57
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.impl.SituationMonitorImpl.java">org/universAAL/security/session/manager/impl/SituationMonitorImpl.java</a>
+                </td>
+                <td>
+                  65
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  38
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.ProjectActivator.java">org/universAAL/security/authorisator/ProjectActivator.java</a>
+                </td>
+                <td>
+                  118
+                </td>
+                <td>
+                  15
+                </td>
+                <td>
+                  33
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.service.SessionManagerService.java">org/universAAL/security/session/manager/service/SessionManagerService.java</a>
+                </td>
+                <td>
+                  38
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.service.SCallee.java">org/universAAL/security/session/manager/service/SCallee.java</a>
+                </td>
+                <td>
+                  30
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authenticator.client.UserPaswordAuthenticatorClient.java">org/universAAL/security/authenticator/client/UserPaswordAuthenticatorClient.java</a>
+                </td>
+                <td>
+                  50
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.helpers.SerializerGetter.java">org/universAAL/security/session/manager/helpers/SerializerGetter.java</a>
+                </td>
+                <td>
+                  20
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.helpers.LocationTreeWrapper.java">org/universAAL/security/session/manager/helpers/LocationTreeWrapper.java</a>
+                </td>
+                <td>
+                  10
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.profiles.RoleMngServiceProfile.java">org/universAAL/security/authorisator/profiles/RoleMngServiceProfile.java</a>
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authenticator.dummy.UserPasswordDummyService.java">org/universAAL/security/authenticator/dummy/UserPasswordDummyService.java</a>
+                </td>
+                <td>
+                  25
+                </td>
+                <td>
+                  9
+                </td>
+                <td>
+                  19
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.helpers.UserDeviceWrapper.java">org/universAAL/security/session/manager/helpers/UserDeviceWrapper.java</a>
+                </td>
+                <td>
+                  38
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.delegation.DelegationActivator.java">org/universAAL/security/authorisator/delegation/DelegationActivator.java</a>
+                </td>
+                <td>
+                  10
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.helpers.UserLocationTree.java">org/universAAL/security/session/manager/helpers/UserLocationTree.java</a>
+                </td>
+                <td>
+                  66
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.MultiDestinationProfiles.java">org/universAAL/security/cryptographic/services/MultiDestinationProfiles.java</a>
+                </td>
+                <td>
+                  85
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  18
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.access_checkers.DelegationAccessChecker.java">org/universAAL/security/authorisator/access_checkers/DelegationAccessChecker.java</a>
+                </td>
+                <td>
+                  39
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.cryptographic.services.SignVerifyProfiles.java">org/universAAL/security/cryptographic/services/SignVerifyProfiles.java</a>
+                </td>
+                <td>
+                  69
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.access_checkers.AssetDefaultAccessChecker.java">org/universAAL/security/authorisator/access_checkers/AssetDefaultAccessChecker.java</a>
+                </td>
+                <td>
+                  18
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.session.manager.helpers.CHeQuery.java">org/universAAL/security/session/manager/helpers/CHeQuery.java</a>
+                </td>
+                <td>
+                  24
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
