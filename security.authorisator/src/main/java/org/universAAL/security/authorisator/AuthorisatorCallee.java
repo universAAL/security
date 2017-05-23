@@ -247,6 +247,11 @@ public class AuthorisatorCallee extends ServiceCallee {
 	private boolean setProperty(Resource r, String prop) {
 		
 		Object propvalue = r.getProperty(prop);
+		if (propvalue == null){
+			// Property has to be removed
+			String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("removeProperty.sparql"), new String[]{  r.getURI(),prop}));
+			return resp !=null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
+		}
 		String propvalueURI = "";
 		if (propvalue instanceof Resource) {
 				if (!((Resource)propvalue).isAnon()) {
@@ -276,6 +281,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		}
 		
 		Object propvalue = r.getProperty(prop);
+		
 		String propvalueURI = "";
 		if (propvalue instanceof Resource) {
 			if (!((Resource)propvalue).isAnon()) {
@@ -284,7 +290,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 			}else {
 				propvalueURI = "_:BN000000 .";
 			}
-	}
+		}
 		
 		
 		String serialization = serializer.getObject().serialize(propvalue);

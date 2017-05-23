@@ -1,0 +1,7 @@
+#1 is the object URI to be updated
+#2 is the property URI
+
+DELETE {<$1> <$2> ?o}
+WHERE  { 
+        <$1> <$2> ?o . 
+}
