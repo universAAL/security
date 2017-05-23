@@ -28,7 +28,7 @@ under the License.
       <title>File: 50,
              Errors: 670,
              Warnings: 148,
-             Infos: 2549
+             Infos: 2556
       </title>
             <link>http://security/security.pom//checkstyle.html</link>
       <description>
@@ -63,7 +63,7 @@ under the License.
                   <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.AuthorisatorCallee.java">org/universAAL/security/authorisator/AuthorisatorCallee.java</a>
                 </td>
                 <td>
-                  198
+                  205
                 </td>
                 <td>
                   20
