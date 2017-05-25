@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.05673758865248227" branch-rate="0.05263157894736842" lines-covered="8" lines-valid="141" branches-covered="2" branches-valid="38" complexity="2.75" version="2.1.1" timestamp="1495725788517">
+<coverage line-rate="0.05673758865248227" branch-rate="0.05263157894736842" lines-covered="8" lines-valid="141" branches-covered="2" branches-valid="38" complexity="2.75" version="2.1.1" timestamp="1495750100445">
 	<sources>
 		<source>--source</source>
 		<source>/home/travis/build/universAAL/security/security.authenticator.profile/src/main/java</source>
