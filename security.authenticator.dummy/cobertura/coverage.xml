@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.0" branch-rate="0.0" lines-covered="0" lines-valid="69" branches-covered="0" branches-valid="14" complexity="2.090909090909091" version="2.1.1" timestamp="1495750088843">
+<coverage line-rate="0.0" branch-rate="0.0" lines-covered="0" lines-valid="64" branches-covered="0" branches-valid="14" complexity="2.090909090909091" version="2.1.1" timestamp="1496982252314">
 	<sources>
 		<source>--source</source>
 		<source>/home/travis/build/universAAL/security/security.authenticator.dummy/src/main/java</source>
@@ -49,61 +49,56 @@
 					<methods>
 						<method name="&lt;init&gt;" signature="(Lorg/universAAL/middleware/container/ModuleContext;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
+								<line number="57" hits="0" branch="false"/>
 								<line number="58" hits="0" branch="false"/>
-								<line number="59" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="&lt;init&gt;" signature="(Lorg/universAAL/middleware/container/ModuleContext;[Lorg/universAAL/middleware/service/owls/profile/ServiceProfile;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
+								<line number="50" hits="0" branch="false"/>
 								<line number="51" hits="0" branch="false"/>
-								<line number="52" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="authenticate" signature="(Ljava/lang/String;Lorg/universAAL/middleware/xsd/Base64Binary;Lorg/universAAL/ontology/cryptographic/Digest;)Lorg/universAAL/ontology/profile/User;" line-rate="0.0" branch-rate="0.0" complexity="0">
 							<lines>
-								<line number="104" hits="0" branch="true" condition-coverage="0% (0/4)">
+								<line number="103" hits="0" branch="true" condition-coverage="0% (0/4)">
 									<conditions>
 										<condition number="0" type="jump" coverage="0%"/>
 										<condition number="1" type="jump" coverage="0%"/>
 									</conditions>
 								</line>
-								<line number="105" hits="0" branch="true" condition-coverage="0% (0/2)">
+								<line number="104" hits="0" branch="true" condition-coverage="0% (0/2)">
 									<conditions>
 										<condition number="0" type="jump" coverage="0%"/>
 									</conditions>
 								</line>
+								<line number="105" hits="0" branch="false"/>
 								<line number="106" hits="0" branch="false"/>
-								<line number="107" hits="0" branch="false"/>
 								<line number="108" hits="0" branch="false"/>
 								<line number="109" hits="0" branch="false"/>
-								<line number="110" hits="0" branch="false"/>
 								<line number="112" hits="0" branch="false"/>
-								<line number="113" hits="0" branch="false"/>
-								<line number="114" hits="0" branch="false"/>
-								<line number="115" hits="0" branch="false"/>
-								<line number="116" hits="0" branch="false"/>
-								<line number="119" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="communicationChannelBroken" signature="()V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="65" hits="0" branch="false"/>
+								<line number="64" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="handleCall" signature="(Lorg/universAAL/middleware/service/ServiceCall;)Lorg/universAAL/middleware/service/ServiceResponse;" line-rate="0.0" branch-rate="0.0" complexity="0">
 							<lines>
-								<line number="70" hits="0" branch="true" condition-coverage="0% (0/2)">
+								<line number="69" hits="0" branch="true" condition-coverage="0% (0/2)">
 									<conditions>
 										<condition number="0" type="jump" coverage="0%"/>
 									</conditions>
 								</line>
-								<line number="71" hits="0" branch="false"/>
-								<line number="74" hits="0" branch="false"/>
-								<line number="75" hits="0" branch="true" condition-coverage="0% (0/2)">
+								<line number="70" hits="0" branch="false"/>
+								<line number="73" hits="0" branch="false"/>
+								<line number="74" hits="0" branch="true" condition-coverage="0% (0/2)">
 									<conditions>
 										<condition number="0" type="jump" coverage="0%"/>
 									</conditions>
 								</line>
+								<line number="75" hits="0" branch="false"/>
 								<line number="76" hits="0" branch="false"/>
 								<line number="77" hits="0" branch="false"/>
 								<line number="78" hits="0" branch="true" condition-coverage="0% (0/2)">
@@ -129,23 +124,24 @@
 						</method>
 					</methods>
 					<lines>
+						<line number="50" hits="0" branch="false"/>
 						<line number="51" hits="0" branch="false"/>
-						<line number="52" hits="0" branch="false"/>
+						<line number="57" hits="0" branch="false"/>
 						<line number="58" hits="0" branch="false"/>
-						<line number="59" hits="0" branch="false"/>
-						<line number="65" hits="0" branch="false"/>
-						<line number="70" hits="0" branch="true" condition-coverage="0% (0/2)">
+						<line number="64" hits="0" branch="false"/>
+						<line number="69" hits="0" branch="true" condition-coverage="0% (0/2)">
 							<conditions>
 								<condition number="0" type="jump" coverage="0%"/>
 							</conditions>
 						</line>
-						<line number="71" hits="0" branch="false"/>
-						<line number="74" hits="0" branch="false"/>
-						<line number="75" hits="0" branch="true" condition-coverage="0% (0/2)">
+						<line number="70" hits="0" branch="false"/>
+						<line number="73" hits="0" branch="false"/>
+						<line number="74" hits="0" branch="true" condition-coverage="0% (0/2)">
 							<conditions>
 								<condition number="0" type="jump" coverage="0%"/>
 							</conditions>
 						</line>
+						<line number="75" hits="0" branch="false"/>
 						<line number="76" hits="0" branch="false"/>
 						<line number="77" hits="0" branch="false"/>
 						<line number="78" hits="0" branch="true" condition-coverage="0% (0/2)">
@@ -167,28 +163,22 @@
 						<line number="89" hits="0" branch="false"/>
 						<line number="90" hits="0" branch="false"/>
 						<line number="93" hits="0" branch="false"/>
-						<line number="104" hits="0" branch="true" condition-coverage="0% (0/4)">
+						<line number="103" hits="0" branch="true" condition-coverage="0% (0/4)">
 							<conditions>
 								<condition number="0" type="jump" coverage="0%"/>
 								<condition number="1" type="jump" coverage="0%"/>
 							</conditions>
 						</line>
-						<line number="105" hits="0" branch="true" condition-coverage="0% (0/2)">
+						<line number="104" hits="0" branch="true" condition-coverage="0% (0/2)">
 							<conditions>
 								<condition number="0" type="jump" coverage="0%"/>
 							</conditions>
 						</line>
+						<line number="105" hits="0" branch="false"/>
 						<line number="106" hits="0" branch="false"/>
-						<line number="107" hits="0" branch="false"/>
 						<line number="108" hits="0" branch="false"/>
 						<line number="109" hits="0" branch="false"/>
-						<line number="110" hits="0" branch="false"/>
 						<line number="112" hits="0" branch="false"/>
-						<line number="113" hits="0" branch="false"/>
-						<line number="114" hits="0" branch="false"/>
-						<line number="115" hits="0" branch="false"/>
-						<line number="116" hits="0" branch="false"/>
-						<line number="119" hits="0" branch="false"/>
 					</lines>
 				</class>
 				<class name="org.universAAL.security.authenticator.dummy.UserPasswordDummyService" filename="org/universAAL/security/authenticator/dummy/UserPasswordDummyService.java" line-rate="0.0" branch-rate="1.0" complexity="1.0">
@@ -221,15 +211,15 @@
 						<method name="initialize" signature="(Lorg/universAAL/middleware/container/ModuleContext;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
 								<line number="64" hits="0" branch="false"/>
+								<line number="75" hits="0" branch="false"/>
 								<line number="76" hits="0" branch="false"/>
 								<line number="77" hits="0" branch="false"/>
 								<line number="78" hits="0" branch="false"/>
-								<line number="79" hits="0" branch="false"/>
+								<line number="83" hits="0" branch="false"/>
 								<line number="84" hits="0" branch="false"/>
-								<line number="85" hits="0" branch="false"/>
 								<line number="86" hits="0" branch="false"/>
-								<line number="87" hits="0" branch="false"/>
 								<line number="88" hits="0" branch="false"/>
+								<line number="89" hits="0" branch="false"/>
 							</lines>
 						</method>
 					</methods>
@@ -248,15 +238,15 @@
 						<line number="60" hits="0" branch="false"/>
 						<line number="61" hits="0" branch="false"/>
 						<line number="64" hits="0" branch="false"/>
+						<line number="75" hits="0" branch="false"/>
 						<line number="76" hits="0" branch="false"/>
 						<line number="77" hits="0" branch="false"/>
 						<line number="78" hits="0" branch="false"/>
-						<line number="79" hits="0" branch="false"/>
+						<line number="83" hits="0" branch="false"/>
 						<line number="84" hits="0" branch="false"/>
-						<line number="85" hits="0" branch="false"/>
 						<line number="86" hits="0" branch="false"/>
-						<line number="87" hits="0" branch="false"/>
 						<line number="88" hits="0" branch="false"/>
+						<line number="89" hits="0" branch="false"/>
 					</lines>
 				</class>
 				<class name="org.universAAL.security.authenticator.dummy.UserPasswordDummyService$1" filename="org/universAAL/security/authenticator/dummy/UserPasswordDummyService.java" line-rate="0.0" branch-rate="1.0" complexity="1.0">
@@ -268,13 +258,13 @@
 						</method>
 						<method name="createInstance" signature="(Ljava/lang/String;Ljava/lang/String;I)Lorg/universAAL/middleware/rdf/Resource;" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="69" hits="0" branch="false"/>
+								<line number="68" hits="0" branch="false"/>
 							</lines>
 						</method>
 					</methods>
 					<lines>
 						<line number="65" hits="0" branch="false"/>
-						<line number="69" hits="0" branch="false"/>
+						<line number="68" hits="0" branch="false"/>
 					</lines>
 				</class>
 			</classes>

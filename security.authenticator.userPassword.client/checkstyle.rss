@@ -27,8 +27,8 @@ under the License.
     <item>
       <title>File: 2,
              Errors: 16,
-             Warnings: 2,
-             Infos: 71
+             Warnings: 1,
+             Infos: 6
       </title>
             <link>http://security/security.authenticator.userPassword.client//checkstyle.html</link>
       <description>
@@ -49,10 +49,10 @@ under the License.
                   <a href="http://security/security.authenticator.userPassword.client//checkstyle.html#org.universAAL.security.authenticator.client.UserPaswordAuthenticatorClient.java">org/universAAL/security/authenticator/client/UserPaswordAuthenticatorClient.java</a>
                 </td>
                 <td>
-                  50
+                  5
                 </td>
                 <td>
-                  1
+                  0
                 </td>
                 <td>
                   8
@@ -63,7 +63,7 @@ under the License.
                   <a href="http://security/security.authenticator.userPassword.client//checkstyle.html#org.universAAL.security.authenticator.client.AuthenticationPublisher.java">org/universAAL/security/authenticator/client/AuthenticationPublisher.java</a>
                 </td>
                 <td>
-                  21
+                  1
                 </td>
                 <td>
                   1

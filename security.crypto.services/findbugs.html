@@ -146,7 +146,7 @@
 <td>Found reliance on default encoding in org.universAAL.security.cryptographic.services.DigestServiceCallee.digestResource(Resource, Digest): String.getBytes()</td>
 <td>I18N</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td>
-<td>96</td>
+<td>93</td>
 <td>High</td></tr></table></div><a name="org.universAAL.security.cryptographic.services.DigestServiceProfiles"></a>
 <div class="section">
 <h3><a name="org.universAAL.security.cryptographic.services.DigestServiceProfiles"></a>org.universAAL.security.cryptographic.services.DigestServiceProfiles</h3>
@@ -176,19 +176,19 @@
 <td>Found reliance on default encoding in org.universAAL.security.cryptographic.services.EncryptionServiceCallee.doEncryption(Resource, Base64Binary, SymmetricEncryption): String.getBytes()</td>
 <td>I18N</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td>
-<td>217</td>
+<td>198</td>
 <td>High</td></tr>
 <tr class="b">
 <td>org.universAAL.security.cryptographic.services.EncryptionServiceCallee.generateKeyRing(AsymmetricEncryption, Object) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
 <td>PERFORMANCE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#DM_NUMBER_CTOR">DM_NUMBER_CTOR</a></td>
-<td>331</td>
+<td>313</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>org.universAAL.security.cryptographic.services.EncryptionServiceCallee.generateSymmetricKey(SymmetricEncryption, Object) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
 <td>PERFORMANCE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#DM_NUMBER_CTOR">DM_NUMBER_CTOR</a></td>
-<td>266</td>
+<td>248</td>
 <td>Medium</td></tr></table></div><a name="org.universAAL.security.cryptographic.services.EncryptionServiceProfiles"></a>
 <div class="section">
 <h3><a name="org.universAAL.security.cryptographic.services.EncryptionServiceProfiles"></a>org.universAAL.security.cryptographic.services.EncryptionServiceProfiles</h3>
@@ -218,13 +218,13 @@
 <td>Exception is caught when Exception is not thrown in org.universAAL.security.cryptographic.services.MultiDestinationCallee.createMDER(Resource, SymmetricEncryption, List)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#REC_CATCH_EXCEPTION">REC_CATCH_EXCEPTION</a></td>
-<td>213</td>
+<td>218</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>Exception is caught when Exception is not thrown in org.universAAL.security.cryptographic.services.MultiDestinationCallee.decryptSessionKey(MultidestinationEncryptedResource, KeyRing)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#REC_CATCH_EXCEPTION">REC_CATCH_EXCEPTION</a></td>
-<td>285</td>
+<td>296</td>
 <td>Medium</td></tr></table></div><a name="org.universAAL.security.cryptographic.services.MultiDestinationProfiles"></a>
 <div class="section">
 <h3><a name="org.universAAL.security.cryptographic.services.MultiDestinationProfiles"></a>org.universAAL.security.cryptographic.services.MultiDestinationProfiles</h3>
@@ -266,13 +266,13 @@
 <td>Write to static field org.universAAL.security.cryptographic.services.ProjectActivator.serializer from instance method org.universAAL.security.cryptographic.services.ProjectActivator.start(ModuleContext)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD">ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD</a></td>
-<td>41</td>
+<td>40</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>Unread field: org.universAAL.security.cryptographic.services.ProjectActivator.mderCallee</td>
 <td>PERFORMANCE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#URF_UNREAD_FIELD">URF_UNREAD_FIELD</a></td>
-<td>50</td>
+<td>49</td>
 <td>Medium</td></tr></table></div><a name="org.universAAL.security.cryptographic.services.SignVerifyCallee"></a>
 <div class="section">
 <h3><a name="org.universAAL.security.cryptographic.services.SignVerifyCallee"></a>org.universAAL.security.cryptographic.services.SignVerifyCallee</h3>
@@ -287,19 +287,19 @@
 <td>Found reliance on default encoding in org.universAAL.security.cryptographic.services.SignVerifyCallee.sign(Resource, Digest, AsymmetricEncryption, Base64Binary): String.getBytes()</td>
 <td>I18N</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td>
-<td>153</td>
+<td>151</td>
 <td>High</td></tr>
 <tr class="b">
 <td>Found reliance on default encoding in org.universAAL.security.cryptographic.services.SignVerifyCallee.verify(SignedResource, Digest, AsymmetricEncryption, Base64Binary): String.getBytes()</td>
 <td>I18N</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td>
-<td>182</td>
+<td>181</td>
 <td>High</td></tr>
 <tr class="a">
 <td>Possible null pointer dereference of dig in org.universAAL.security.cryptographic.services.SignVerifyCallee.getSignature(Digest, AsymmetricEncryption)</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_NULL_ON_SOME_PATH">NP_NULL_ON_SOME_PATH</a></td>
-<td>204</td>
+<td>202</td>
 <td>High</td></tr></table></div><a name="org.universAAL.security.cryptographic.services.SignVerifyProfiles"></a>
 <div class="section">
 <h3><a name="org.universAAL.security.cryptographic.services.SignVerifyProfiles"></a>org.universAAL.security.cryptographic.services.SignVerifyProfiles</h3>
@@ -329,7 +329,7 @@
 <td>Dead store to scrambled in org.universAAL.security.cryptographic.services.utils.BlockChipher.blockCipher(byte[], int)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#DLS_DEAD_LOCAL_STORE">DLS_DEAD_LOCAL_STORE</a></td>
-<td>63</td>
+<td>65</td>
 <td>Medium</td></tr></table></div>
       </div>
     </div>

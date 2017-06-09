@@ -131,13 +131,13 @@
 <td>org.universAAL.security.session.manager.helpers.CHeQuery.getQuery(String, String[]) might ignore java.lang.Exception</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#DE_MIGHT_IGNORE">DE_MIGHT_IGNORE</a></td>
-<td>102</td>
+<td>94</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>Can't close CHeQuery.sc since it is always null in org.universAAL.security.session.manager.helpers.CHeQuery.close()</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_CLOSING_NULL">NP_CLOSING_NULL</a></td>
-<td>62</td>
+<td>61</td>
 <td>High</td></tr></table></div><a name="org.universAAL.security.session.manager.helpers.LocationTreeWrapper"></a>
 <div class="section">
 <h3><a name="org.universAAL.security.session.manager.helpers.LocationTreeWrapper"></a>org.universAAL.security.session.manager.helpers.LocationTreeWrapper</h3>
@@ -152,13 +152,13 @@
 <td>org.universAAL.security.session.manager.helpers.LocationTreeWrapper defines equals(LocationTreeWrapper) method and uses Object.equals(Object)</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EQ_SELF_USE_OBJECT">EQ_SELF_USE_OBJECT</a></td>
-<td>116</td>
+<td>117</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>org.universAAL.security.session.manager.helpers.LocationTreeWrapper defines equals and uses Object.hashCode()</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#HE_EQUALS_USE_HASHCODE">HE_EQUALS_USE_HASHCODE</a></td>
-<td>116</td>
+<td>117</td>
 <td>Medium</td></tr></table></div><a name="org.universAAL.security.session.manager.helpers.UserLocationTree"></a>
 <div class="section">
 <h3><a name="org.universAAL.security.session.manager.helpers.UserLocationTree"></a>org.universAAL.security.session.manager.helpers.UserLocationTree</h3>
@@ -173,7 +173,7 @@
 <td>org.universAAL.ontology.profile.User is incompatible with expected argument type UserLocationTree in org.universAAL.security.session.manager.helpers.UserLocationTree.getMaxUser(User)</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#GC_UNRELATED_TYPES">GC_UNRELATED_TYPES</a></td>
-<td>220</td>
+<td>231</td>
 <td>High</td></tr></table></div><a name="org.universAAL.security.session.manager.impl.SessionManagerImpl"></a>
 <div class="section">
 <h3><a name="org.universAAL.security.session.manager.impl.SessionManagerImpl"></a>org.universAAL.security.session.manager.impl.SessionManagerImpl</h3>
@@ -188,7 +188,7 @@
 <td>String is incompatible with expected argument type org.universAAL.ontology.profile.User in org.universAAL.security.session.manager.impl.SessionManagerImpl.getCopyOfUserSession(User)</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#GC_UNRELATED_TYPES">GC_UNRELATED_TYPES</a></td>
-<td>215</td>
+<td>213</td>
 <td>High</td></tr></table></div><a name="org.universAAL.security.session.manager.service.SessionManagerService"></a>
 <div class="section">
 <h3><a name="org.universAAL.security.session.manager.service.SessionManagerService"></a>org.universAAL.security.session.manager.service.SessionManagerService</h3>
@@ -203,13 +203,13 @@
 <td>Public static org.universAAL.security.session.manager.service.SessionManagerService.initialize(ModuleContext) may expose internal representation by returning SessionManagerService.profs</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#MS_EXPOSE_REP">MS_EXPOSE_REP</a></td>
-<td>107</td>
+<td>106</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>org.universAAL.security.session.manager.service.SessionManagerService.profs should be package protected</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#MS_PKGPROTECT">MS_PKGPROTECT</a></td>
-<td>46</td>
+<td>45</td>
 <td>Medium</td></tr></table></div>
       </div>
     </div>

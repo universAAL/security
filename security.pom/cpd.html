@@ -131,29 +131,29 @@
 <tr class="a">
 <td>org/universAAL/security/authenticator/client/UserPaswordAuthenticatorClient.java</td>
 <td>universAAL Security UserPassword Authentication client</td>
-<td>193</td></tr>
+<td>177</td></tr>
 <tr class="b"><td colspan='3'>
 <div>
-<pre>    }
-    
-    private MessageDigest getMD(Digest digestAlgorithm) throws NoSuchAlgorithmException{
-    	//TODO call encryption service for a fully dynamic way to do this
-		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2){
+<pre>	}
+
+	private MessageDigest getMD(Digest digestAlgorithm) throws NoSuchAlgorithmException {
+		// TODO call encryption service for a fully dynamic way to do this
+		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2) {
 			return MessageDigest.getInstance(&quot;MD2&quot;);
 		}
-		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD5){
+		if (digestAlgorithm == org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD5) {
 			return MessageDigest.getInstance(&quot;MD5&quot;);
 		}
-		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA){
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA) {
 			return MessageDigest.getInstance(&quot;SHA&quot;);
 		}
-		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA256){
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA256) {
 			return MessageDigest.getInstance(&quot;SHA-256&quot;);
 		}
-		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA384){
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA384) {
 			return MessageDigest.getInstance(&quot;SHA-384&quot;);
 		}
-		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA512){
+		if (digestAlgorithm == SecureHashAlgorithm.IND_SHA512) {
 			return MessageDigest.getInstance(&quot;SHA-512&quot;);
 		}
 		throw new NoSuchAlgorithmException();
@@ -166,29 +166,25 @@
 <tr class="b">
 <td>org/universAAL/security/authenticator/client/AuthenticationPublisher.java</td>
 <td>universAAL Security UserPassword Authentication client</td>
-<td>59</td></tr>
+<td>58</td></tr>
 <tr class="a">
 <td>org/universAAL/security/session/manager/context/Subscriber.java</td>
 <td>universAAL Security Session Manager</td>
 <td>59</td></tr>
 <tr class="b"><td colspan='3'>
 <div>
-<pre>	    ContextEventPattern[] patterns = new ContextEventPattern[2];
+<pre>		ContextEventPattern[] patterns = new ContextEventPattern[2];
 		ContextEventPattern cep = new ContextEventPattern();
-		cep.addRestriction(MergedRestriction
-				.getAllValuesRestriction(ContextEvent.PROP_RDF_OBJECT, Device.MY_URI));
-		cep.addRestriction(MergedRestriction
-			.getAllValuesRestriction(ContextEvent.PROP_RDF_SUBJECT, User.MY_URI));
-		cep.addRestriction(MergedRestriction
-			.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE, SecurityOntology.PROP_AUTHENTICATED));
+		cep.addRestriction(MergedRestriction.getAllValuesRestriction(ContextEvent.PROP_RDF_OBJECT, Device.MY_URI));
+		cep.addRestriction(MergedRestriction.getAllValuesRestriction(ContextEvent.PROP_RDF_SUBJECT, User.MY_URI));
+		cep.addRestriction(MergedRestriction.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE,
+				SecurityOntology.PROP_AUTHENTICATED));
 		patterns[0] = cep;
 		cep = new ContextEventPattern();
-		cep.addRestriction(MergedRestriction
-				.getAllValuesRestriction(ContextEvent.PROP_RDF_OBJECT, Device.MY_URI));
-		cep.addRestriction(MergedRestriction
-			.getAllValuesRestriction(ContextEvent.PROP_RDF_SUBJECT, User.MY_URI));
-		cep.addRestriction(MergedRestriction
-			.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE, SecurityOntology.PROP_REVOKED));
+		cep.addRestriction(MergedRestriction.getAllValuesRestriction(ContextEvent.PROP_RDF_OBJECT, Device.MY_URI));
+		cep.addRestriction(MergedRestriction.getAllValuesRestriction(ContextEvent.PROP_RDF_SUBJECT, User.MY_URI));
+		cep.addRestriction(MergedRestriction.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE,
+				SecurityOntology.PROP_REVOKED));
 		patterns[1] = cep;</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
@@ -207,22 +203,21 @@
 <div>
 <pre>		String propvalueURI = &quot;&quot;;
 		if (propvalue instanceof Resource) {
-				if (!((Resource)propvalue).isAnon()) {
-					propvalueURI = ((Resource) propvalue).getURI();
-					propvalueURI = &quot;&lt;&quot; + propvalueURI +&quot;&gt; .&quot;;
-				}else {
-					propvalueURI = &quot;_:BN000000 .&quot;;
-				}
+			if (!((Resource) propvalue).isAnon()) {
+				propvalueURI = ((Resource) propvalue).getURI();
+				propvalueURI = &quot;&lt;&quot; + propvalueURI + &quot;&gt; .&quot;;
+			} else {
+				propvalueURI = &quot;_:BN000000 .&quot;;
+			}
 		}
-		
-		
+
 		String serialization = serializer.getObject().serialize(propvalue);
-		
+
 		String[] split = CHeQuerrier.splitPrefixes(serialization);
-		
+
 		String prefixes = split[0];
 		String serialValue = split[1];
-		String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource(&quot;setProperty.sparql&quot;), new String[]{  prefixes,r.getURI(),prop, propvalueURI +  serialValue}));</pre></div></td></tr></table>
+		String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource(&quot;setProperty.sparql&quot;),</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
@@ -235,25 +230,20 @@
 <tr class="a">
 <td>org/universAAL/security/session/manager/helpers/CHeQuery.java</td>
 <td>universAAL Security Session Manager</td>
-<td>67</td></tr>
+<td>66</td></tr>
 <tr class="b"><td colspan='3'>
 <div>
-<pre>    private Object query(String queryFile, String[] params){
-	String q = getQuery(queryFile, params);
-	ServiceRequest getQuery = new ServiceRequest(
-		new ContextHistoryService(null), null);
+<pre>	private Object query(String queryFile, String[] params) {
+		String q = getQuery(queryFile, params);
+		ServiceRequest getQuery = new ServiceRequest(new ContextHistoryService(null), null);
 
-	MergedRestriction r = MergedRestriction.getFixedValueRestriction(
-		ContextHistoryService.PROP_PROCESSES, q);
+		MergedRestriction r = MergedRestriction.getFixedValueRestriction(ContextHistoryService.PROP_PROCESSES, q);
 
-	getQuery.getRequestedService().addInstanceLevelRestriction(r,
-		new String[] { ContextHistoryService.PROP_PROCESSES });
-	getQuery.addSimpleOutputBinding(
-		new ProcessOutput(OUTPUT_RESULT_STRING), new PropertyPath(null,
-			true,
-			new String[] { ContextHistoryService.PROP_RETURNS })
-			.getThePath());
-	ServiceResponse sr = new DefaultServiceCaller(owner).call(getQuery);</pre></div></td></tr></table></div>
+		getQuery.getRequestedService().addInstanceLevelRestriction(r,
+				new String[] { ContextHistoryService.PROP_PROCESSES });
+		getQuery.addSimpleOutputBinding(new ProcessOutput(OUTPUT_RESULT_STRING),
+				new PropertyPath(null, true, new String[] { ContextHistoryService.PROP_RETURNS }).getThePath());
+		ServiceResponse sr = new DefaultServiceCaller(owner).call(getQuery);</pre></div></td></tr></table></div>
       </div>
     </div>
     <div class="clear">
