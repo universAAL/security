@@ -49,18 +49,16 @@ public class AnonServiceCallee extends ServiceCallee {
 	private static final String PARAM_ENCRY_RESOURCE_OUT = AnonServiceProfile.NAMESPACE + "paramOutEncryptedResource";
 
 	public static final String PROTOCOL = "activeAnon://";
-	
+
 	static PassiveDependencyProxy<MessageContentSerializer> serializer;
 
 	/**
 	 * @param context
 	 * @param realizedServices
 	 */
-	public AnonServiceCallee(ModuleContext context,
-			ServiceProfile[] realizedServices) {
+	public AnonServiceCallee(ModuleContext context, ServiceProfile[] realizedServices) {
 		super(context, realizedServices);
-		serializer = new PassiveDependencyProxy<MessageContentSerializer>(
-				context,
+		serializer = new PassiveDependencyProxy<MessageContentSerializer>(context,
 				new Object[] { MessageContentSerializer.class.getName() });
 	}
 
@@ -69,178 +67,186 @@ public class AnonServiceCallee extends ServiceCallee {
 	 * @param realizedServices
 	 * @param throwOnError
 	 */
-	public AnonServiceCallee(ModuleContext context,
-			ServiceProfile[] realizedServices, boolean throwOnError) {
+	public AnonServiceCallee(ModuleContext context, ServiceProfile[] realizedServices, boolean throwOnError) {
 		super(context, realizedServices, throwOnError);
-		serializer = new PassiveDependencyProxy<MessageContentSerializer>(
-				context,
+		serializer = new PassiveDependencyProxy<MessageContentSerializer>(context,
 				new Object[] { MessageContentSerializer.class.getName() });
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public void communicationChannelBroken() {
 
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResponse handleCall(ServiceCall call) {
-		if (call.getProcessURI().contains(AnonServiceProfile.PROC_ANON)){
+		if (call.getProcessURI().contains(AnonServiceProfile.PROC_ANON)) {
 			/*
 			 * anonymize
 			 */
-			//gather imputs
+			// gather imputs
 			Resource anonymizable = (Resource) call.getInputValue(AnonServiceProfile.PARAM_IN_ANONYMIZABLE);
-			Resource propvalue =  (Resource) call.getInputValue(AnonServiceProfile.PARAM_PROPERTY);
+			Resource propvalue = (Resource) call.getInputValue(AnonServiceProfile.PARAM_PROPERTY);
 			Resource method = (Resource) call.getInputValue(AnonServiceProfile.PARAM_METHOD);
-			//create dummy resource to be encrypted
+			// create dummy resource to be encrypted
 			Resource newPropValue = Resource.getResource(propvalue.getType(), propvalue.getURI());
-			if (newPropValue == null){
+			if (newPropValue == null) {
 				newPropValue = new Resource(propvalue.getURI());
-				//propertySoThatItSerializesCorrectly
-				newPropValue.setResourceComment("This is a Resource Placeholder, you must query to find the full Resource with this URI.");
+				// propertySoThatItSerializesCorrectly
+				newPropValue.setResourceComment(
+						"This is a Resource Placeholder, you must query to find the full Resource with this URI.");
 			}
-			//TODO: add option to encrypt the full resource?
-			
-			//call Multidestination Encryption Service
-			
+			// TODO: add option to encrypt the full resource?
+
+			// call Multidestination Encryption Service
+
 			ServiceRequest sreq = new ServiceRequest(new EncryptionService(), call.getInvolvedUser());
 
-			sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE, EncryptedResource.PROP_ENCRYPTION}, new AES());
-			sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTION}, method);
-			sreq.addValueFilter(new String[] {EncryptionService.PROP_ENCRYPTS}, newPropValue);
-			sreq.addRequiredOutput(PARAM_ENCRY_RESOURCE_OUT, new String[] {EncryptionService.PROP_ENCRYPTED_RESOURCE});
-			
+			sreq.addValueFilter(
+					new String[] { EncryptionService.PROP_ENCRYPTED_RESOURCE, EncryptedResource.PROP_ENCRYPTION },
+					new AES());
+			sreq.addValueFilter(new String[] { EncryptionService.PROP_ENCRYPTION }, method);
+			sreq.addValueFilter(new String[] { EncryptionService.PROP_ENCRYPTS }, newPropValue);
+			sreq.addRequiredOutput(PARAM_ENCRY_RESOURCE_OUT,
+					new String[] { EncryptionService.PROP_ENCRYPTED_RESOURCE });
+
 			System.out.println(serializer.getObject().serialize(sreq));
 			DefaultServiceCaller caller = new DefaultServiceCaller(owner);
 			ServiceResponse sresp = caller.call(sreq);
 			caller.close();
-			
+
 			EncryptedResource er = (EncryptedResource) sresp.getOutput(PARAM_ENCRY_RESOURCE_OUT).get(0);
 			// serialize to create newURI
-			
+
 			try {
 				String newURI = flatten2URI(serializer.getObject().serialize(er));
 				newPropValue = Resource.getResource(propvalue.getType(), newURI);
-				if (newPropValue == null){
+				if (newPropValue == null) {
 					newPropValue = new Resource(newURI);
-					//propertySoThatItSerializesCorrectly
-					newPropValue.setResourceComment("this is an anonymousResource, It's URI is encrypted use the deanonymzation service to get to the actual URI, and then the actual full Resource.");
+					// propertySoThatItSerializesCorrectly
+					newPropValue.setResourceComment(
+							"this is an anonymousResource, It's URI is encrypted use the deanonymzation service to get to the actual URI, and then the actual full Resource.");
 				}
 			} catch (UnsupportedEncodingException e) {
-				LogUtils.logError(owner, getClass(), "attemptDecryption", new String[]{"unable to encode. It seems Your system does not support UTF-8... from when is your system? darkages? "}, e);
+				LogUtils.logError(owner, getClass(), "attemptDecryption",
+						new String[] {
+								"unable to encode. It seems Your system does not support UTF-8... from when is your system? darkages? " },
+						e);
 				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			}
-			
+
 			// substitute property in anonymizable
 			Resource newanon = copyWreplacedProperty(anonymizable, propvalue, newPropValue);
 
-			//construct response
+			// construct response
 			if (newanon != null) {
 				ServiceResponse mysrvresp = new ServiceResponse(CallStatus.succeeded);
 				mysrvresp.addOutput(AnonServiceProfile.PARAM_OUT_ANONYMIZABLE, newanon);
 				return mysrvresp;
-			}
-			else {
+			} else {
 				ServiceResponse mysrvresp = new ServiceResponse(CallStatus.serviceSpecificFailure);
-				mysrvresp. setProperty(ServiceResponse.PROP_SERVICE_SPECIFIC_ERROR, "Unable to add new Anonymised property value");
+				mysrvresp.setProperty(ServiceResponse.PROP_SERVICE_SPECIFIC_ERROR,
+						"Unable to add new Anonymised property value");
 				return mysrvresp;
 			}
 		}
-		if (call.getProcessURI().contains(AnonServiceProfile.PROC_DEANON)){
+		if (call.getProcessURI().contains(AnonServiceProfile.PROC_DEANON)) {
 			/*
 			 * deanonymize
 			 */
-			//gather imputs
+			// gather imputs
 			Resource anonymizable = (Resource) call.getInputValue(AnonServiceProfile.PARAM_IN_ANONYMIZABLE);
 			AsymmetricEncryption method = (AsymmetricEncryption) call.getInputValue(AnonServiceProfile.PARAM_METHOD);
-			
-			//create copy
+
+			// create copy
 			Resource newanon = anonymizable.deepCopy();
-			//search all properties to deanonymize
+			// search all properties to deanonymize
 			Enumeration en = newanon.getPropertyURIs();
-			while (en.hasMoreElements() ) {
+			while (en.hasMoreElements()) {
 				String prop = (String) en.nextElement();
 				Object propValue = newanon.getProperty(prop);
-				if (propValue instanceof Resource 
-						&& ((Resource)propValue).getURI().contains(PROTOCOL)){
-					newanon.changeProperty(prop, attemptDecryption(method, (Resource)propValue, call.getInvolvedUser()));
+				if (propValue instanceof Resource && ((Resource) propValue).getURI().contains(PROTOCOL)) {
+					newanon.changeProperty(prop,
+							attemptDecryption(method, (Resource) propValue, call.getInvolvedUser()));
 				}
 			}
-			
-			//construct response
+
+			// construct response
 			ServiceResponse mysrvresp = new ServiceResponse(CallStatus.succeeded);
 			mysrvresp.addOutput(AnonServiceProfile.PARAM_OUT_ANONYMIZABLE, newanon);
 			return mysrvresp;
 		}
 		return new ServiceResponse(CallStatus.noMatchingServiceFound);
 	}
-	
-	static Resource copyWreplacedProperty(Resource root, Object orig, Object newPropValue){
+
+	static Resource copyWreplacedProperty(Resource root, Object orig, Object newPropValue) {
 		// substitute property in anonymizable
 		Resource newanon = root.deepCopy();
 		Enumeration en = newanon.getPropertyURIs();
 		boolean replaced = false;
 		while (en.hasMoreElements() && !replaced) {
 			String prop = (String) en.nextElement();
-			if (newanon.getProperty(prop).equals(orig)){
-				//WARN: This checks the membership of the newPropvalue
+			if (newanon.getProperty(prop).equals(orig)) {
+				// WARN: This checks the membership of the newPropvalue
 				replaced = newanon.changeProperty(prop, newPropValue);
 			}
 		}
-		if (replaced){
+		if (replaced) {
 			return newanon;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	static String flatten2URI(String s) throws UnsupportedEncodingException {
 		String newURI = s.replaceAll("\\s+", " ");
 		newURI = URLEncoder.encode(newURI, "UTF-8");
-		return  AnonServiceCallee.PROTOCOL + newURI;
+		return AnonServiceCallee.PROTOCOL + newURI;
 	}
-	
-	static String unflattenFromURI(String uri) throws UnsupportedEncodingException{
+
+	static String unflattenFromURI(String uri) throws UnsupportedEncodingException {
 		String serialized = uri.substring(AnonServiceCallee.PROTOCOL.length(), uri.length());
 		return URLDecoder.decode(serialized, "UTF-8");
 	}
 
-	private Resource attemptDecryption(AsymmetricEncryption method, Resource encryptedValue, Resource involvedUser){
-		//reconstruct original MDER
+	private Resource attemptDecryption(AsymmetricEncryption method, Resource encryptedValue, Resource involvedUser) {
+		// reconstruct original MDER
 		String serialized = encryptedValue.getURI();
 		try {
 			serialized = unflattenFromURI(serialized);
 		} catch (UnsupportedEncodingException e) {
-			LogUtils.logWarn(owner, getClass(), "attemptDecryption", new String[]{"unable to deconde. It seems Your system does not support UTF-8... from when is your system? darkages? "}, e);
+			LogUtils.logWarn(owner, getClass(), "attemptDecryption",
+					new String[] {
+							"unable to deconde. It seems Your system does not support UTF-8... from when is your system? darkages? " },
+					e);
 		}
 		Resource mder = (Resource) serializer.getObject().deserialize(serialized);
-		
-		
-		//call Multidestination Encryption Service to decrypt
+
+		// call Multidestination Encryption Service to decrypt
 		EncryptionService encSrv = new EncryptionService();
 		encSrv.setEncryption((Encryption) method);
-		
+
 		ServiceRequest sr = new ServiceRequest(encSrv, involvedUser);
-		sr.addValueFilter(new String[]{EncryptionService.PROP_ENCRYPTION,AsymmetricEncryption.PROP_KEY_RING}, method.getProperty(AsymmetricEncryption.PROP_KEY_RING));
-		sr.addValueFilter(new String[]{EncryptionService.PROP_ENCRYPTED_RESOURCE}, mder);
-		sr.addRequiredOutput(PARAM_ENCRY_RESOURCE_OUT, new String [] {EncryptionService.PROP_ENCRYPTS});
-		
+		sr.addValueFilter(new String[] { EncryptionService.PROP_ENCRYPTION, AsymmetricEncryption.PROP_KEY_RING },
+				method.getProperty(AsymmetricEncryption.PROP_KEY_RING));
+		sr.addValueFilter(new String[] { EncryptionService.PROP_ENCRYPTED_RESOURCE }, mder);
+		sr.addRequiredOutput(PARAM_ENCRY_RESOURCE_OUT, new String[] { EncryptionService.PROP_ENCRYPTS });
+
 		DefaultServiceCaller caller = new DefaultServiceCaller(owner);
 		ServiceResponse sresp = caller.call(sr);
 		caller.close();
-		
-		//if successful decryption return deanonymized resource
+
+		// if successful decryption return deanonymized resource
 		if (sresp.getCallStatus().equals(CallStatus.succeeded)) {
-			return (Resource) sresp.getOutput(PARAM_ENCRY_RESOURCE_OUT)
-					.get(0);
+			return (Resource) sresp.getOutput(PARAM_ENCRY_RESOURCE_OUT).get(0);
 		} else {
-			//else return current value
-			LogUtils.logDebug(owner, getClass(), "deanonymize", "could not decrypt property value with URI: " + serialized);
+			// else return current value
+			LogUtils.logDebug(owner, getClass(), "deanonymize",
+					"could not decrypt property value with URI: " + serialized);
 			return encryptedValue;
 		}
-		
+
 	}
 }

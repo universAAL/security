@@ -29,17 +29,16 @@ public class ProjectActivator implements ModuleActivator {
 	private SignVerifyCallee signCallee;
 	private MultiDestinationCallee mderCallee;
 	static PassiveDependencyProxy<MessageContentSerializer> serializer;
-	
-	public void start(ModuleContext ctxt) throws Exception {	
+
+	public void start(ModuleContext ctxt) throws Exception {
 		context = ctxt;
 		LogUtils.logDebug(context, getClass(), "start", "Starting.");
 		/*
 		 * uAAL stuff
 		 */
-		serializer = new PassiveDependencyProxy<MessageContentSerializer>(
-				context,
+		serializer = new PassiveDependencyProxy<MessageContentSerializer>(context,
 				new Object[] { MessageContentSerializer.class.getName() });
-		
+
 		DigestServiceProfiles.initialize(context);
 		EncryptionServiceProfiles.initialize(context);
 		SignVerifyProfiles.initialize(context);
@@ -48,10 +47,9 @@ public class ProjectActivator implements ModuleActivator {
 		encrypCallee = new EncryptionServiceCallee(context, EncryptionServiceProfiles.profs);
 		signCallee = new SignVerifyCallee(context, SignVerifyProfiles.profs);
 		mderCallee = new MultiDestinationCallee(context, MultiDestinationProfiles.profs);
-		
+
 		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
-
 
 	public void stop(ModuleContext ctxt) throws Exception {
 		LogUtils.logDebug(context, getClass(), "stop", "Stopping.");

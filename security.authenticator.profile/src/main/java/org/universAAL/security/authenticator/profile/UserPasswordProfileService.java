@@ -35,74 +35,66 @@ import org.universAAL.ontology.security.UserPasswordCredentials;
  */
 public class UserPasswordProfileService extends AuthenticationService {
 
-    public static String NAMESPACE = "http://security.universAAL.org/Authenticator#";
-    public static String MY_URI = NAMESPACE + "UserPasswordProfileAuthenticator";
-    static final ServiceProfile[] profs = new ServiceProfile[2];
-    
-    static String AUTHENTICATE_USR_PASSWORD_SERVICE = NAMESPACE +"authenticate";
-    static String CRED_IN = NAMESPACE + "credentialsIn";
-    static String USER_OUT = NAMESPACE + "userOut";
-    static String GET_PWD_DIGEST_SERVICE = NAMESPACE +"getDigest";
-    static String USER_IN = NAMESPACE + "userIn";
-    static String DIGEST_OUT = NAMESPACE + "digestOut";
-    
-    /**
-     * @param uri
-     */
-    public UserPasswordProfileService(String uri) {
-	super(uri);
-    }
+	public static String NAMESPACE = "http://security.universAAL.org/Authenticator#";
+	public static String MY_URI = NAMESPACE + "UserPasswordProfileAuthenticator";
+	static final ServiceProfile[] profs = new ServiceProfile[2];
 
-    /**
-     * 
-     */
-    public UserPasswordProfileService() {
-	super();
-    }
+	static String AUTHENTICATE_USR_PASSWORD_SERVICE = NAMESPACE + "authenticate";
+	static String CRED_IN = NAMESPACE + "credentialsIn";
+	static String USER_OUT = NAMESPACE + "userOut";
+	static String GET_PWD_DIGEST_SERVICE = NAMESPACE + "getDigest";
+	static String USER_IN = NAMESPACE + "userIn";
+	static String DIGEST_OUT = NAMESPACE + "digestOut";
 
-    static void initialize(ModuleContext mc) {
-	OntologyManagement.getInstance().register(mc, 
-		new SimpleOntology(MY_URI, AuthenticationService.MY_URI, new ResourceFactory() {
-	    
-	    public Resource createInstance(String classURI, String instanceURI,
-		    int factoryIndex) {
-		return new UserPasswordProfileService(instanceURI);
-	    }
-	}));
-	
-	/*
-	 * Authenticate profile
+	/**
+	 * @param uri
 	 */
-	UserPasswordProfileService auth = new UserPasswordProfileService(AUTHENTICATE_USR_PASSWORD_SERVICE);
-	auth.addFilteringInput(CRED_IN, UserPasswordCredentials.MY_URI, 1, 1, new String[]{PROP_GIVEN_CREDENTIALS});
-	auth.addOutput(USER_OUT, User.MY_URI, 1, 1, new String[]{PROP_AUTHENTICATED_USER});
-	profs[0] = auth.myProfile;
-	
-	/*
-	 * Get Digest for Username
+	public UserPasswordProfileService(String uri) {
+		super(uri);
+	}
+
+	/**
+	 * 
 	 */
-	UserPasswordProfileService getDigest = new UserPasswordProfileService(GET_PWD_DIGEST_SERVICE);
+	public UserPasswordProfileService() {
+		super();
+	}
 
-//	getDigest.addInstanceLevelRestriction(
-//		MergedRestriction.getAllValuesRestriction(PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.MY_URI),
-//		new String[]{PROP_GIVEN_CREDENTIALS});
-	
-	getDigest.addFilteringInput(
-		USER_IN,
-		TypeMapper.getDatatypeURI(String.class), 
-		1, 
-		1, 
-		new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_USERNAME});
-	getDigest.addOutput(
-		DIGEST_OUT, 
-		Digest.MY_URI,
-		1, 
-		1, 
-		new String[]{PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_PASSWORD_DIGEST});
-	profs[1] = getDigest.myProfile;
-    }
+	static void initialize(ModuleContext mc) {
+		OntologyManagement.getInstance().register(mc,
+				new SimpleOntology(MY_URI, AuthenticationService.MY_URI, new ResourceFactory() {
 
-    public String getClassURI() {
-	return MY_URI;
-    }
+					public Resource createInstance(String classURI, String instanceURI, int factoryIndex) {
+						return new UserPasswordProfileService(instanceURI);
+					}
+				}));
+
+		/*
+		 * Authenticate profile
+		 */
+		UserPasswordProfileService auth = new UserPasswordProfileService(AUTHENTICATE_USR_PASSWORD_SERVICE);
+		auth.addFilteringInput(CRED_IN, UserPasswordCredentials.MY_URI, 1, 1, new String[] { PROP_GIVEN_CREDENTIALS });
+		auth.addOutput(USER_OUT, User.MY_URI, 1, 1, new String[] { PROP_AUTHENTICATED_USER });
+		profs[0] = auth.myProfile;
+
+		/*
+		 * Get Digest for Username
+		 */
+		UserPasswordProfileService getDigest = new UserPasswordProfileService(GET_PWD_DIGEST_SERVICE);
+
+		// getDigest.addInstanceLevelRestriction(
+		// MergedRestriction.getAllValuesRestriction(PROP_GIVEN_CREDENTIALS,
+		// UserPasswordCredentials.MY_URI),
+		// new String[]{PROP_GIVEN_CREDENTIALS});
+
+		getDigest.addFilteringInput(USER_IN, TypeMapper.getDatatypeURI(String.class), 1, 1,
+				new String[] { PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_USERNAME });
+		getDigest.addOutput(DIGEST_OUT, Digest.MY_URI, 1, 1,
+				new String[] { PROP_GIVEN_CREDENTIALS, UserPasswordCredentials.PROP_PASSWORD_DIGEST });
+		profs[1] = getDigest.myProfile;
+	}
+
+	public String getClassURI() {
+		return MY_URI;
+	}
 }

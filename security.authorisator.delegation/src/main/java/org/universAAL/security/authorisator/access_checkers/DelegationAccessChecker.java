@@ -40,73 +40,74 @@ import org.universAAL.security.authorisator.interfaces.AccessChecker;
 public class DelegationAccessChecker extends CheckUserRoles implements AccessChecker {
 
 	@Override
-	public Set<AccessType> checkAccess(ModuleContext mc, User usr,
-			Resource asset) {
-		
+	public Set<AccessType> checkAccess(ModuleContext mc, User usr, Resource asset) {
+
 		init(mc);
-		
+
 		// get the SecuritySubProfile for the user
 
 		SecuritySubprofile ssp = getSecuritySubProfile(mc, usr);
-		if (ssp == null){
+		if (ssp == null) {
 			LogUtils.logInfo(mc, getClass(), "checkAccess", "No SecuritySubprofile found for user:" + usr.getURI());
 			return Collections.EMPTY_SET;
 		}
-		
+
 		// aggregate all the AccessRights from DelegationForms
 		Object obj = ssp.getProperty(SecuritySubprofile.PROP_DELEGATED_FORMS);
-		List<DelegationForm> allDelegationForms ;
-		if (obj == null){
-			LogUtils.logInfo(mc, getClass(), "checkAccess", "No DelegationForms found in SecuritySubprofile of user:" + usr.getURI());
+		List<DelegationForm> allDelegationForms;
+		if (obj == null) {
+			LogUtils.logInfo(mc, getClass(), "checkAccess",
+					"No DelegationForms found in SecuritySubprofile of user:" + usr.getURI());
 			return Collections.EMPTY_SET;
-		} else if (obj instanceof DelegationForm){
+		} else if (obj instanceof DelegationForm) {
 			allDelegationForms = new ArrayList<DelegationForm>();
 			allDelegationForms.add((DelegationForm) obj);
-		} else if (obj instanceof List){
+		} else if (obj instanceof List) {
 			allDelegationForms = (List<DelegationForm>) obj;
 		} else {
 			allDelegationForms = Collections.EMPTY_LIST;
 		}
-		
+
 		List<Role> roles = new ArrayList<Role>();
-		
+
 		for (DelegationForm delegationForm : allDelegationForms) {
-			//check validity of each delegation form. I.E: check the signature
+			// check validity of each delegation form. I.E: check the signature
 			if (validateDelegationForm(delegationForm)) {
 				roles.addAll(getRoles(delegationForm));
 			}
 		}
-		
+
 		Set<AccessRight> finalAccessRights = new HashSet<AccessRight>();
 		for (Role role : roles) {
 			finalAccessRights.addAll(role.getAllAccessRights());
 		}
-		
-		//match the asset with all AccessRights
-		
+
+		// match the asset with all AccessRights
+
 		return matchAccessRightsWAsset(finalAccessRights, asset);
 	}
-	
+
 	private boolean validateDelegationForm(DelegationForm delegationForm) {
 		// TODO check the signature belongs to the Authoriser
 		/*
-		 * IDEA: If Delegation form is an Asset, creating DF can also be delegated! 
-		 * default accessRight of DF allows for everyone to read. 
-		 * A Default Role on the user allows to create its own DF. 
-		 * This default Role is added if the user does not have it on the first attempt to create a DF.
+		 * IDEA: If Delegation form is an Asset, creating DF can also be
+		 * delegated! default accessRight of DF allows for everyone to read. A
+		 * Default Role on the user allows to create its own DF. This default
+		 * Role is added if the user does not have it on the first attempt to
+		 * create a DF.
 		 */
 		return true;
 	}
 
-	private List<Role> getRoles(DelegationForm df){
+	private List<Role> getRoles(DelegationForm df) {
 		List<Role> res;
 		Object obj = df.getProperty(DelegationForm.PROP_DELEGATED_COMPETENCES);
-		if (obj == null){
+		if (obj == null) {
 			return Collections.EMPTY_LIST;
-		} else if (obj instanceof Role){
+		} else if (obj instanceof Role) {
 			res = new ArrayList<Role>();
 			res.add((Role) obj);
-		} else if (obj instanceof List){
+		} else if (obj instanceof List) {
 			res = (List<Role>) obj;
 		} else {
 			return Collections.EMPTY_LIST;

@@ -23,11 +23,11 @@ import junit.framework.TestCase;
  */
 public class TestCHeQuerier extends TestCase {
 
-	public void testSplit(){
-		String query = CHeQuerrier.getQuery(CHeQuerrier.getResource("testOrig"), new String[]{});
-		//System.out.println(query);
-		String [] res = CHeQuerrier.splitPrefixes(query);
-		//System.out.println(res[1]);
+	public void testSplit() {
+		String query = CHeQuerrier.getQuery(CHeQuerrier.getResource("testOrig"), new String[] {});
+		// System.out.println(query);
+		String[] res = CHeQuerrier.splitPrefixes(query);
+		// System.out.println(res[1]);
 	}
 
 }

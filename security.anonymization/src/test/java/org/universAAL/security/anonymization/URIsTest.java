@@ -39,71 +39,69 @@ import org.universAAL.ontology.space.SpaceOntology;
 import org.universAAL.ontology.vcard.VCardOntology;
 import org.universAAL.security.anonymization.AnonServiceCallee;
 
-
 /**
  * @author amedrano
  *
  */
 public class URIsTest extends TestCase {
-	
 
 	private static ModuleContext mc;
 	private PassiveDependencyProxy<MessageContentSerializer> serializer;
-	
+
 	/** {@inheritDoc} */
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		mc = new JUnitModuleContext();
-		mc.getContainer().shareObject(mc,
-				new TurtleSerializer(),
+		mc.getContainer().shareObject(mc, new TurtleSerializer(),
 				new Object[] { MessageContentSerializer.class.getName() });
-		
-		serializer = new PassiveDependencyProxy<MessageContentSerializer>(mc, 
+
+		serializer = new PassiveDependencyProxy<MessageContentSerializer>(mc,
 				new Object[] { MessageContentSerializer.class.getName() });
-		
+
 		OntologyManagement.getInstance().register(mc, new DataRepOntology());
 		OntologyManagement.getInstance().register(mc, new ServiceBusOntology());
-//    	OntologyManagement.getInstance().register(mc, new UIBusOntology());
-        OntologyManagement.getInstance().register(mc, new LocationOntology());
-//		OntologyManagement.getInstance().register(mc, new SysinfoOntology());
-        OntologyManagement.getInstance().register(mc, new ShapeOntology());
-        OntologyManagement.getInstance().register(mc, new PhThingOntology());
-        OntologyManagement.getInstance().register(mc, new SpaceOntology());
-        OntologyManagement.getInstance().register(mc, new VCardOntology());
-    	OntologyManagement.getInstance().register(mc, new ProfileOntology());
-//		OntologyManagement.getInstance().register(mc, new MenuProfileOntology());
-		OntologyManagement.getInstance().register(mc, new CryptographicOntology());		
+		// OntologyManagement.getInstance().register(mc, new UIBusOntology());
+		OntologyManagement.getInstance().register(mc, new LocationOntology());
+		// OntologyManagement.getInstance().register(mc, new SysinfoOntology());
+		OntologyManagement.getInstance().register(mc, new ShapeOntology());
+		OntologyManagement.getInstance().register(mc, new PhThingOntology());
+		OntologyManagement.getInstance().register(mc, new SpaceOntology());
+		OntologyManagement.getInstance().register(mc, new VCardOntology());
+		OntologyManagement.getInstance().register(mc, new ProfileOntology());
+		// OntologyManagement.getInstance().register(mc, new
+		// MenuProfileOntology());
+		OntologyManagement.getInstance().register(mc, new CryptographicOntology());
 		OntologyManagement.getInstance().register(mc, new SecurityOntology());
 	}
 
-	public void testURIEncoding() throws UnsupportedEncodingException{
-		
+	public void testURIEncoding() throws UnsupportedEncodingException {
+
 		Resource tr = RandomResourceGenerator.randomResource();
-		
+
 		String serialised = serializer.getObject().serialize(tr);
 		String newURI = AnonServiceCallee.flatten2URI(serialised);
-		
-		//System.out.println(newURI);
-		
+
+		// System.out.println(newURI);
+
 		String deserialized = AnonServiceCallee.unflattenFromURI(newURI);
-		//System.out.println(deserialized);
+		// System.out.println(deserialized);
 		Resource mder = (Resource) serializer.getObject().deserialize(deserialized);
 		assertEquals(tr, mder);
 	}
-	
-	public void testCopyWReplacedProperty(){
+
+	public void testCopyWReplacedProperty() {
 		Resource tr = RandomResourceGenerator.randomResource();
 		String propname = "http://test.universAAL.org/Anon.owl#testproperty";
 		String origVal = RandomResourceGenerator.randomText();
 		tr.setProperty(propname, origVal);
-		
+
 		String newVal = RandomResourceGenerator.randomText();
-		
-		Resource r2= AnonServiceCallee.copyWreplacedProperty(tr, origVal, newVal);
-		
+
+		Resource r2 = AnonServiceCallee.copyWreplacedProperty(tr, origVal, newVal);
+
 		assertEquals(newVal, r2.getProperty(propname));
-		
+
 	}
-	
+
 }

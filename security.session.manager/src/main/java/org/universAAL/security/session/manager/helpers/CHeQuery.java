@@ -39,80 +39,69 @@ import org.universAAL.security.session.manager.impl.SituationMonitorImpl;
  *
  */
 public class CHeQuery {
-    
-    private static final String UTF_8 = "utf-8";
-    private static final String OUTPUT_RESULT_STRING = SecurityOntology.NAMESPACE
-	    + "outputfromCHE";
-    private ModuleContext owner;
-    private static ServiceCaller sc = null;
-    
-    /**
-     * 
-     */
-    public CHeQuery(ModuleContext mc) {
-	owner = mc;
-	if (sc == null) {
-	    sc = new DefaultServiceCaller(owner);
-	   // sc.setLabel("Security Session Manager CHE Query");
+
+	private static final String UTF_8 = "utf-8";
+	private static final String OUTPUT_RESULT_STRING = SecurityOntology.NAMESPACE + "outputfromCHE";
+	private ModuleContext owner;
+	private static ServiceCaller sc = null;
+
+	/**
+	 * 
+	 */
+	public CHeQuery(ModuleContext mc) {
+		owner = mc;
+		if (sc == null) {
+			sc = new DefaultServiceCaller(owner);
+			// sc.setLabel("Security Session Manager CHE Query");
+		}
 	}
-    }
-    
-    public static void close() {
-	if (sc == null) {
-	    sc.close();
-	    sc = null;
+
+	public static void close() {
+		if (sc == null) {
+			sc.close();
+			sc = null;
+		}
 	}
-    }
 
-    public Object query(String queryFile, String[] params){
-  	String q = getQuery(queryFile, params);
-  	ServiceRequest getQuery = new ServiceRequest(
-  		new ContextHistoryService(null), null);
+	public Object query(String queryFile, String[] params) {
+		String q = getQuery(queryFile, params);
+		ServiceRequest getQuery = new ServiceRequest(new ContextHistoryService(null), null);
 
-  	MergedRestriction r = MergedRestriction.getFixedValueRestriction(
-  		ContextHistoryService.PROP_PROCESSES, q);
+		MergedRestriction r = MergedRestriction.getFixedValueRestriction(ContextHistoryService.PROP_PROCESSES, q);
 
-  	getQuery.getRequestedService().addInstanceLevelRestriction(r,
-  		new String[] { ContextHistoryService.PROP_PROCESSES });
-  	getQuery.addSimpleOutputBinding(
-  		new ProcessOutput(OUTPUT_RESULT_STRING), new PropertyPath(null,
-  			true,
-  			new String[] { ContextHistoryService.PROP_RETURNS })
-  			.getThePath());
-  	ServiceResponse sr = sc.call(getQuery);
-  	List res = sr.getOutput(OUTPUT_RESULT_STRING, true);
-  	if (res.size() >0 && res.get(0) instanceof String){
-  	    try {
-		return new SerializerGetter(owner).getSerializer().deserialize((String) res.get(0));
-	    } catch (Exception e) {
-		LogUtils.logError(owner, getClass(), "query", new String[]{"Error"}, e);
-	    }
-  	}
-  	return null;
-      }
-
- 
-
-    public static String getQuery(String queryFile, String[] params){
-  	String query = "";
-  	try {
-  	    	InputStream file = SituationMonitorImpl.class.getClassLoader().getResourceAsStream(queryFile);
-  		query = new Scanner(file,UTF_8).useDelimiter("\\Z").next();
-  		file.close();
-  	} catch (Exception e){
-  		/*
-  		 *  either:
-  		 *  	- empty file
-  		 *  	- non existent file
-  		 *  	- Scanner failture...
-  		 *  Nothing to do here
-  		 */
-  	}
-  	if (params != null) {
-	    for (int i = 0; i < params.length; i++) {
-		query = query.replace("$" + Integer.toString(i + 1), params[i]);
-	    }
+		getQuery.getRequestedService().addInstanceLevelRestriction(r,
+				new String[] { ContextHistoryService.PROP_PROCESSES });
+		getQuery.addSimpleOutputBinding(new ProcessOutput(OUTPUT_RESULT_STRING),
+				new PropertyPath(null, true, new String[] { ContextHistoryService.PROP_RETURNS }).getThePath());
+		ServiceResponse sr = sc.call(getQuery);
+		List res = sr.getOutput(OUTPUT_RESULT_STRING, true);
+		if (res.size() > 0 && res.get(0) instanceof String) {
+			try {
+				return new SerializerGetter(owner).getSerializer().deserialize((String) res.get(0));
+			} catch (Exception e) {
+				LogUtils.logError(owner, getClass(), "query", new String[] { "Error" }, e);
+			}
+		}
+		return null;
 	}
-	return query;
-      }
+
+	public static String getQuery(String queryFile, String[] params) {
+		String query = "";
+		try {
+			InputStream file = SituationMonitorImpl.class.getClassLoader().getResourceAsStream(queryFile);
+			query = new Scanner(file, UTF_8).useDelimiter("\\Z").next();
+			file.close();
+		} catch (Exception e) {
+			/*
+			 * either: - empty file - non existent file - Scanner failture...
+			 * Nothing to do here
+			 */
+		}
+		if (params != null) {
+			for (int i = 0; i < params.length; i++) {
+				query = query.replace("$" + Integer.toString(i + 1), params[i]);
+			}
+		}
+		return query;
+	}
 }

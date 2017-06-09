@@ -40,63 +40,66 @@ import org.universAAL.ontology.security.Session;
  */
 public class SessionPublisher extends ContextPublisher {
 
-    /**
-     * @param context
-     * @param providerInfo
-     */
-    public SessionPublisher(ModuleContext context, ContextProvider providerInfo) {
-	super(context, providerInfo);
-    }
-    
-    public SessionPublisher(ModuleContext context){
-	this(context, getProvider());
-    }
-
-    /**
-     * @return
-     */
-    private static ContextProvider getProvider() {
-	ContextProvider cp = new ContextProvider();
-	ContextEventPattern cep = new ContextEventPattern();
-	cep.addRestriction(MergedRestriction.getAllValuesRestrictionWithCardinality(ContextEvent.PROP_RDF_SUBJECT, User.MY_URI, 1, 1));
-	cep.addRestriction(MergedRestriction.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE, SecurityOntology.PROP_SESSION));
-	cep.addRestriction(MergedRestriction.getAllValuesRestrictionWithCardinality(ContextEvent.PROP_RDF_OBJECT, Session.MY_URI, 1, 1));
-	cp.setProvidedEvents(new ContextEventPattern[]{cep});
-	cp.setType(ContextProviderType.gauge);
-	return cp;
-    }
-
-    /** {@ inheritDoc}	 */
-    @Override
-    public void communicationChannelBroken() {
-
-    }
-
-    /**
-     * @param usr
-     * @param s
-     */
-    public void updateSession(User usr, Session s) {
-	//remove private, and complex properties in copies
-	Session sCopy = filteredCopy(s);
-	
-	usr.changeProperty(SecurityOntology.PROP_SESSION, sCopy );
-	publish(new ContextEvent(usr, SecurityOntology.PROP_SESSION));
-    	LogUtils.logDebug(owner, getClass(), "updateSession", "published session");
-    }
-    
-    public static Session filteredCopy(Session s){
-	Session sCopy = (Session) s.copy(false);
-	if (s instanceof LocationBoundSession){
-	    Location cleanLocation = (Location) s.getProperty(LocationBoundSession.PROP_BOUNDED_LOCATION);
-	    cleanLocation = (Location) Resource.getResource(cleanLocation.getClassURI(), cleanLocation.getURI());
-	    sCopy.changeProperty(LocationBoundSession.PROP_BOUNDED_LOCATION, cleanLocation);
-	} else {
-	    Device cleanDevice = (Device) s.getProperty(DeviceBoundSession.PROP_BOUNDED_DEVICE);
-	    cleanDevice = (Device) Resource.getResource(cleanDevice.getClassURI(), cleanDevice.getURI());
-	    sCopy.changeProperty(DeviceBoundSession.PROP_BOUNDED_DEVICE, cleanDevice);
+	/**
+	 * @param context
+	 * @param providerInfo
+	 */
+	public SessionPublisher(ModuleContext context, ContextProvider providerInfo) {
+		super(context, providerInfo);
 	}
-	return sCopy;
-    }
+
+	public SessionPublisher(ModuleContext context) {
+		this(context, getProvider());
+	}
+
+	/**
+	 * @return
+	 */
+	private static ContextProvider getProvider() {
+		ContextProvider cp = new ContextProvider();
+		ContextEventPattern cep = new ContextEventPattern();
+		cep.addRestriction(MergedRestriction.getAllValuesRestrictionWithCardinality(ContextEvent.PROP_RDF_SUBJECT,
+				User.MY_URI, 1, 1));
+		cep.addRestriction(MergedRestriction.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE,
+				SecurityOntology.PROP_SESSION));
+		cep.addRestriction(MergedRestriction.getAllValuesRestrictionWithCardinality(ContextEvent.PROP_RDF_OBJECT,
+				Session.MY_URI, 1, 1));
+		cp.setProvidedEvents(new ContextEventPattern[] { cep });
+		cp.setType(ContextProviderType.gauge);
+		return cp;
+	}
+
+	/** {@ inheritDoc} */
+	@Override
+	public void communicationChannelBroken() {
+
+	}
+
+	/**
+	 * @param usr
+	 * @param s
+	 */
+	public void updateSession(User usr, Session s) {
+		// remove private, and complex properties in copies
+		Session sCopy = filteredCopy(s);
+
+		usr.changeProperty(SecurityOntology.PROP_SESSION, sCopy);
+		publish(new ContextEvent(usr, SecurityOntology.PROP_SESSION));
+		LogUtils.logDebug(owner, getClass(), "updateSession", "published session");
+	}
+
+	public static Session filteredCopy(Session s) {
+		Session sCopy = (Session) s.copy(false);
+		if (s instanceof LocationBoundSession) {
+			Location cleanLocation = (Location) s.getProperty(LocationBoundSession.PROP_BOUNDED_LOCATION);
+			cleanLocation = (Location) Resource.getResource(cleanLocation.getClassURI(), cleanLocation.getURI());
+			sCopy.changeProperty(LocationBoundSession.PROP_BOUNDED_LOCATION, cleanLocation);
+		} else {
+			Device cleanDevice = (Device) s.getProperty(DeviceBoundSession.PROP_BOUNDED_DEVICE);
+			cleanDevice = (Device) Resource.getResource(cleanDevice.getClassURI(), cleanDevice.getURI());
+			sCopy.changeProperty(DeviceBoundSession.PROP_BOUNDED_DEVICE, cleanDevice);
+		}
+		return sCopy;
+	}
 
 }

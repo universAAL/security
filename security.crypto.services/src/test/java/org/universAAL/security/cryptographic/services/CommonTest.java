@@ -34,32 +34,33 @@ import org.universAAL.ontology.cryptographic.CryptographicOntology;
 public abstract class CommonTest extends TestCase {
 
 	private static ModuleContext mc;
-	
+
 	/** {@inheritDoc} */
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		mc = new JUnitModuleContext();
-		mc.getContainer().shareObject(mc,
-				new TurtleSerializer(),
+		mc.getContainer().shareObject(mc, new TurtleSerializer(),
 				new Object[] { MessageContentSerializer.class.getName() });
-		
-		ProjectActivator.serializer = new PassiveDependencyProxy<MessageContentSerializer>(mc, 
+
+		ProjectActivator.serializer = new PassiveDependencyProxy<MessageContentSerializer>(mc,
 				new Object[] { MessageContentSerializer.class.getName() });
-		
+
 		OntologyManagement.getInstance().register(mc, new DataRepOntology());
 		OntologyManagement.getInstance().register(mc, new ServiceBusOntology());
-//    	OntologyManagement.getInstance().register(mc, new UIBusOntology());
-//        OntologyManagement.getInstance().register(mc, new LocationOntology());
-//		OntologyManagement.getInstance().register(mc, new SysinfoOntology());
-//        OntologyManagement.getInstance().register(mc, new ShapeOntology());
-//        OntologyManagement.getInstance().register(mc, new PhThingOntology());
-//        OntologyManagement.getInstance().register(mc, new SpaceOntology());
-//        OntologyManagement.getInstance().register(mc, new VCardOntology());
-//    	OntologyManagement.getInstance().register(mc, new ProfileOntology());
-//		OntologyManagement.getInstance().register(mc, new MenuProfileOntology());
+		// OntologyManagement.getInstance().register(mc, new UIBusOntology());
+		// OntologyManagement.getInstance().register(mc, new
+		// LocationOntology());
+		// OntologyManagement.getInstance().register(mc, new SysinfoOntology());
+		// OntologyManagement.getInstance().register(mc, new ShapeOntology());
+		// OntologyManagement.getInstance().register(mc, new PhThingOntology());
+		// OntologyManagement.getInstance().register(mc, new SpaceOntology());
+		// OntologyManagement.getInstance().register(mc, new VCardOntology());
+		// OntologyManagement.getInstance().register(mc, new ProfileOntology());
+		// OntologyManagement.getInstance().register(mc, new
+		// MenuProfileOntology());
 		OntologyManagement.getInstance().register(mc, new CryptographicOntology());
-		
+
 	}
 
 }

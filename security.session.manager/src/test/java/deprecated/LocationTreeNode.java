@@ -29,97 +29,93 @@ import org.universAAL.ontology.location.Location;
  */
 public class LocationTreeNode {
 
-    Location loc;
-    
-    Set<LocationTreeNode> children;
+	Location loc;
 
-    private LocationTreeNode parent;
-    
-    /**
-     * 
-     */
-    public LocationTreeNode(Location l) {
-	loc = l;
-	Object contains = loc.getProperty(Location.PROP_CONTAINS);
-	if (contains instanceof Location){
-	    add((Location) contains);
-	}
-	if (contains instanceof List<?>){
-	    for (Object con : (List)contains) {
-		if (con instanceof Location){
-		    add((Location) con);
+	Set<LocationTreeNode> children;
+
+	private LocationTreeNode parent;
+
+	/**
+	 * 
+	 */
+	public LocationTreeNode(Location l) {
+		loc = l;
+		Object contains = loc.getProperty(Location.PROP_CONTAINS);
+		if (contains instanceof Location) {
+			add((Location) contains);
 		}
-	    }
+		if (contains instanceof List<?>) {
+			for (Object con : (List) contains) {
+				if (con instanceof Location) {
+					add((Location) con);
+				}
+			}
+		}
 	}
-    }
-        
-    public void add(Location l){
-	if (l != loc && l != null){
-	    LocationTreeNode nLTN = new LocationTreeNode(l);
-	    LocationTreeNode parent = search(nLTN.getLocationParent());
-	    if (parent != null){
-		nLTN.parent = parent;
-		parent.children.add(nLTN);
-	    }else {
-		nLTN.parent = this;
-		children.add(nLTN);
-	    }
-	}
-    }
-    
-    public void add(LocationTreeNode ltn){
-	if (ltn != null && ltn.loc != loc) {
-	   LocationTreeNode addRoot = search(ltn.loc);
-	   if (addRoot != null){
-	       for (LocationTreeNode cltn : ltn.children) {
-		cltn.parent = addRoot;
-		addRoot.children.add(cltn);
-	    }
-	   }
-	   else {
-	    addRoot = search(ltn.getLocationParent());
-	    if (addRoot != null) {
-		ltn.parent = addRoot;
-		addRoot.children.add(ltn);
-	    }
-	    else {
-		ltn.parent = this;
-		children.add(ltn);
-	    }
-	}
-	}
-    }
-    
-    public LocationTreeNode search(Location l){
-	LocationTreeNode found = null;
-	Iterator<LocationTreeNode> it = children.iterator();
-	while (l != null
-		&& found == null
-		&& it.hasNext()){
-	    found = it.next().search(l);
-	}
-	return found;
-    }
 
-    public LocationTreeNode getParent(){
-	return parent;
-    }
-    
-    public LocationTreeNode getRoot(){
-	if (parent == null){
-	    return this;
-	} else {
-	    return parent.getRoot();
+	public void add(Location l) {
+		if (l != loc && l != null) {
+			LocationTreeNode nLTN = new LocationTreeNode(l);
+			LocationTreeNode parent = search(nLTN.getLocationParent());
+			if (parent != null) {
+				nLTN.parent = parent;
+				parent.children.add(nLTN);
+			} else {
+				nLTN.parent = this;
+				children.add(nLTN);
+			}
+		}
 	}
-    }
-    
-    public Location getLocationParent(){
-	return (Location) loc.getProperty(Location.PROP_IS_CONTAINED_IN);
-    }
 
-    /** {@ inheritDoc}	 */
-    public boolean equals(LocationTreeNode obj) {
-	return loc.equals(obj.loc);
-    }
+	public void add(LocationTreeNode ltn) {
+		if (ltn != null && ltn.loc != loc) {
+			LocationTreeNode addRoot = search(ltn.loc);
+			if (addRoot != null) {
+				for (LocationTreeNode cltn : ltn.children) {
+					cltn.parent = addRoot;
+					addRoot.children.add(cltn);
+				}
+			} else {
+				addRoot = search(ltn.getLocationParent());
+				if (addRoot != null) {
+					ltn.parent = addRoot;
+					addRoot.children.add(ltn);
+				} else {
+					ltn.parent = this;
+					children.add(ltn);
+				}
+			}
+		}
+	}
+
+	public LocationTreeNode search(Location l) {
+		LocationTreeNode found = null;
+		Iterator<LocationTreeNode> it = children.iterator();
+		while (l != null && found == null && it.hasNext()) {
+			found = it.next().search(l);
+		}
+		return found;
+	}
+
+	public LocationTreeNode getParent() {
+		return parent;
+	}
+
+	public LocationTreeNode getRoot() {
+		if (parent == null) {
+			return this;
+		} else {
+			return parent.getRoot();
+		}
+	}
+
+	public Location getLocationParent() {
+		return (Location) loc.getProperty(Location.PROP_IS_CONTAINED_IN);
+	}
+
+	/** {@ inheritDoc} */
+	public boolean equals(LocationTreeNode obj) {
+		return loc.equals(obj.loc);
+	}
 
 }

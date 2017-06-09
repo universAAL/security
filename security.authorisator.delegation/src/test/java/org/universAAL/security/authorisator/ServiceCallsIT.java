@@ -47,121 +47,125 @@ import org.universAAL.ontology.space.SpaceOntology;
 import org.universAAL.ontology.vcard.VCardOntology;
 import org.universAAL.security.authorisator.delegation.DelegationActivator;
 
-
 /**
  * @author amedrano
  *
  */
 public class ServiceCallsIT extends BusTestCase {
-	
+
 	private static final String NAMESPACE = "http://tests.universAAL.org/Anonymization#";
-	
-	private static final String MY_OUTPUT = NAMESPACE +  "ServiceOutput";
+
+	private static final String MY_OUTPUT = NAMESPACE + "ServiceOutput";
 
 	private DefaultServiceCaller scaller;
 
 	private DelegationActivator scallee;
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-//		OntologyManagement.getInstance().register(mc, new DataRepOntology());
-//		OntologyManagement.getInstance().register(mc, new ServiceBusOntology());
-//    	OntologyManagement.getInstance().register(mc, new UIBusOntology());
-        OntologyManagement.getInstance().register(mc, new LocationOntology());
-//		OntologyManagement.getInstance().register(mc, new SysinfoOntology());
-        OntologyManagement.getInstance().register(mc, new ShapeOntology());
-        OntologyManagement.getInstance().register(mc, new PhThingOntology());
-        OntologyManagement.getInstance().register(mc, new SpaceOntology());
-        OntologyManagement.getInstance().register(mc, new VCardOntology());
-    	OntologyManagement.getInstance().register(mc, new ProfileOntology());
-//		OntologyManagement.getInstance().register(mc, new MenuProfileOntology());
-		OntologyManagement.getInstance().register(mc, new CryptographicOntology());	
+		// OntologyManagement.getInstance().register(mc, new DataRepOntology());
+		// OntologyManagement.getInstance().register(mc, new
+		// ServiceBusOntology());
+		// OntologyManagement.getInstance().register(mc, new UIBusOntology());
+		OntologyManagement.getInstance().register(mc, new LocationOntology());
+		// OntologyManagement.getInstance().register(mc, new SysinfoOntology());
+		OntologyManagement.getInstance().register(mc, new ShapeOntology());
+		OntologyManagement.getInstance().register(mc, new PhThingOntology());
+		OntologyManagement.getInstance().register(mc, new SpaceOntology());
+		OntologyManagement.getInstance().register(mc, new VCardOntology());
+		OntologyManagement.getInstance().register(mc, new ProfileOntology());
+		// OntologyManagement.getInstance().register(mc, new
+		// MenuProfileOntology());
+		OntologyManagement.getInstance().register(mc, new CryptographicOntology());
 		OntologyManagement.getInstance().register(mc, new SecurityOntology());
-		
-		
+
 		scallee = new DelegationActivator();
 		scallee.start(mc);
-		
+
 	}
-	
-	public void testExecution(){
+
+	public void testExecution() {
 		scaller = new DefaultServiceCaller(mc);
-		
-		User u1 = new AssistedPerson(NAMESPACE+"user1");
-//		SecuritySubprofile sspu1  = new SecuritySubprofile(NAMESPACE + "u1SSP");
-		
-		User u2 = new AssistedPerson(NAMESPACE+"user2");
-//		SecuritySubprofile sspu2  = new SecuritySubprofile(NAMESPACE + "u2SSP");
+
+		User u1 = new AssistedPerson(NAMESPACE + "user1");
+		// SecuritySubprofile sspu1 = new SecuritySubprofile(NAMESPACE +
+		// "u1SSP");
+
+		User u2 = new AssistedPerson(NAMESPACE + "user2");
+		// SecuritySubprofile sspu2 = new SecuritySubprofile(NAMESPACE +
+		// "u2SSP");
 
 		Role role = new Role();
-		
+
 		RSA ae = new RSA();
-		
-    	//create Delegation Form
-		ServiceRequest sreq = new ServiceRequest(new ProfilingService(),u1);
-		sreq.addValueFilter( new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_AUTHORISER}, u1);
-		sreq.addValueFilter( new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_DELEGATE}, u2);
-		sreq.addValueFilter( new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_DELEGATED_COMPETENCES}, role);
-		sreq.addValueFilter( new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_ASYMMETRIC}, ae);
-		sreq.addRequiredOutput(MY_OUTPUT, new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS});
-		
-    	
-    	try {
-    		writeR("./target/Delegation/Request", "Create Delegation From", sreq);
+
+		// create Delegation Form
+		ServiceRequest sreq = new ServiceRequest(new ProfilingService(), u1);
+		sreq.addValueFilter(new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+				Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_AUTHORISER },
+				u1);
+		sreq.addValueFilter(new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+				Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_DELEGATE },
+				u2);
+		sreq.addValueFilter(new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+				Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS,
+				DelegationForm.PROP_DELEGATED_COMPETENCES }, role);
+		sreq.addValueFilter(new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+				Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_ASYMMETRIC },
+				ae);
+		sreq.addRequiredOutput(MY_OUTPUT, new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+				Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS });
+
+		try {
+			writeR("./target/Delegation/Request", "Create Delegation From", sreq);
 			ServiceResponse srep = scaller.call(sreq);
-			//System.out.println(srep.getCallStatus());
-    		writeR("Delegation/Response", "Create Delegation From", srep);
+			// System.out.println(srep.getCallStatus());
+			writeR("Delegation/Response", "Create Delegation From", srep);
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
-    	
 
 		// add Delegation form to Delegated User's securitysubprofile
-    	sreq = new ServiceRequest(new ProfilingService(),u1);
-		sreq.addAddEffect(new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS}, new DelegationForm());
-		
-    	
-    	try {
-    		writeR("Delegation/Request", "Add Delegation From", sreq);
+		sreq = new ServiceRequest(new ProfilingService(), u1);
+		sreq.addAddEffect(new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+				Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS }, new DelegationForm());
+
+		try {
+			writeR("Delegation/Request", "Add Delegation From", sreq);
 			ServiceResponse srep = scaller.call(sreq);
-    		writeR("Delegation/Response", "Add Delegation From", srep);
-			//System.out.println(srep.getCallStatus());
+			writeR("Delegation/Response", "Add Delegation From", srep);
+			// System.out.println(srep.getCallStatus());
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
 
-		//Delegation form revokation
-    	sreq = new ServiceRequest(new ProfilingService(),u1);
-		sreq.addRemoveEffect(new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS});
-		sreq.getRequestedService().addInstanceLevelRestriction(MergedRestriction.getFixedValueRestriction(SecuritySubprofile.PROP_DELEGATED_FORMS, new DelegationForm()),
-				new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS});
-		
-    	
-    	try {
-    		writeR("Delegation/Request", "Add Delegation From", sreq);
+		// Delegation form revokation
+		sreq = new ServiceRequest(new ProfilingService(), u1);
+		sreq.addRemoveEffect(new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+				Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS });
+		sreq.getRequestedService().addInstanceLevelRestriction(
+				MergedRestriction.getFixedValueRestriction(SecuritySubprofile.PROP_DELEGATED_FORMS,
+						new DelegationForm()),
+				new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+						Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS });
+
+		try {
+			writeR("Delegation/Request", "Add Delegation From", sreq);
 			ServiceResponse srep = scaller.call(sreq);
-			//System.out.println(srep.getCallStatus());
-    		writeR(".Delegation/Response", "Add Delegation From", srep);
+			// System.out.println(srep.getCallStatus());
+			writeR(".Delegation/Response", "Add Delegation From", srep);
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
 	}
-	
-	private void writeR(String folder, String sname, Resource sreq){
+
+	private void writeR(String folder, String sname, Resource sreq) {
 		File dir = new File("./target/" + folder);
 		dir.mkdirs();
 		File out = new File(dir, sname);
-		if (out.exists()){
+		if (out.exists()) {
 			out.delete();
 		}
 		TurtleSerializer s = new TurtleSerializer();
@@ -171,7 +175,6 @@ public class ServiceCallsIT extends BusTestCase {
 			w = new BufferedWriter(new FileWriter(out));
 			w.write(ser);
 			w.flush();
-			
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -185,5 +188,5 @@ public class ServiceCallsIT extends BusTestCase {
 			}
 		}
 	}
-	
+
 }

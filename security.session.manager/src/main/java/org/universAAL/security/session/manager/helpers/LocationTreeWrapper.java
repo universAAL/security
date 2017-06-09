@@ -33,86 +33,87 @@ import org.universAAL.ontology.location.Location;
  */
 public class LocationTreeWrapper {
 
-    protected Location loc;
+	protected Location loc;
 
-    /**
-     * Constructor. Model the given Location.
-     * 
-     * @param l
-     *            the location to be extended.
-     */
-    public LocationTreeWrapper(Location l) {
-	loc = l;
-    }
-
-    /**
-     * @return The location linked to this element.
-     */
-    public Location getLocation() {
-	return loc;
-    }
-
-    /**
-     * Get all {@link Location#PROP_CONTAINS children} of the {@link Location}
-     * represented buy this node.
-     * 
-     * @return The children in {@link LocationTreeWrapper} form.
-     */
-    public Set<LocationTreeWrapper> getChildren() {
-	HashSet<LocationTreeWrapper> children = new HashSet<LocationTreeWrapper>();
-	Object contains = loc.getProperty(Location.PROP_CONTAINS);
-	if (contains instanceof Location) {
-	    children.add(new LocationTreeWrapper((Location) contains));
+	/**
+	 * Constructor. Model the given Location.
+	 * 
+	 * @param l
+	 *            the location to be extended.
+	 */
+	public LocationTreeWrapper(Location l) {
+		loc = l;
 	}
-	if (contains instanceof List<?>) {
-	    for (Object con : (List) contains) {
-		if (con instanceof Location) {
-		    children.add(new LocationTreeWrapper((Location) con));
+
+	/**
+	 * @return The location linked to this element.
+	 */
+	public Location getLocation() {
+		return loc;
+	}
+
+	/**
+	 * Get all {@link Location#PROP_CONTAINS children} of the {@link Location}
+	 * represented buy this node.
+	 * 
+	 * @return The children in {@link LocationTreeWrapper} form.
+	 */
+	public Set<LocationTreeWrapper> getChildren() {
+		HashSet<LocationTreeWrapper> children = new HashSet<LocationTreeWrapper>();
+		Object contains = loc.getProperty(Location.PROP_CONTAINS);
+		if (contains instanceof Location) {
+			children.add(new LocationTreeWrapper((Location) contains));
 		}
-	    }
+		if (contains instanceof List<?>) {
+			for (Object con : (List) contains) {
+				if (con instanceof Location) {
+					children.add(new LocationTreeWrapper((Location) con));
+				}
+			}
+		}
+		return children;
 	}
-	return children;
-    }
 
-    /**
-     * Get the {@link Location#PROP_IS_CONTAINED_IN parent} {@link Location} of
-     * the represented {@link Location} in {@link LocationTreeWrapper} form.
-     * 
-     * @return the Parent node, or null if no parent is defined.
-     */
-    public LocationTreeWrapper getParent() {
-	Object containedIn = loc.getProperty(Location.PROP_IS_CONTAINED_IN);
-	if (containedIn != null && containedIn instanceof Location) {
-	    return new LocationTreeWrapper((Location) containedIn);
+	/**
+	 * Get the {@link Location#PROP_IS_CONTAINED_IN parent} {@link Location} of
+	 * the represented {@link Location} in {@link LocationTreeWrapper} form.
+	 * 
+	 * @return the Parent node, or null if no parent is defined.
+	 */
+	public LocationTreeWrapper getParent() {
+		Object containedIn = loc.getProperty(Location.PROP_IS_CONTAINED_IN);
+		if (containedIn != null && containedIn instanceof Location) {
+			return new LocationTreeWrapper((Location) containedIn);
+		}
+		return null;
 	}
-	return null;
-    }
 
-    /**
-     * Get the most generic {@link Location} reachable from the {@link Location}
-     * represented.
-     * @return the tree root.
-     */
-    public LocationTreeWrapper getRoot() {
-	if (isRoot()) {
-	    return this;
-	} else {
-	    return getParent().getRoot();
+	/**
+	 * Get the most generic {@link Location} reachable from the {@link Location}
+	 * represented.
+	 * 
+	 * @return the tree root.
+	 */
+	public LocationTreeWrapper getRoot() {
+		if (isRoot()) {
+			return this;
+		} else {
+			return getParent().getRoot();
+		}
 	}
-    }
 
-    /**
-     * Check if there are no parents.
-     * If they are not any parents then this must be the root
-     * node of the {@link Location} tree.
-     * @return
-     */
-    public boolean isRoot() {
-	return getParent() == null;
-    }
+	/**
+	 * Check if there are no parents. If they are not any parents then this must
+	 * be the root node of the {@link Location} tree.
+	 * 
+	 * @return
+	 */
+	public boolean isRoot() {
+		return getParent() == null;
+	}
 
-    /** {@ inheritDoc}	 */
-    public boolean equals(LocationTreeWrapper obj) {
-	return loc.equals(obj.loc);
-    }
+	/** {@ inheritDoc} */
+	public boolean equals(LocationTreeWrapper obj) {
+		return loc.equals(obj.loc);
+	}
 }

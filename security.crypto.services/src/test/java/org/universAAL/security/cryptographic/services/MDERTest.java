@@ -32,48 +32,49 @@ import org.universAAL.ontology.cryptographic.asymmetric.RSA;
  */
 public class MDERTest extends CommonTest {
 
-	public void test() throws Exception{
+	public void test() throws Exception {
 		RSA rsa = new RSA();
 		KeyRing ku1 = EncryptionServiceCallee.generateKeyRing(rsa, null);
 		KeyRing ku2 = EncryptionServiceCallee.generateKeyRing(rsa, null);
 		KeyRing ku3 = EncryptionServiceCallee.generateKeyRing(rsa, null);
-		
+
 		RSA enc1 = new RSA();
 		enc1.addKeyRing(ku1);
 		RSA enc2 = new RSA();
 		enc2.addKeyRing(ku2);
-//		RSA enc3 = new RSA();
-//		enc1.addKey(ku3);
-		
+		// RSA enc3 = new RSA();
+		// enc1.addKey(ku3);
+
 		Resource r = RandomResourceGenerator.randomResource();
-		
+
 		List<AsymmetricEncryption> ael = new ArrayList<AsymmetricEncryption>();
-		
+
 		MultidestinationEncryptedResource mder = MultiDestinationCallee.createMDER(r, null, ael);
-		
+
 		ael.add(enc1);
 		ael.add(enc2);
-		
+
 		mder = MultiDestinationCallee.createMDER(r, null, ael);
-		
+
 		// System.out.println(new TurtleSerializer().serialize(mder));
-		
+
 		Resource r2 = MultiDestinationCallee.decrypt(mder, ku1);
 		assertEquals(r, r2);
 		assertTrue(EncryptTest.fullResourceEquals(r, r2));
-		
+
 		r2 = MultiDestinationCallee.decrypt(mder, ku2);
 		assertEquals(r, r2);
 		assertTrue(EncryptTest.fullResourceEquals(r, r2));
-		
+
 		r2 = MultiDestinationCallee.decrypt(mder, ku3);
 		assertNull(r2);
-		
-//		ael.clear();
-//		ael.add(enc3); //XXX: test what happens if add an existing destination.
-//		
-//		mder = MultiDestinationServiceImpl.addToMDERDest(mder, ku1, ael);
-		
+
+		// ael.clear();
+		// ael.add(enc3); //XXX: test what happens if add an existing
+		// destination.
+		//
+		// mder = MultiDestinationServiceImpl.addToMDERDest(mder, ku1, ael);
+
 	}
 
 }

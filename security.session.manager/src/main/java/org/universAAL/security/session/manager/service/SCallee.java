@@ -41,72 +41,70 @@ import org.universAAL.security.session.manager.SessionManager;
  */
 public class SCallee extends ServiceCallee {
 
-    private SessionManager sm;
-    
-    // prepare a standard error message for later use
-    private static final ServiceResponse invalidInput = new ServiceResponse(
-	    CallStatus.serviceSpecificFailure);
-    static {
-    	invalidInput.addOutput(new ProcessOutput(
-    			ServiceResponse.PROP_SERVICE_SPECIFIC_ERROR, "Invalid input!"));
-    }
-    
-    /**
-     * @param context
-     * @param realizedServices
-     */
-    public SCallee(ModuleContext context, ServiceProfile[] realizedServices, SessionManager sessionMngr) {
-	super(context, realizedServices);
-	this.sm = sessionMngr;
-    }
+	private SessionManager sm;
 
-    /** {@ inheritDoc}	 */
-    @Override
-    public void communicationChannelBroken() {
+	// prepare a standard error message for later use
+	private static final ServiceResponse invalidInput = new ServiceResponse(CallStatus.serviceSpecificFailure);
+	static {
+		invalidInput.addOutput(new ProcessOutput(ServiceResponse.PROP_SERVICE_SPECIFIC_ERROR, "Invalid input!"));
+	}
 
-    }
+	/**
+	 * @param context
+	 * @param realizedServices
+	 */
+	public SCallee(ModuleContext context, ServiceProfile[] realizedServices, SessionManager sessionMngr) {
+		super(context, realizedServices);
+		this.sm = sessionMngr;
+	}
 
-    /** {@ inheritDoc}	 */
-    @Override
-    public ServiceResponse handleCall(ServiceCall call) {
-	if (call == null)
-	    return invalidInput;
-	
-	String cmd = call.getProcessURI();
-	if(cmd == null)
-	    return invalidInput;
-	
-	ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
-	
-	if (cmd.startsWith(SessionManagerService.SESSIONS_IN_DEVICE_SERVICE)){
-	    Resource dvc = (Resource) call.getInputValue(SessionManagerService.DEV_IN);
-	    if (dvc == null || !(dvc instanceof Device))
-		return invalidInput;
-	    Set<User> usrs = sm.validUsersForDevice((Device) dvc);
-	    sr.addOutput(new ProcessOutput(SessionManagerService.USER_PARAM, new ArrayList<User>(usrs)));
-	    return sr;
+	/** {@ inheritDoc} */
+	@Override
+	public void communicationChannelBroken() {
+
 	}
-	
-	if (cmd.startsWith(SessionManagerService.SESSIONS_IN_LOCATIONS_SERVICE)){
-	    Resource loc = (Resource) call.getInputValue(SessionManagerService.LOC_IN);
-	    if (loc == null || !(loc instanceof Location))
+
+	/** {@ inheritDoc} */
+	@Override
+	public ServiceResponse handleCall(ServiceCall call) {
+		if (call == null)
+			return invalidInput;
+
+		String cmd = call.getProcessURI();
+		if (cmd == null)
+			return invalidInput;
+
+		ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+
+		if (cmd.startsWith(SessionManagerService.SESSIONS_IN_DEVICE_SERVICE)) {
+			Resource dvc = (Resource) call.getInputValue(SessionManagerService.DEV_IN);
+			if (dvc == null || !(dvc instanceof Device))
+				return invalidInput;
+			Set<User> usrs = sm.validUsersForDevice((Device) dvc);
+			sr.addOutput(new ProcessOutput(SessionManagerService.USER_PARAM, new ArrayList<User>(usrs)));
+			return sr;
+		}
+
+		if (cmd.startsWith(SessionManagerService.SESSIONS_IN_LOCATIONS_SERVICE)) {
+			Resource loc = (Resource) call.getInputValue(SessionManagerService.LOC_IN);
+			if (loc == null || !(loc instanceof Location))
+				return invalidInput;
+			Set<User> usrs = sm.validUsersForLocation((Location) loc);
+			sr.addOutput(new ProcessOutput(SessionManagerService.USER_PARAM, new ArrayList<User>(usrs)));
+			return sr;
+		}
+
+		if (cmd.startsWith(SessionManagerService.GET_SESSION_FOR_USER_SERVICE)) {
+			Resource usr = (Resource) call.getInputValue(SessionManagerService.USER_PARAM);
+			if (usr == null || !(usr instanceof User))
+				return invalidInput;
+			Session s = sm.getCopyOfUserSession((User) usr);
+
+			sr.addOutput(new ProcessOutput(SessionManagerService.SESSION_OUT, s));
+			return sr;
+		}
+
 		return invalidInput;
-	    Set<User> usrs = sm.validUsersForLocation((Location) loc);
-	    sr.addOutput(new ProcessOutput(SessionManagerService.USER_PARAM, new ArrayList<User>(usrs)));
-	    return sr;
 	}
-	
-	if (cmd.startsWith(SessionManagerService.GET_SESSION_FOR_USER_SERVICE)){
-	    Resource usr = (Resource) call.getInputValue(SessionManagerService.USER_PARAM);
-	    if (usr == null || !(usr instanceof User))
-		return invalidInput;
-	    Session s = sm.getCopyOfUserSession((User)usr);
-	   
-	    sr.addOutput(new ProcessOutput(SessionManagerService.SESSION_OUT, s));
-	    return sr;
-	}
-	
-	return invalidInput;
-    }
 
 }

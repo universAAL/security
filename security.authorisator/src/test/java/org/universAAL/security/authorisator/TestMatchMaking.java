@@ -47,36 +47,39 @@ public class TestMatchMaking extends TestCase {
 		super.setUp();
 		ModuleContext mc = new JUnitModuleContext();
 		OntologyManagement.getInstance().register(mc, new DataRepOntology());
-//		OntologyManagement.getInstance().register(mc, new ServiceBusOntology());
-//    	OntologyManagement.getInstance().register(mc, new UIBusOntology());
-        OntologyManagement.getInstance().register(mc, new LocationOntology());
-//		OntologyManagement.getInstance().register(mc, new SysinfoOntology());
-        OntologyManagement.getInstance().register(mc, new ShapeOntology());
-        OntologyManagement.getInstance().register(mc, new PhThingOntology());
-        OntologyManagement.getInstance().register(mc, new SpaceOntology());
-        OntologyManagement.getInstance().register(mc, new VCardOntology());
-    	OntologyManagement.getInstance().register(mc, new ProfileOntology());
-//		OntologyManagement.getInstance().register(mc, new MenuProfileOntology());
-		OntologyManagement.getInstance().register(mc, new CryptographicOntology());	
-		OntologyManagement.getInstance().register(mc, new SecurityOntology());		
+		// OntologyManagement.getInstance().register(mc, new
+		// ServiceBusOntology());
+		// OntologyManagement.getInstance().register(mc, new UIBusOntology());
+		OntologyManagement.getInstance().register(mc, new LocationOntology());
+		// OntologyManagement.getInstance().register(mc, new SysinfoOntology());
+		OntologyManagement.getInstance().register(mc, new ShapeOntology());
+		OntologyManagement.getInstance().register(mc, new PhThingOntology());
+		OntologyManagement.getInstance().register(mc, new SpaceOntology());
+		OntologyManagement.getInstance().register(mc, new VCardOntology());
+		OntologyManagement.getInstance().register(mc, new ProfileOntology());
+		// OntologyManagement.getInstance().register(mc, new
+		// MenuProfileOntology());
+		OntologyManagement.getInstance().register(mc, new CryptographicOntology());
+		OntologyManagement.getInstance().register(mc, new SecurityOntology());
 	}
-	
-	public void testExecution(){
+
+	public void testExecution() {
 		MessageContentSerializer serializer = new TurtleSerializer();
-		AccessRight ar = new AccessRight();//NAMESPACE+ "accessToAllDelegationForms");
-    	ar.addAccessType(AccessType.add);
-    	ar.addAccessType(AccessType.change);
-    	ar.addAccessType(AccessType.remove);
-    	ar.addAccessType(AccessType.read);
-    	ar.setAccessTo(new TypeURI(DelegationForm.MY_URI, false));
-    	
-    	DelegationForm asset = new DelegationForm();
-    	
-    	Object te = ar.getProperty(AccessRight.PROP_ACCESS_TO);
-    	//System.out.println("te of class" + te.getClass().getCanonicalName());
-    	//System.out.println("Checking Membership of:"
-		//+ serializer.serialize(asset) + "\nwith: " + serializer.serialize(te));
-		assertTrue(te instanceof TypeExpression
-				&& ((TypeExpression)te).hasMember(asset));
+		AccessRight ar = new AccessRight();// NAMESPACE+
+											// "accessToAllDelegationForms");
+		ar.addAccessType(AccessType.add);
+		ar.addAccessType(AccessType.change);
+		ar.addAccessType(AccessType.remove);
+		ar.addAccessType(AccessType.read);
+		ar.setAccessTo(new TypeURI(DelegationForm.MY_URI, false));
+
+		DelegationForm asset = new DelegationForm();
+
+		Object te = ar.getProperty(AccessRight.PROP_ACCESS_TO);
+		// System.out.println("te of class" + te.getClass().getCanonicalName());
+		// System.out.println("Checking Membership of:"
+		// + serializer.serialize(asset) + "\nwith: " +
+		// serializer.serialize(te));
+		assertTrue(te instanceof TypeExpression && ((TypeExpression) te).hasMember(asset));
 	}
 }

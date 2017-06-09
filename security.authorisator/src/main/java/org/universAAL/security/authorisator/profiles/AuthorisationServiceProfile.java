@@ -25,9 +25,8 @@ import org.universAAL.security.authorisator.ProjectActivator;
  */
 public class AuthorisationServiceProfile extends AuthorizationService {
 
+	public static String MY_URI = ProjectActivator.NAMESPACE + "AuthorisationService";
 
-    public static String MY_URI = ProjectActivator.NAMESPACE + "AuthorisationService";
-	
 	/**
 	 * 
 	 */
@@ -41,23 +40,23 @@ public class AuthorisationServiceProfile extends AuthorizationService {
 		super(uri);
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public String getClassURI() {
 		return MY_URI;
 	}
-	
-	public static AccessType getAccessType(String uri){
-		if (uri.contains("Read")){
+
+	public static AccessType getAccessType(String uri) {
+		if (uri.contains("Read")) {
 			return AccessType.read;
 		}
-		if (uri.contains("Change")){
+		if (uri.contains("Change")) {
 			return AccessType.change;
 		}
-		if (uri.contains("Add")){
+		if (uri.contains("Add")) {
 			return AccessType.add;
 		}
-		if (uri.contains("Remove")){
+		if (uri.contains("Remove")) {
 			return AccessType.remove;
 		}
 		return null;

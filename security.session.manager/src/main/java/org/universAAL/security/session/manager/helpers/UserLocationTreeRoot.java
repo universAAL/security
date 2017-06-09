@@ -26,67 +26,65 @@ import org.universAAL.ontology.profile.User;
 import org.universAAL.security.session.manager.context.LocationChangeListener;
 import org.universAAL.security.session.manager.context.SituationMonitor;
 
-
 /**
  * @author amedrano
  *
  */
-public class UserLocationTreeRoot implements LocationChangeListener{
+public class UserLocationTreeRoot implements LocationChangeListener {
 
+	Set<UserLocationTree> children;
 
-    Set<UserLocationTree> children;
-    
-    /**
-     * @param l
-     */
-    public UserLocationTreeRoot(SituationMonitor sm) {
-	children = new HashSet<UserLocationTree>();
-	addLocations(sm.getAllAvailableLocations());
-	sm.addListener(this);
-    }
+	/**
+	 * @param l
+	 */
+	public UserLocationTreeRoot(SituationMonitor sm) {
+		children = new HashSet<UserLocationTree>();
+		addLocations(sm.getAllAvailableLocations());
+		sm.addListener(this);
+	}
 
-    public Set<User> deallocateUser(User u){
-	HashSet<User> affected = new HashSet<User>();
-	for (UserLocationTree ult : children) {
-	    affected.addAll(ult.deallocateUser(u));
+	public Set<User> deallocateUser(User u) {
+		HashSet<User> affected = new HashSet<User>();
+		for (UserLocationTree ult : children) {
+			affected.addAll(ult.deallocateUser(u));
+		}
+		return affected;
 	}
-	return affected;
-    }
-    
-    public UserLocationTree getMaxUser(User u) {
-	for (UserLocationTree ult : children) {
-	    UserLocationTree l = ult.getMaxUser(u);
-	    if (l != null){
-		return l;
-	    }
-	}
-	return null;
-    }
 
-    public void addLocations(List<Location> locs){
-	for (Location location : locs) {
-	    UserLocationTree ult = new UserLocationTree(location);
-	    UserLocationTree root = new UserLocationTree(ult.getRoot().getLocation());
-	    if (!children.contains(root)){
-		children.add(root);
-	    }
+	public UserLocationTree getMaxUser(User u) {
+		for (UserLocationTree ult : children) {
+			UserLocationTree l = ult.getMaxUser(u);
+			if (l != null) {
+				return l;
+			}
+		}
+		return null;
 	}
-    }
-    
-    public void clearLocations(){
-	children.clear();
-    }
 
-    /** {@ inheritDoc}	 */
-    public void locationChanged(Location l) {
-	UserLocationTree nult = new UserLocationTree(l);
-	if (children.contains(nult)){
-	    children.remove(nult);
+	public void addLocations(List<Location> locs) {
+		for (Location location : locs) {
+			UserLocationTree ult = new UserLocationTree(location);
+			UserLocationTree root = new UserLocationTree(ult.getRoot().getLocation());
+			if (!children.contains(root)) {
+				children.add(root);
+			}
+		}
 	}
-	UserLocationTree root = new UserLocationTree(nult.getRoot().getLocation());
-	if (!children.contains(root)){
-	    children.add(root);
+
+	public void clearLocations() {
+		children.clear();
 	}
-    }
-    
+
+	/** {@ inheritDoc} */
+	public void locationChanged(Location l) {
+		UserLocationTree nult = new UserLocationTree(l);
+		if (children.contains(nult)) {
+			children.remove(nult);
+		}
+		UserLocationTree root = new UserLocationTree(nult.getRoot().getLocation());
+		if (!children.contains(root)) {
+			children.add(root);
+		}
+	}
+
 }

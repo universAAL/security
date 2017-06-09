@@ -35,35 +35,37 @@ import org.universAAL.security.cryptographic.services.utils.BlockChipher;
  */
 public class BlockTest extends CommonTest {
 
-	public void test() throws Exception{
-		
-//		KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-//		kpg.initialize(1024);
-//		KeyPair keypair = kpg.generateKeyPair();
-//		byte[] codedPuK = keypair.getPublic().getEncoded();
-//		byte[] codedPrK = keypair.getPrivate().getEncoded();
-		
+	public void test() throws Exception {
+
+		// KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+		// kpg.initialize(1024);
+		// KeyPair keypair = kpg.generateKeyPair();
+		// byte[] codedPuK = keypair.getPublic().getEncoded();
+		// byte[] codedPrK = keypair.getPrivate().getEncoded();
+
 		KeyRing kr = EncryptionServiceCallee.generateKeyRing(new RSA(), 1024);
-		
-//		Base64Binary b64Puk = new Base64Binary(codedPuK);
-		
-		PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(kr.getPublicKey().getVal())); 
-		PrivateKey privateKey = KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(kr.getPrivateKey().getVal()));
-		
+
+		// Base64Binary b64Puk = new Base64Binary(codedPuK);
+
+		PublicKey publicKey = KeyFactory.getInstance("RSA")
+				.generatePublic(new X509EncodedKeySpec(kr.getPublicKey().getVal()));
+		PrivateKey privateKey = KeyFactory.getInstance("RSA")
+				.generatePrivate(new PKCS8EncodedKeySpec(kr.getPrivateKey().getVal()));
+
 		Cipher c = Cipher.getInstance("RSA");
 		BlockChipher bc = new BlockChipher(c);
-		
+
 		Resource testR = RandomResourceGenerator.randomResource();
 		TurtleSerializer ts = new TurtleSerializer();
 		String s = ts.serialize(testR);
-//		System.out.println(s);
-				
+		// System.out.println(s);
+
 		byte[] enc = bc.encrypt(s, publicKey);
-		
+
 		String s2 = bc.decrypt(enc, privateKey);
-		
+
 		assertEquals(s, s2);
-		
+
 	}
 
 }

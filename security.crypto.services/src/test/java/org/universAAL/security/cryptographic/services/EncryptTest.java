@@ -35,7 +35,7 @@ import org.universAAL.ontology.cryptographic.symmetric.DES;
 
 /**
  * @author amedrano
- * */
+ */
 public class EncryptTest extends CommonTest {
 
 	/**
@@ -46,37 +46,38 @@ public class EncryptTest extends CommonTest {
 	static boolean fullResourceEquals(Resource a, Resource b) {
 		HashSet aSet = new HashSet(Collections.list(a.getPropertyURIs()));
 		HashSet bSet = new HashSet(Collections.list(b.getPropertyURIs()));
-		if (!aSet.equals(bSet)){
+		if (!aSet.equals(bSet)) {
 			return false;
 		}
 		for (Object prop : aSet) {
 			Object val = a.getProperty((String) prop);
-			if (val instanceof Resource && !fullResourceEquals((Resource) val, (Resource) b.getProperty((String) prop))){
+			if (val instanceof Resource
+					&& !fullResourceEquals((Resource) val, (Resource) b.getProperty((String) prop))) {
 				return false;
-			} else if (!val.equals(b.getProperty((String) prop))){
+			} else if (!val.equals(b.getProperty((String) prop))) {
 				return false;
 			}
 		}
-	
+
 		return true;
 	}
 
-	public void testAES() throws Exception{
+	public void testAES() throws Exception {
 		SymmetricEncryption aes = new AES();
 		SimpleKey key = EncryptionServiceCallee.generateSymmetricKey(aes, null);
 		aes.addKey(key);
 		Resource testR = RandomResourceGenerator.randomResource();
-		
+
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, key.getKeyText(), aes);
-		
+
 		assertEquals(0, enc.getEncryption().getKey().length);
-		assertNull(((SymmetricEncryption)enc.getEncryption()).getSimpleKey());
-		
+		assertNull(((SymmetricEncryption) enc.getEncryption()).getSimpleKey());
+
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), aes);
-		
+
 		assertNotNull(detestR);
-		assertTrue(fullResourceEquals(testR,detestR));
-		
+		assertTrue(fullResourceEquals(testR, detestR));
+
 		Resource detestR2;
 		try {
 			detestR2 = EncryptionServiceCallee.doDecryption(enc,
@@ -86,8 +87,7 @@ public class EncryptTest extends CommonTest {
 		} catch (Exception e) {
 			assertTrue(false);
 		}
-		
-		
+
 		try {
 			detestR2 = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), new DES());
 		} catch (InvalidKeyException e) {
@@ -95,25 +95,25 @@ public class EncryptTest extends CommonTest {
 		} catch (Exception e) {
 			assertTrue(false);
 		}
-		
+
 	}
-	
-	public void testBlofish() throws Exception{
+
+	public void testBlofish() throws Exception {
 		SymmetricEncryption blo = new Blowfish();
 		SimpleKey key = EncryptionServiceCallee.generateSymmetricKey(blo, null);
 		blo.addKey(key);
 		Resource testR = RandomResourceGenerator.randomResource();
-		
+
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, key.getKeyText(), blo);
 
 		assertEquals(0, enc.getEncryption().getKey().length);
-		assertNull(((SymmetricEncryption)enc.getEncryption()).getSimpleKey());
-		
+		assertNull(((SymmetricEncryption) enc.getEncryption()).getSimpleKey());
+
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), blo);
-		
+
 		assertNotNull(detestR);
-		assertTrue(fullResourceEquals(testR,detestR));
-		
+		assertTrue(fullResourceEquals(testR, detestR));
+
 		Resource detestR2;
 		try {
 			detestR2 = EncryptionServiceCallee.doDecryption(enc,
@@ -123,8 +123,7 @@ public class EncryptTest extends CommonTest {
 		} catch (Exception e) {
 			assertTrue(false);
 		}
-		
-		
+
 		try {
 			detestR2 = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), new DES());
 		} catch (InvalidKeyException e) {
@@ -132,25 +131,25 @@ public class EncryptTest extends CommonTest {
 		} catch (Exception e) {
 			assertTrue(false);
 		}
-		
+
 	}
-	
-	public void testDES() throws Exception{
+
+	public void testDES() throws Exception {
 		SymmetricEncryption des = new DES();
 		SimpleKey key = EncryptionServiceCallee.generateSymmetricKey(des, null);
 		des.addKey(key);
 		Resource testR = RandomResourceGenerator.randomResource();
-		
+
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, key.getKeyText(), des);
 
 		assertEquals(0, enc.getEncryption().getKey().length);
-		assertNull(((SymmetricEncryption)enc.getEncryption()).getSimpleKey());
-		
+		assertNull(((SymmetricEncryption) enc.getEncryption()).getSimpleKey());
+
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), des);
-		
+
 		assertNotNull(detestR);
-		assertTrue(fullResourceEquals(testR,detestR));
-		
+		assertTrue(fullResourceEquals(testR, detestR));
+
 		Resource detestR2;
 		try {
 			detestR2 = EncryptionServiceCallee.doDecryption(enc,
@@ -160,8 +159,7 @@ public class EncryptTest extends CommonTest {
 		} catch (Exception e) {
 			assertTrue(false);
 		}
-		
-		
+
 		try {
 			detestR2 = EncryptionServiceCallee.doDecryption(enc, key.getKeyText(), new AES());
 		} catch (InvalidKeyException e) {
@@ -169,26 +167,31 @@ public class EncryptTest extends CommonTest {
 		} catch (Exception e) {
 			assertTrue(false);
 		}
-		
+
 	}
-	
-	public void testRSA() throws Exception{
+
+	public void testRSA() throws Exception {
 		AsymmetricEncryption rsa = new RSA();
-		KeyRing kr = EncryptionServiceCallee.generateKeyRing(new RSA(), 1024); //FIXME only 1024 byte keys supported!!!
+		KeyRing kr = EncryptionServiceCallee.generateKeyRing(new RSA(), 1024); // FIXME
+																				// only
+																				// 1024
+																				// byte
+																				// keys
+																				// supported!!!
 		rsa.addKeyRing(kr);
-		
-		Resource testR = RandomResourceGenerator.randomResource(); 
-		
+
+		Resource testR = RandomResourceGenerator.randomResource();
+
 		EncryptedResource enc = EncryptionServiceCallee.doEncryption(testR, kr.getPublicKey(), rsa);
 
 		assertEquals(0, enc.getEncryption().getKey().length);
-		
-//		System.out.println(Arrays.toString(enc.getCypheredText().getVal()));
+
+		// System.out.println(Arrays.toString(enc.getCypheredText().getVal()));
 		Resource detestR = EncryptionServiceCallee.doDecryption(enc, kr.getPrivateKey(), rsa);
-		
+
 		assertNotNull(detestR);
-		assertTrue(fullResourceEquals(testR,detestR));
-		
+		assertTrue(fullResourceEquals(testR, detestR));
+
 	}
-	
+
 }

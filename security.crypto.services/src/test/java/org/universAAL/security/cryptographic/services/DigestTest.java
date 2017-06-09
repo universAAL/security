@@ -25,40 +25,44 @@ import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
  *
  */
 public class DigestTest extends CommonTest {
-	
 
-	public void testMD2() throws Exception{
-		
+	public void testMD2() throws Exception {
+
 		Resource r = RandomResourceGenerator.randomResource();
-		
+
 		Base64Binary hash = DigestServiceCallee.digestResource(r, MessageDigest.IND_MD2);
-		
+
 		assertNotNull(hash);
-		assertNotSame(hash, DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(), MessageDigest.IND_MD2));
+		assertNotSame(hash,
+				DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(), MessageDigest.IND_MD2));
 		assertNotSame(hash, DigestServiceCallee.digestResource(r, MessageDigest.IND_MD5));
 	}
-	
-	public void testMD5() throws Exception{
-		
+
+	public void testMD5() throws Exception {
+
 		Resource r = RandomResourceGenerator.randomResource();
-		
+
 		Base64Binary hash = DigestServiceCallee.digestResource(r, MessageDigest.IND_MD5);
-		
+
 		assertNotNull(hash);
-		assertNotSame(hash, DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(), MessageDigest.IND_MD5));
+		assertNotSame(hash,
+				DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(), MessageDigest.IND_MD5));
 		assertEquals(hash, DigestServiceCallee.digestResource(r, MessageDigest.IND_MD5));
 	}
-	
-public void testSHA() throws Exception{
-		
+
+	public void testSHA() throws Exception {
+
 		Resource r = RandomResourceGenerator.randomResource();
-		
+
 		Base64Binary hash = DigestServiceCallee.digestResource(r, SecureHashAlgorithm.IND_SHA);
 		assertNotNull(hash);
-		assertNotSame(hash, DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(), SecureHashAlgorithm.IND_SHA256));
-		assertNotSame(hash, DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(), SecureHashAlgorithm.IND_SHA384));
-		assertNotSame(hash, DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(), SecureHashAlgorithm.IND_SHA512));
+		assertNotSame(hash, DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(),
+				SecureHashAlgorithm.IND_SHA256));
+		assertNotSame(hash, DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(),
+				SecureHashAlgorithm.IND_SHA384));
+		assertNotSame(hash, DigestServiceCallee.digestResource(RandomResourceGenerator.randomResource(),
+				SecureHashAlgorithm.IND_SHA512));
 		assertEquals(hash, DigestServiceCallee.digestResource(r, SecureHashAlgorithm.IND_SHA));
 	}
-	
+
 }

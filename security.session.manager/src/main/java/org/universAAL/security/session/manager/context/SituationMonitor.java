@@ -23,28 +23,28 @@ import org.universAAL.ontology.location.Location;
 import org.universAAL.ontology.phThing.Device;
 
 /**
- * Implementation will initialize status and monitor changes regarding {@link Device}s
- * and {@link Location}s; in order to keep internal status synchronized with actual
- * status.
+ * Implementation will initialize status and monitor changes regarding
+ * {@link Device}s and {@link Location}s; in order to keep internal status
+ * synchronized with actual status.
  * 
  * @author amedrano
  * 
  */
 public interface SituationMonitor {
 
-    public Location locationOf(Device d);
-    
-    public Location getInternalStateOf(Location l);
-    
-    public Device getInternalStateOf(Device d);
+	public Location locationOf(Device d);
 
-    public List<Location> getAllAvailableLocations();
+	public Location getInternalStateOf(Location l);
 
-    public List<Device> devicesInLocation(Location loc);
+	public Device getInternalStateOf(Device d);
 
-    public void addListener(LocationChangeListener lcl);
+	public List<Location> getAllAvailableLocations();
 
-    public void removeListener(LocationChangeListener lcl);
-    
-    public void close();
+	public List<Device> devicesInLocation(Location loc);
+
+	public void addListener(LocationChangeListener lcl);
+
+	public void removeListener(LocationChangeListener lcl);
+
+	public void close();
 }

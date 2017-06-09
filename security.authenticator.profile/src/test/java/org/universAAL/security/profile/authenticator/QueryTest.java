@@ -7,23 +7,21 @@ import junit.framework.TestCase;
 /**
  * Unit test for simple App.
  */
-public class QueryTest 
-    extends TestCase
-{
+public class QueryTest extends TestCase {
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testGetUserQuery() {
-	String s = UserPasswordCallee.getQuery("GetUserQuery", new String []{"usr1","password", "secret"});
-	assertNotNull(s);
-    }
-    
-    /**
-     * Rigourous Test :-)
-     */
-    public void testGetDigestQuery() {
-	String s = UserPasswordCallee.getQuery("GetDigestQuery", new String []{"usr1","password", "secret"});
-	assertNotNull(s);
-    }
+	/**
+	 * Rigourous Test :-)
+	 */
+	public void testGetUserQuery() {
+		String s = UserPasswordCallee.getQuery("GetUserQuery", new String[] { "usr1", "password", "secret" });
+		assertNotNull(s);
+	}
+
+	/**
+	 * Rigourous Test :-)
+	 */
+	public void testGetDigestQuery() {
+		String s = UserPasswordCallee.getQuery("GetDigestQuery", new String[] { "usr1", "password", "secret" });
+		assertNotNull(s);
+	}
 }

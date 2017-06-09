@@ -8,8 +8,8 @@ public class ProjectActivator implements ModuleActivator {
 
 	static ModuleContext context;
 	private AnonServiceCallee callee;
-	
-	public void start(ModuleContext ctxt) throws Exception {	
+
+	public void start(ModuleContext ctxt) throws Exception {
 		context = ctxt;
 		LogUtils.logDebug(context, getClass(), "start", "Starting.");
 		/*
@@ -19,7 +19,6 @@ public class ProjectActivator implements ModuleActivator {
 		callee = new AnonServiceCallee(context, AnonServiceProfile.profs);
 		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
-
 
 	public void stop(ModuleContext ctxt) throws Exception {
 		LogUtils.logDebug(context, getClass(), "stop", "Stopping.");

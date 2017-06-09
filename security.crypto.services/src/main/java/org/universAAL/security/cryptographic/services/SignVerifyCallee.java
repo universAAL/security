@@ -53,8 +53,7 @@ public class SignVerifyCallee extends ServiceCallee {
 	 * @param context
 	 * @param realizedServices
 	 */
-	public SignVerifyCallee(ModuleContext context,
-			ServiceProfile[] realizedServices) {
+	public SignVerifyCallee(ModuleContext context, ServiceProfile[] realizedServices) {
 		super(context, realizedServices);
 	}
 
@@ -63,50 +62,47 @@ public class SignVerifyCallee extends ServiceCallee {
 	 * @param realizedServices
 	 * @param throwOnError
 	 */
-	public SignVerifyCallee(ModuleContext context,
-			ServiceProfile[] realizedServices, boolean throwOnError) {
+	public SignVerifyCallee(ModuleContext context, ServiceProfile[] realizedServices, boolean throwOnError) {
 		super(context, realizedServices, throwOnError);
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public void communicationChannelBroken() {
 
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResponse handleCall(ServiceCall call) {
-		if (call.getProcessURI().contains("sign")){
+		if (call.getProcessURI().contains("sign")) {
 			Resource r = (Resource) call.getInputValue(SignVerifyProfiles.CLEAR_RESOURCE);
 			AsymmetricEncryption enc = (AsymmetricEncryption) call.getInputValue(SignVerifyProfiles.ENC_METHOD);
 			Digest dig = (Digest) call.getInputValue(SignVerifyProfiles.DIG_METHOD);
-			
-			Base64Binary key = ((KeyRing)enc.getKeyRing()[0]).getPrivateKey();
+
+			Base64Binary key = ((KeyRing) enc.getKeyRing()[0]).getPrivateKey();
 			try {
 				SignedResource sr = sign(r, dig, enc, key);
-				
+
 				ServiceResponse sresp = new ServiceResponse(CallStatus.succeeded);
 				sresp.addOutput(new ProcessOutput(SignVerifyProfiles.SIGNED_RESOURCE, sr));
 				return sresp;
 			} catch (Exception e) {
-				LogUtils.logError(owner, getClass(), "serviceResponse", new String[]{"un expected error."}, e);
+				LogUtils.logError(owner, getClass(), "serviceResponse", new String[] { "un expected error." }, e);
 				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			}
-		}
-		else {
+		} else {
 			SignedResource sr = (SignedResource) call.getInputValue(SignVerifyProfiles.SIGNED_RESOURCE);
 			AsymmetricEncryption enc = (AsymmetricEncryption) call.getInputValue(SignVerifyProfiles.ENC_METHOD);
-			if (enc == null){
+			if (enc == null) {
 				enc = sr.getAsymmetric();
 			}
 			Digest dig = sr.getDigest();
-			
-			
-			
+
 			if (enc.getKeyRing() == null || enc.getKeyRing().length == 0 || enc.getKeyRing()[0] == null) {
-				//PANIC!
-				LogUtils.logError(owner, getClass(), "handleCall", "Should not reach here this, missing keyring for verifying.");
+				// PANIC!
+				LogUtils.logError(owner, getClass(), "handleCall",
+						"Should not reach here this, missing keyring for verifying.");
 				return new ServiceResponse(CallStatus.noMatchingServiceFound);
 			}
 			KeyRing keyring = enc.getKeyRing()[0];
@@ -117,18 +113,18 @@ public class SignVerifyCallee extends ServiceCallee {
 				sresp.addOutput(new ProcessOutput(SignVerifyProfiles.RESULT, result));
 				return sresp;
 			} catch (Exception e) {
-				LogUtils.logError(owner, getClass(), "serviceResponse", new String[]{"un expected error."}, e);
+				LogUtils.logError(owner, getClass(), "serviceResponse", new String[] { "un expected error." }, e);
 				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			}
 		}
 	}
 
 	static private Resource strip4specialCase(Resource r) {
-		if (ManagedIndividual.checkMembership(SignedResource.MY_URI, r)){
+		if (ManagedIndividual.checkMembership(SignedResource.MY_URI, r)) {
 			/*
-			 * you are about to sign / verify a signed resource, 
-			 * due to loopy reasons we need to strip the signedResource 
-			 * intrinsic properties before proceeding.
+			 * you are about to sign / verify a signed resource, due to loopy
+			 * reasons we need to strip the signedResource intrinsic properties
+			 * before proceeding.
 			 */
 			Resource copy = r.deepCopy();
 			copy.changeProperty(SignedResource.PROP_ASYMMETRIC, null);
@@ -139,88 +135,90 @@ public class SignVerifyCallee extends ServiceCallee {
 		return r;
 	}
 
-	static SignedResource sign(Resource r, Digest dig, AsymmetricEncryption enc, Base64Binary privateKey) throws GeneralSecurityException{
+	static SignedResource sign(Resource r, Digest dig, AsymmetricEncryption enc, Base64Binary privateKey)
+			throws GeneralSecurityException {
 		r = strip4specialCase(r);
 		// Serialize Resource
 		String message = ProjectActivator.serializer.getObject().serialize(r);
-				
-		//prepare Java Signature
+
+		// prepare Java Signature
 		Signature s = getSignature(dig, enc);
 		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey.getVal());
-		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc));
+		KeyFactory keyFactory = KeyFactory
+				.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc));
 		PrivateKey prKey = keyFactory.generatePrivate(keySpec);
-		s.initSign(prKey);	
+		s.initSign(prKey);
 		s.update(message.getBytes());
-		
 
-		//set up the result
+		// set up the result
 		SignedResource sr = new SignedResource();
 		sr.setSignedResource(r);
-		sr.setSignature(new Base64Binary[]{new Base64Binary(s.sign())});
+		sr.setSignature(new Base64Binary[] { new Base64Binary(s.sign()) });
 		sr.setDigest(dig);
 
-		//create copy without the keyring
+		// create copy without the keyring
 		AsymmetricEncryption method = (AsymmetricEncryption) enc.deepCopy();
 		method.changeProperty(AsymmetricEncryption.PROP_KEY_RING, null);
 		method.changeProperty(AsymmetricEncryption.PROP_KEY, null);
 		sr.setAsymmetric(method);
 		return sr;
 	}
-	
-	static Boolean verify(SignedResource sr, Digest dig,AsymmetricEncryption enc, Base64Binary publicKey) throws GeneralSecurityException{
-		//Digest
+
+	static Boolean verify(SignedResource sr, Digest dig, AsymmetricEncryption enc, Base64Binary publicKey)
+			throws GeneralSecurityException {
+		// Digest
 		Resource r = strip4specialCase(sr.getSignedResource());
 		// Serialize Resource
 		String message = ProjectActivator.serializer.getObject().serialize(r);
-				
-		//prepare Java Verification
+
+		// prepare Java Verification
 		Signature s = getSignature(dig, enc);
 		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey.getVal());
-		KeyFactory keyFactory = KeyFactory.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc));
+		KeyFactory keyFactory = KeyFactory
+				.getInstance(EncryptionServiceCallee.getJavaCipherProviderFromEncryption(enc));
 		PublicKey pubKey = keyFactory.generatePublic(keySpec);
-		s.initVerify(pubKey);	
+		s.initVerify(pubKey);
 		s.update(message.getBytes());
-		
-		
-		//check signatures
+
+		// check signatures
 		Boolean result = Boolean.FALSE;
 		List signatures = sr.getSignature();
 		for (Object sign : signatures) {
-			if (s.verify(((Base64Binary)sign).getVal())){
+			if (s.verify(((Base64Binary) sign).getVal())) {
 				result = Boolean.TRUE;
 			}
 		}
 		return result;
 	}
-	
-	static Signature getSignature(Digest dig, AsymmetricEncryption asy) throws NoSuchAlgorithmException{
+
+	static Signature getSignature(Digest dig, AsymmetricEncryption asy) throws NoSuchAlgorithmException {
 		String dName = "";
 		String aName = "";
-		if (dig == null){
+		if (dig == null) {
 			dName = "NONE";
-		}else if (dig.equals(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2)) {
-			dName ="MD2";
+		} else if (dig.equals(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2)) {
+			dName = "MD2";
 		}
 		if (dig.equals(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD5)) {
-			dName ="MD5";
+			dName = "MD5";
 		}
 		if (dig.equals(SecureHashAlgorithm.IND_SHA)) {
-			dName ="SHA1";
+			dName = "SHA1";
 		}
 		if (dig.equals(SecureHashAlgorithm.IND_SHA256)) {
-			dName ="SHA256";
+			dName = "SHA256";
 		}
 		if (dig.equals(SecureHashAlgorithm.IND_SHA384)) {
-			dName ="SHA384";
+			dName = "SHA384";
 		}
 		if (dig.equals(SecureHashAlgorithm.IND_SHA512)) {
-			dName ="SHA512";
-		} 
-		if (ManagedIndividual.checkMembership(RSA.MY_URI, asy)){
+			dName = "SHA512";
+		}
+		if (ManagedIndividual.checkMembership(RSA.MY_URI, asy)) {
 			aName = "RSA";
 		}
-		
-		return Signature.getInstance(dName+"with"+aName);
+
+		return Signature.getInstance(dName + "with" + aName);
 	}
-	
+
 }

@@ -64,8 +64,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 	 * @param context
 	 * @param realizedServices
 	 */
-	public EncryptionServiceCallee(ModuleContext context,
-			ServiceProfile[] realizedServices) {
+	public EncryptionServiceCallee(ModuleContext context, ServiceProfile[] realizedServices) {
 		super(context, realizedServices);
 	}
 
@@ -74,8 +73,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 	 * @param realizedServices
 	 * @param throwOnError
 	 */
-	public EncryptionServiceCallee(ModuleContext context,
-			ServiceProfile[] realizedServices, boolean throwOnError) {
+	public EncryptionServiceCallee(ModuleContext context, ServiceProfile[] realizedServices, boolean throwOnError) {
 		super(context, realizedServices, throwOnError);
 	}
 
@@ -90,109 +88,93 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		Base64Binary key = null;
 		boolean symmetrical = true;
 		Encryption algorithm = (Encryption) call.getInputValue(EncryptionServiceProfiles.METHOD);
-		if (call.getProcessURI().contains("generate-new")){
+		if (call.getProcessURI().contains("generate-new")) {
 			try {
 				EncryptionKey out;
-				if (ManagedIndividual.checkMembership(SymmetricEncryption.MY_URI, algorithm)){
-					out = generateSymmetricKey((SymmetricEncryption) algorithm,call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH));
-				}
-				else {
-					out = generateKeyRing((AsymmetricEncryption) algorithm, call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH));
+				if (ManagedIndividual.checkMembership(SymmetricEncryption.MY_URI, algorithm)) {
+					out = generateSymmetricKey((SymmetricEncryption) algorithm,
+							call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH));
+				} else {
+					out = generateKeyRing((AsymmetricEncryption) algorithm,
+							call.getInputValue(EncryptionServiceProfiles.KEY_LENGTH));
 				}
 				ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
 				sr.addOutput(new ProcessOutput(EncryptionServiceProfiles.KEY, out));
 				return sr;
 			} catch (Exception e) {
-				LogUtils.logError(owner, getClass(), "GenerateRSAkeyring", new String []{"Something whent wrong"}, e);
+				LogUtils.logError(owner, getClass(), "GenerateRSAkeyring", new String[] { "Something whent wrong" }, e);
 				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			}
 		}
 		if (ManagedIndividual.checkMembership(AsymmetricEncryption.MY_URI, algorithm)) {
 			symmetrical = false;
-			//if it is an asymmetrical operation resolve the Key to use
-			KeyRing keyring = (KeyRing) call
-					.getInputValue(EncryptionServiceProfiles.KEY);
-//			key = resolveKey(keyring); 
+			// if it is an asymmetrical operation resolve the Key to use
+			KeyRing keyring = (KeyRing) call.getInputValue(EncryptionServiceProfiles.KEY);
+			// key = resolveKey(keyring);
 			if (call.getProcessURI().contains("encrypt")) {
 				key = keyring.getPublicKey();
-			}else if (call.getProcessURI().contains("decrypt")) {
+			} else if (call.getProcessURI().contains("decrypt")) {
 				key = keyring.getPrivateKey();
 			}
-			
-			if (key == null){
-				ServiceResponse sr =  new ServiceResponse(CallStatus.serviceSpecificFailure);
+
+			if (key == null) {
+				ServiceResponse sr = new ServiceResponse(CallStatus.serviceSpecificFailure);
 				sr.setResourceComment("MAN! I need at least one key; public or private does not matter!");
 				return sr;
 			}
 		} else {
-			SimpleKey sk = (SimpleKey) call
-					.getInputValue(EncryptionServiceProfiles.KEY);
+			SimpleKey sk = (SimpleKey) call.getInputValue(EncryptionServiceProfiles.KEY);
 			key = sk.getKeyText();
 		}
 		if (call.getProcessURI().contains("encrypt")) {
-			Resource ir = (Resource) call
-					.getInputValue(EncryptionServiceProfiles.CLEAR_RESOURCE);
+			Resource ir = (Resource) call.getInputValue(EncryptionServiceProfiles.CLEAR_RESOURCE);
 			EncryptedResource er = null;
-			
+
 			try {
 				if (symmetrical) {
 					er = doEncryption(ir, key, (SymmetricEncryption) algorithm);
-				}else {
-					//encryption with Asymmetrical
+				} else {
+					// encryption with Asymmetrical
 					er = doEncryption(ir, key, (AsymmetricEncryption) algorithm);
 				}
 			} catch (Exception e) {
-				LogUtils.logError(owner, getClass(), "Encrypt"
-						+ algorithm,
-						new String[] { "unable to encrypt." }, e);
-				return new ServiceResponse(
-						CallStatus.serviceSpecificFailure);
+				LogUtils.logError(owner, getClass(), "Encrypt" + algorithm, new String[] { "unable to encrypt." }, e);
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			}
-				ProcessOutput po = new ProcessOutput(
-						EncryptionServiceProfiles.ENCRYPTED_RESOURCE,
-						er);
-						
-				ServiceResponse sr = new ServiceResponse(
-						CallStatus.succeeded);
-				sr.addOutput(po);
+			ProcessOutput po = new ProcessOutput(EncryptionServiceProfiles.ENCRYPTED_RESOURCE, er);
 
-				return sr;
+			ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+			sr.addOutput(po);
+
+			return sr;
 		}
 		if (call.getProcessURI().contains("decrypt")) {
-			EncryptedResource ir = (EncryptedResource) call
-					.getInputValue(EncryptionServiceProfiles.ENCRYPTED_RESOURCE);
+			EncryptedResource ir = (EncryptedResource) call.getInputValue(EncryptionServiceProfiles.ENCRYPTED_RESOURCE);
 			Encryption method = (Encryption) call.getInputValue(EncryptionServiceProfiles.METHOD);
-			if ( ir.hasProperty(EncryptedResource.PROP_ENCRYPTION) && !ir.getEncryption().equals(method)){
+			if (ir.hasProperty(EncryptedResource.PROP_ENCRYPTION) && !ir.getEncryption().equals(method)) {
 				ServiceResponse sr = new ServiceResponse(CallStatus.serviceSpecificFailure);
 				sr.setResourceComment("EncryptedResource Method and Solicited method don't match. Aborting");
 				return sr;
 			}
 
 			Resource r = null;
-			
+
 			try {
-				if(symmetrical){
+				if (symmetrical) {
 					r = doDecryption(ir, key, (SymmetricEncryption) algorithm);
-				}else {
-					//decryption with Asymmetrical
+				} else {
+					// decryption with Asymmetrical
 					r = doDecryption(ir, key, (AsymmetricEncryption) algorithm);
-					
+
 				}
 
 			} catch (Exception e) {
-				LogUtils.logError(owner, getClass(), "Decrypt"
-						+ algorithm,
-						new String[] { "unable to decrypt." }, e);
-				return new ServiceResponse(
-						CallStatus.serviceSpecificFailure);
+				LogUtils.logError(owner, getClass(), "Decrypt" + algorithm, new String[] { "unable to decrypt." }, e);
+				return new ServiceResponse(CallStatus.serviceSpecificFailure);
 			}
 
-
-			ProcessOutput po = new ProcessOutput(
-					EncryptionServiceProfiles.CLEAR_RESOURCE,
-					r);
-			ServiceResponse sr = new ServiceResponse(
-					CallStatus.succeeded);
+			ProcessOutput po = new ProcessOutput(EncryptionServiceProfiles.CLEAR_RESOURCE, r);
+			ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
 			sr.addOutput(po);
 
 			return sr;
@@ -202,8 +184,8 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		return new ServiceResponse(CallStatus.noMatchingServiceFound);
 	}
 
-	static EncryptedResource doEncryption(Resource ir, Base64Binary key,
-			SymmetricEncryption algorithm) throws GeneralSecurityException {
+	static EncryptedResource doEncryption(Resource ir, Base64Binary key, SymmetricEncryption algorithm)
+			throws GeneralSecurityException {
 		String alg = getJavaCipherProviderFromEncryption(algorithm);
 		Cipher cipher = Cipher.getInstance(alg);
 
@@ -211,8 +193,7 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		String message = ProjectActivator.serializer.getObject().serialize(ir);
 
 		// configure cipher
-		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getVal(),
-				alg));
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getVal(), alg));
 		// Encrypt
 		byte[] byteCipherText = cipher.doFinal(message.getBytes());
 
@@ -226,14 +207,13 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		return or;
 	}
 
-	static Resource doDecryption(EncryptedResource ir, Base64Binary key,
-			SymmetricEncryption encrytionAlgorithm) throws GeneralSecurityException {
+	static Resource doDecryption(EncryptedResource ir, Base64Binary key, SymmetricEncryption encrytionAlgorithm)
+			throws GeneralSecurityException {
 		String alg = getJavaCipherProviderFromEncryption(encrytionAlgorithm);
 		Cipher cipher = Cipher.getInstance(alg);
 
 		// configure cipher
-		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getVal(),
-				alg));
+		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getVal(), alg));
 		// Encrypt
 		byte[] clearText = cipher.doFinal(ir.getCypheredText().getVal());
 
@@ -244,37 +224,38 @@ public class EncryptionServiceCallee extends ServiceCallee {
 
 		return or;
 	}
-	
-	static SimpleKey generateSymmetricKey(SymmetricEncryption enc, Object preferredKeyLength) throws NoSuchAlgorithmException{
+
+	static SimpleKey generateSymmetricKey(SymmetricEncryption enc, Object preferredKeyLength)
+			throws NoSuchAlgorithmException {
 		int keyLength;
-		if (preferredKeyLength == null || !(preferredKeyLength instanceof Integer) ||  ((Integer)preferredKeyLength).intValue() == 0){
-			if (enc.getClassURI().equals(DES.MY_URI)){
+		if (preferredKeyLength == null || !(preferredKeyLength instanceof Integer)
+				|| ((Integer) preferredKeyLength).intValue() == 0) {
+			if (enc.getClassURI().equals(DES.MY_URI)) {
 				keyLength = 56;
-			}else {
+			} else {
 				keyLength = 128;
 			}
 		} else {
-			keyLength = ((Integer)preferredKeyLength).intValue();
+			keyLength = ((Integer) preferredKeyLength).intValue();
 		}
-		
+
 		KeyGenerator keyGen = KeyGenerator.getInstance(getJavaCipherProviderFromEncryption(enc));
 		keyGen.init(keyLength);
-						
-		//generate Keyring
+
+		// generate Keyring
 		SimpleKey out = new SimpleKey();
 		out.setKeyText(new Base64Binary(keyGen.generateKey().getEncoded()));
 		out.setProperty(EncryptionKey.PROP_KEY_LENGTH, new Integer(keyLength));
 		return out;
 	}
-	
-	static EncryptedResource doEncryption(Resource ir, Base64Binary publickey,
-			AsymmetricEncryption algorithm) throws Exception {
+
+	static EncryptedResource doEncryption(Resource ir, Base64Binary publickey, AsymmetricEncryption algorithm)
+			throws Exception {
 		String alg = getJavaCipherProviderFromEncryption(algorithm);
 		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publickey.getVal());
 		KeyFactory keyFactory = KeyFactory.getInstance(alg);
 		PublicKey puKey = keyFactory.generatePublic(keySpec);
 
-		
 		// Serialize Resource
 		String message = ProjectActivator.serializer.getObject().serialize(ir);
 
@@ -292,8 +273,8 @@ public class EncryptionServiceCallee extends ServiceCallee {
 		return or;
 	}
 
-	static Resource doDecryption(EncryptedResource ir, Base64Binary privatekey,
-			AsymmetricEncryption algorithm) throws Exception {
+	static Resource doDecryption(EncryptedResource ir, Base64Binary privatekey, AsymmetricEncryption algorithm)
+			throws Exception {
 		String alg = getJavaCipherProviderFromEncryption(algorithm);
 		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privatekey.getVal());
 		KeyFactory keyFactory = KeyFactory.getInstance(alg);
@@ -305,46 +286,45 @@ public class EncryptionServiceCallee extends ServiceCallee {
 
 		// Collect result
 		// deserialize Resource
-		Resource or = (Resource) ProjectActivator.serializer.getObject()
-				.deserialize(clearText);
+		Resource or = (Resource) ProjectActivator.serializer.getObject().deserialize(clearText);
 
 		return or;
 	}
-	
-	static KeyRing generateKeyRing (AsymmetricEncryption algorithm, Object preferredKeyLength) throws NoSuchAlgorithmException{
+
+	static KeyRing generateKeyRing(AsymmetricEncryption algorithm, Object preferredKeyLength)
+			throws NoSuchAlgorithmException {
 		int keyLength;
-		if (preferredKeyLength == null || !(preferredKeyLength instanceof Integer) ||  ((Integer)preferredKeyLength).intValue() == 0){
+		if (preferredKeyLength == null || !(preferredKeyLength instanceof Integer)
+				|| ((Integer) preferredKeyLength).intValue() == 0) {
 			keyLength = 1024;
 		} else {
-			keyLength = ((Integer)preferredKeyLength).intValue();
+			keyLength = ((Integer) preferredKeyLength).intValue();
 		}
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(getJavaCipherProviderFromEncryption(algorithm));
 		keyGen.initialize(keyLength);
 		KeyPair kp = keyGen.generateKeyPair();
 		byte[] publicKey = kp.getPublic().getEncoded();
 		byte[] privateKey = kp.getPrivate().getEncoded();
-		
-		//generate Keyring
+
+		// generate Keyring
 		KeyRing out = new KeyRing();
 		out.setPublicKey(new Base64Binary(publicKey));
 		out.setPrivateKey(new Base64Binary(privateKey));
 		out.setProperty(EncryptionKey.PROP_KEY_LENGTH, new Integer(keyLength));
 		return out;
 	}
-	
-	
-	
-	static String getJavaCipherProviderFromEncryption(Encryption enc){
+
+	static String getJavaCipherProviderFromEncryption(Encryption enc) {
 		if (ManagedIndividual.checkMembership(AES.MY_URI, enc)) {
 			return "AES";
 		}
-		if (ManagedIndividual.checkMembership(Blowfish.MY_URI, enc)){
+		if (ManagedIndividual.checkMembership(Blowfish.MY_URI, enc)) {
 			return "Blowfish";
 		}
-		if (ManagedIndividual.checkMembership(DES.MY_URI, enc)){
+		if (ManagedIndividual.checkMembership(DES.MY_URI, enc)) {
 			return "DES";
 		}
-		if (ManagedIndividual.checkMembership(RSA.MY_URI, enc)){
+		if (ManagedIndividual.checkMembership(RSA.MY_URI, enc)) {
 			return "RSA";
 		}
 		return null;

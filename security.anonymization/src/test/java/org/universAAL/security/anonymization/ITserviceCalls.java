@@ -45,118 +45,130 @@ import org.universAAL.ontology.shape.ShapeOntology;
 import org.universAAL.ontology.space.SpaceOntology;
 import org.universAAL.ontology.vcard.VCardOntology;
 
-
 /**
  * @author amedrano
  *
  */
 public class ITserviceCalls extends BusTestCase {
-	
+
 	private static final String NAMESPACE = "http://tests.universAAL.org/Anonymization#";
-	
-	private static final String MY_OUTPUT = NAMESPACE +  "ServiceOutput";
+
+	private static final String MY_OUTPUT = NAMESPACE + "ServiceOutput";
 
 	private DefaultServiceCaller scaller;
 
 	private ProjectActivator scallee;
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-//		OntologyManagement.getInstance().register(mc, new DataRepOntology());
-//		OntologyManagement.getInstance().register(mc, new ServiceBusOntology());
-//    	OntologyManagement.getInstance().register(mc, new UIBusOntology());
-        OntologyManagement.getInstance().register(mc, new LocationOntology());
-//		OntologyManagement.getInstance().register(mc, new SysinfoOntology());
-        OntologyManagement.getInstance().register(mc, new ShapeOntology());
-        OntologyManagement.getInstance().register(mc, new PhThingOntology());
-        OntologyManagement.getInstance().register(mc, new SpaceOntology());
-        OntologyManagement.getInstance().register(mc, new VCardOntology());
-    	OntologyManagement.getInstance().register(mc, new ProfileOntology());
-//		OntologyManagement.getInstance().register(mc, new MenuProfileOntology());
-		OntologyManagement.getInstance().register(mc, new CryptographicOntology());	
+		// OntologyManagement.getInstance().register(mc, new DataRepOntology());
+		// OntologyManagement.getInstance().register(mc, new
+		// ServiceBusOntology());
+		// OntologyManagement.getInstance().register(mc, new UIBusOntology());
+		OntologyManagement.getInstance().register(mc, new LocationOntology());
+		// OntologyManagement.getInstance().register(mc, new SysinfoOntology());
+		OntologyManagement.getInstance().register(mc, new ShapeOntology());
+		OntologyManagement.getInstance().register(mc, new PhThingOntology());
+		OntologyManagement.getInstance().register(mc, new SpaceOntology());
+		OntologyManagement.getInstance().register(mc, new VCardOntology());
+		OntologyManagement.getInstance().register(mc, new ProfileOntology());
+		// OntologyManagement.getInstance().register(mc, new
+		// MenuProfileOntology());
+		OntologyManagement.getInstance().register(mc, new CryptographicOntology());
 		OntologyManagement.getInstance().register(mc, new SecurityOntology());
-		
-		//register Encryption services module...
-		new org.universAAL.security.cryptographic.services
-			.ProjectActivator().start(new JUnitModuleContext());
-		
+
+		// register Encryption services module...
+		new org.universAAL.security.cryptographic.services.ProjectActivator().start(new JUnitModuleContext());
+
 		scallee = new ProjectActivator();
 		scallee.start(mc);
-		
+
 		scaller = new DefaultServiceCaller(mc);
 	}
-	
-	public void testExecution(){
-		
+
+	public void testExecution() {
+
 		Resource r = RandomResourceGenerator.randomResource();
-		
-//		Resource a = ManagedIndividual.getResource(UserProfile.MY_URI, NAMESPACE+"testUP");
-		Resource a = ManagedIndividual.getResource(Anonymizable.MY_URI, NAMESPACE+"testUP");
+
+		// Resource a = ManagedIndividual.getResource(UserProfile.MY_URI,
+		// NAMESPACE+"testUP");
+		Resource a = ManagedIndividual.getResource(Anonymizable.MY_URI, NAMESPACE + "testUP");
 		assertTrue(a.changeProperty(Anonymizable.PROP_ANNONYMOUS_RESOURCE, r));
-		
+
 		AsymmetricEncryption ae = new RSA();
 		ae.addKeyRing(keyringKeygen(ae, 1024));
-		
+
 		// Anonymize
 		ServiceRequest sreq = new ServiceRequest(new AnonymizationService(), null);
-		
-		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ASYMMETRIC_ENCRYPTION}, ae);
-//		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE}, a);
-		sreq.addChangeEffect(new String[]{AnonymizationService.PROP_ANONYMIZABLE}, a);
-		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE,Anonymizable.PROP_ANNONYMOUS_RESOURCE}, r);
-		sreq.addRequiredOutput(MY_OUTPUT, new String[]{AnonymizationService.PROP_ANONYMIZABLE});
-		
+
+		sreq.addValueFilter(new String[] { AnonymizationService.PROP_ASYMMETRIC_ENCRYPTION }, ae);
+		// sreq.addValueFilter(new
+		// String[]{AnonymizationService.PROP_ANONYMIZABLE}, a);
+		sreq.addChangeEffect(new String[] { AnonymizationService.PROP_ANONYMIZABLE }, a);
+		sreq.addValueFilter(
+				new String[] { AnonymizationService.PROP_ANONYMIZABLE, Anonymizable.PROP_ANNONYMOUS_RESOURCE }, r);
+		sreq.addRequiredOutput(MY_OUTPUT, new String[] { AnonymizationService.PROP_ANONYMIZABLE });
+
 		writeR("Anonymization/Requests", "Anonymize", sreq);
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
 		writeR("Anonymization/Responses", "Anonymize", sres);
-		
+
 		Resource anonymized = (Resource) sres.getOutput(MY_OUTPUT).get(0);
-		
-		assertEquals(a, anonymized); //only checks URI
-		assertFalse(RandomResourceGenerator.fullResourceEquals(a, anonymized)); //there must be a property which is changed
-		
-		//System.out.println(serialize(anonymized));
-		
+
+		assertEquals(a, anonymized); // only checks URI
+		assertFalse(RandomResourceGenerator.fullResourceEquals(a, anonymized)); // there
+																				// must
+																				// be
+																				// a
+																				// property
+																				// which
+																				// is
+																				// changed
+
+		// System.out.println(serialize(anonymized));
+
 		// Deanonymize
 		sreq = new ServiceRequest(new AnonymizationService(), null);
-		
-		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ASYMMETRIC_ENCRYPTION}, ae);
-		sreq.addValueFilter(new String[]{AnonymizationService.PROP_ANONYMIZABLE}, anonymized);
-		sreq.addRequiredOutput(MY_OUTPUT, new String[]{AnonymizationService.PROP_ANONYMIZABLE});
-		
+
+		sreq.addValueFilter(new String[] { AnonymizationService.PROP_ASYMMETRIC_ENCRYPTION }, ae);
+		sreq.addValueFilter(new String[] { AnonymizationService.PROP_ANONYMIZABLE }, anonymized);
+		sreq.addRequiredOutput(MY_OUTPUT, new String[] { AnonymizationService.PROP_ANONYMIZABLE });
+
 		writeR("Anonymization/Requests", "Denonymize", sreq);
 		sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
 		writeR("Anonymization/Responses", "Deanonymize", sres);
-		
+
 		Resource deanonymized = (Resource) sres.getOutput(MY_OUTPUT).get(0);
-		
-//		System.out.println(serialize(anonymized));
+
+		// System.out.println(serialize(anonymized));
 		assertEquals(a, deanonymized);
-		
-		assertEquals(a.getProperty(Anonymizable.PROP_ANNONYMOUS_RESOURCE), deanonymized.getProperty(Anonymizable.PROP_ANNONYMOUS_RESOURCE));
+
+		assertEquals(a.getProperty(Anonymizable.PROP_ANNONYMOUS_RESOURCE),
+				deanonymized.getProperty(Anonymizable.PROP_ANNONYMOUS_RESOURCE));
 	}
 
 	private KeyRing keyringKeygen(AsymmetricEncryption ae, int keylength) {
 		ServiceRequest sreq = new ServiceRequest(new EncryptionService(), null);
-		
-		sreq.addValueFilter(new String [] {EncryptionService.PROP_ENCRYPTION}, ae );
-		sreq.addValueFilter(new String[]{EncryptionService.PROP_ENCRYPTION,RSA.PROP_KEY_RING,KeyRing.PROP_KEY_LENGTH}, Integer.valueOf(keylength) );
-		//if previous statement is left out, even the propfile having cardinality 0,1 it will not match.
-		sreq.addRequiredOutput(MY_OUTPUT, new String[]{EncryptionService.PROP_ENCRYPTION,RSA.PROP_KEY_RING});
-		
+
+		sreq.addValueFilter(new String[] { EncryptionService.PROP_ENCRYPTION }, ae);
+		sreq.addValueFilter(
+				new String[] { EncryptionService.PROP_ENCRYPTION, RSA.PROP_KEY_RING, KeyRing.PROP_KEY_LENGTH },
+				Integer.valueOf(keylength));
+		// if previous statement is left out, even the propfile having
+		// cardinality 0,1 it will not match.
+		sreq.addRequiredOutput(MY_OUTPUT, new String[] { EncryptionService.PROP_ENCRYPTION, RSA.PROP_KEY_RING });
+
 		ServiceResponse sres = scaller.call(sreq);
 		assertEquals(CallStatus.succeeded, sres.getCallStatus());
 		return (KeyRing) sres.getOutput(MY_OUTPUT).get(0);
-		
+
 	}
-	
-	
-	
-	private void writeR(String folder, String sname, Resource sreq){
+
+	private void writeR(String folder, String sname, Resource sreq) {
 		File dir = new File("./target/" + folder);
 		dir.mkdirs();
 		File out = new File(dir, sname);
@@ -167,7 +179,6 @@ public class ITserviceCalls extends BusTestCase {
 			w = new BufferedWriter(new FileWriter(out));
 			w.write(ser);
 			w.flush();
-			
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -179,6 +190,6 @@ public class ITserviceCalls extends BusTestCase {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 }

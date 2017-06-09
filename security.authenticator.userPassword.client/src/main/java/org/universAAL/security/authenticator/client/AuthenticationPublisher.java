@@ -29,65 +29,60 @@ import org.universAAL.ontology.profile.User;
 import org.universAAL.ontology.security.SecurityOntology;
 
 /**
- * This class should be used when the Authentication is successful,
- * to allow the Session Manager to uplift the authentication to a 
- * Session.
+ * This class should be used when the Authentication is successful, to allow the
+ * Session Manager to uplift the authentication to a Session.
  * 
  * @author amedrano
  *
  */
 public class AuthenticationPublisher extends ContextPublisher {
 
-    /**
-     * @param context
-     * @param providerInfo
-     */
-    public AuthenticationPublisher(ModuleContext context) {
-	super(context, getProvider());
-    }
-    
-	public static ContextProvider getProvider(){
+	/**
+	 * @param context
+	 * @param providerInfo
+	 */
+	public AuthenticationPublisher(ModuleContext context) {
+		super(context, getProvider());
+	}
+
+	public static ContextProvider getProvider() {
 		// creates a context provider for CompetitionDevices
 		ContextProvider cprovider;
-				cprovider = new ContextProvider();
-				cprovider.setProvidedEvents(getPattern());
-				cprovider.setType(ContextProviderType.gauge);
+		cprovider = new ContextProvider();
+		cprovider.setProvidedEvents(getPattern());
+		cprovider.setType(ContextProviderType.gauge);
 		return cprovider;
 	}
-	
+
 	public static ContextEventPattern[] getPattern() {
-	    ContextEventPattern[] patterns = new ContextEventPattern[2];
+		ContextEventPattern[] patterns = new ContextEventPattern[2];
 		ContextEventPattern cep = new ContextEventPattern();
-		cep.addRestriction(MergedRestriction
-				.getAllValuesRestriction(ContextEvent.PROP_RDF_OBJECT, Device.MY_URI));
-		cep.addRestriction(MergedRestriction
-			.getAllValuesRestriction(ContextEvent.PROP_RDF_SUBJECT, User.MY_URI));
-		cep.addRestriction(MergedRestriction
-			.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE, SecurityOntology.PROP_AUTHENTICATED));
+		cep.addRestriction(MergedRestriction.getAllValuesRestriction(ContextEvent.PROP_RDF_OBJECT, Device.MY_URI));
+		cep.addRestriction(MergedRestriction.getAllValuesRestriction(ContextEvent.PROP_RDF_SUBJECT, User.MY_URI));
+		cep.addRestriction(MergedRestriction.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE,
+				SecurityOntology.PROP_AUTHENTICATED));
 		patterns[0] = cep;
 		cep = new ContextEventPattern();
-		cep.addRestriction(MergedRestriction
-				.getAllValuesRestriction(ContextEvent.PROP_RDF_OBJECT, Device.MY_URI));
-		cep.addRestriction(MergedRestriction
-			.getAllValuesRestriction(ContextEvent.PROP_RDF_SUBJECT, User.MY_URI));
-		cep.addRestriction(MergedRestriction
-			.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE, SecurityOntology.PROP_REVOKED));
+		cep.addRestriction(MergedRestriction.getAllValuesRestriction(ContextEvent.PROP_RDF_OBJECT, Device.MY_URI));
+		cep.addRestriction(MergedRestriction.getAllValuesRestriction(ContextEvent.PROP_RDF_SUBJECT, User.MY_URI));
+		cep.addRestriction(MergedRestriction.getFixedValueRestriction(ContextEvent.PROP_RDF_PREDICATE,
+				SecurityOntology.PROP_REVOKED));
 		patterns[1] = cep;
 		return patterns;
 	}
 
-    /** {@ inheritDoc}	 */
-    public void communicationChannelBroken() {
+	/** {@ inheritDoc} */
+	public void communicationChannelBroken() {
 
-    }
+	}
 
-    public void authenticate(User u, Device d){
-	u.changeProperty(SecurityOntology.PROP_AUTHENTICATED, d);
-	publish(new ContextEvent(u, SecurityOntology.PROP_AUTHENTICATED));
-    }
-    
-    public void deauthenticate(User u, Device d){
-	u.changeProperty(SecurityOntology.PROP_REVOKED, d);
-	publish(new ContextEvent(u, SecurityOntology.PROP_REVOKED));
-    }
+	public void authenticate(User u, Device d) {
+		u.changeProperty(SecurityOntology.PROP_AUTHENTICATED, d);
+		publish(new ContextEvent(u, SecurityOntology.PROP_AUTHENTICATED));
+	}
+
+	public void deauthenticate(User u, Device d) {
+		u.changeProperty(SecurityOntology.PROP_REVOKED, d);
+		publish(new ContextEvent(u, SecurityOntology.PROP_REVOKED));
+	}
 }

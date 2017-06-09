@@ -39,31 +39,28 @@ import org.universAAL.security.authorisator.interfaces.AccessChecker;
  */
 public class CheckUserRoles implements AccessChecker {
 
-
 	private CHeQuerrier querier;
-	
-	protected ModuleContext mc;
-	
-	private static final String AUX_BAG_OBJECT = ProjectActivator.NAMESPACE + "auxilaryBagObject";
-	private static final String AUX_BAG_PROP =  ProjectActivator.NAMESPACE + "auxilaryBagProperty";
 
-	/**{@inheritDoc} */
-	public Set<AccessType> checkAccess(ModuleContext mc, User usr,
-			Resource asset) {
-		
+	protected ModuleContext mc;
+
+	private static final String AUX_BAG_OBJECT = ProjectActivator.NAMESPACE + "auxilaryBagObject";
+	private static final String AUX_BAG_PROP = ProjectActivator.NAMESPACE + "auxilaryBagProperty";
+
+	/** {@inheritDoc} */
+	public Set<AccessType> checkAccess(ModuleContext mc, User usr, Resource asset) {
+
 		init(mc);
-		
-		
+
 		// get the SecuritySubProfile for the user
-		
+
 		LogUtils.logDebug(mc, getClass(), "accessCheck", "Querying for the SecuritySubProfile.");
 		SecuritySubprofile ssp = getSecuritySubProfile(mc, usr);
 		LogUtils.logDebug(mc, getClass(), "accessCheck", "Got the SecuritySubProfile.");
-		if (ssp == null){
+		if (ssp == null) {
 			LogUtils.logInfo(mc, getClass(), "checkAccess", "No SecuritySubprofile found for user:" + usr.getURI());
 			return Collections.EMPTY_SET;
 		}
-		
+
 		// aggregate all the AccessRights
 		LogUtils.logDebug(mc, getClass(), "accessCheck", "Aggregating AccessRights.");
 		List<Role> roles = ssp.getRoles();
@@ -72,27 +69,26 @@ public class CheckUserRoles implements AccessChecker {
 			finalAccessRights.addAll(role.getAllAccessRights());
 		}
 		LogUtils.logDebug(mc, getClass(), "accessCheck", finalAccessRights.size() + " AccessRights aggregated.");
-		
-		//match the asset with all AccessRights
+
+		// match the asset with all AccessRights
 
 		return matchAccessRightsWAsset(finalAccessRights, asset);
 	}
-	
-	protected void init(ModuleContext mc){
-		if (querier == null){
+
+	protected void init(ModuleContext mc) {
+		if (querier == null) {
 			querier = new CHeQuerrier(mc);
 		}
-		if (this.mc == null){
+		if (this.mc == null) {
 			this.mc = mc;
 		}
 	}
-	
-	protected HashSet<AccessType> matchAccessRightsWAsset(Set<AccessRight> finalAccessRights, Resource asset){
+
+	protected HashSet<AccessType> matchAccessRightsWAsset(Set<AccessRight> finalAccessRights, Resource asset) {
 		HashSet<AccessType> res = new HashSet<AccessType>();
 		for (AccessRight ar : finalAccessRights) {
 			Object te = ar.getProperty(AccessRight.PROP_ACCESS_TO);
-			if (te instanceof TypeExpression
-					&& ((TypeExpression)te).hasMember(asset)){
+			if (te instanceof TypeExpression && ((TypeExpression) te).hasMember(asset)) {
 				LogUtils.logDebug(mc, getClass(), "matchAccessRightsWAsset", asset.getURI() + " Matched!");
 				res.addAll(AssetDefaultAccessChecker.resolveFromValue(ar));
 			}
@@ -101,28 +97,33 @@ public class CheckUserRoles implements AccessChecker {
 		return res;
 	}
 
-	protected SecuritySubprofile getSecuritySubProfile(ModuleContext mc, User usr){
-		Object o = querier.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("getSecuritySubProfileForUser.sparql"), new String[]{AUX_BAG_OBJECT,AUX_BAG_PROP,usr.getURI()}));
+	protected SecuritySubprofile getSecuritySubProfile(ModuleContext mc, User usr) {
+		Object o = querier.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("getSecuritySubProfileForUser.sparql"),
+				new String[] { AUX_BAG_OBJECT, AUX_BAG_PROP, usr.getURI() }));
 		SecuritySubprofile ssp;
-		if (o instanceof Resource){ 
-			//"o" should be the resource AUX_BAG_OBJECT
-			o = ((Resource)o).getProperty(AUX_BAG_PROP);
-			if (o instanceof List){
-				LogUtils.logWarn(mc, getClass(), "checkAccess", "WTF mode: More than one SecuritySubprofile found for the given user: " + usr.getURI());
-				o = ((List)o).get(0);
-				ssp = (SecuritySubprofile) querier.getFullResourceGraph(((Resource)o).getURI());
-			} else if (o != null ){
-				// not a list and not null => must be a Resource representing the SSP
-				ssp = (SecuritySubprofile) querier.getFullResourceGraph(((Resource)o).getURI());
-			}else {
-				LogUtils.logError(mc, getClass(), "checkAccess", "No SecuritySubprofile found for the given user: " + usr.getURI());
+		if (o instanceof Resource) {
+			// "o" should be the resource AUX_BAG_OBJECT
+			o = ((Resource) o).getProperty(AUX_BAG_PROP);
+			if (o instanceof List) {
+				LogUtils.logWarn(mc, getClass(), "checkAccess",
+						"WTF mode: More than one SecuritySubprofile found for the given user: " + usr.getURI());
+				o = ((List) o).get(0);
+				ssp = (SecuritySubprofile) querier.getFullResourceGraph(((Resource) o).getURI());
+			} else if (o != null) {
+				// not a list and not null => must be a Resource representing
+				// the SSP
+				ssp = (SecuritySubprofile) querier.getFullResourceGraph(((Resource) o).getURI());
+			} else {
+				LogUtils.logError(mc, getClass(), "checkAccess",
+						"No SecuritySubprofile found for the given user: " + usr.getURI());
 				ssp = null;
 			}
 			return ssp;
-		}else {
-			LogUtils.logError(mc, getClass(), "getAllObjectsOfType", "Wrong querry response, should get a Resource and we didn't");
+		} else {
+			LogUtils.logError(mc, getClass(), "getAllObjectsOfType",
+					"Wrong querry response, should get a Resource and we didn't");
 			return null;
 		}
 	}
-	
+
 }

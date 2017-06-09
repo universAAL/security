@@ -40,83 +40,76 @@ import org.universAAL.ontology.security.UserPasswordCredentials;
  */
 public class UserPasswordCallee extends ServiceCallee {
 
-    private static final String CAREGIVER_TRIGGER = "CG";
+	private static final String CAREGIVER_TRIGGER = "CG";
 
-    /**
-     * @param context
-     * @param realizedServices
-     */
-    private UserPasswordCallee(ModuleContext context,
-	    ServiceProfile[] realizedServices) {
-	super(context, realizedServices);
-    }
-    
-    /**
-     * 
-     */
-    public UserPasswordCallee(ModuleContext mc) {
-	this(mc,UserPasswordDummyService.profs);
-    }
-
-    /** {@ inheritDoc}	 */
-    @Override
-    public void communicationChannelBroken() {
-
-    }
-
-    /** {@ inheritDoc}	 */
-    @Override
-    public ServiceResponse handleCall(ServiceCall call) {
-	if (call == null){
-	    return new ServiceResponse(CallStatus.serviceSpecificFailure);
-	}
-	
-	String cmd = call.getProcessURI();
-	if (cmd.startsWith(UserPasswordDummyService.AUTHENTICATE_USR_PASSWORD_SERVICE)){
-	    UserPasswordCredentials upc = (UserPasswordCredentials) call.getInputValue(UserPasswordDummyService.CRED_IN);
-	    User u = authenticate(upc.getUsername(),upc.getPassword(), upc.getDigestAlgorithm());
-	    if (u != null){
-		ProcessOutput out = new ProcessOutput(UserPasswordDummyService.USER_OUT, u);
-		ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
-		sr.addOutput(out);
-		return sr;
-	    }
-	}
-	
-	if (cmd.startsWith(UserPasswordDummyService.GET_PWD_DIGEST_SERVICE)){
-	    ProcessOutput out = new ProcessOutput(UserPasswordDummyService.DIGEST_OUT, SecureHashAlgorithm.IND_SHA512);
-	    ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
-	    sr.addOutput(out);
-	    return sr;
+	/**
+	 * @param context
+	 * @param realizedServices
+	 */
+	private UserPasswordCallee(ModuleContext context, ServiceProfile[] realizedServices) {
+		super(context, realizedServices);
 	}
 
-	return new ServiceResponse(CallStatus.serviceSpecificFailure);
-    }
-
-    /**
-     * @param username
-     * @param password
-     * @param digestAlgorithm
-     * @return
-     */
-    private User authenticate(String username, Base64Binary password,
-	    Digest digestAlgorithm) {
-	if (username != null && !username.isEmpty()){
-	    if (username.contains(CAREGIVER_TRIGGER)){
-		return new Caregiver(Constants.uAAL_MIDDLEWARE_LOCAL_ID_PREFIX +
-			username.toLowerCase()
-			.replace(" ", "_")
-			.replace("#", "")
-			.replace("/", "_"));
-	    } else {
-		return new AssistedPerson(Constants.uAAL_MIDDLEWARE_LOCAL_ID_PREFIX +
-			username.toLowerCase()
-			.replace(" ", "_")
-			.replace("#", "")
-			.replace("/", "_"));
-	    }
+	/**
+	 * 
+	 */
+	public UserPasswordCallee(ModuleContext mc) {
+		this(mc, UserPasswordDummyService.profs);
 	}
-	return null;
-    }
+
+	/** {@ inheritDoc} */
+	@Override
+	public void communicationChannelBroken() {
+
+	}
+
+	/** {@ inheritDoc} */
+	@Override
+	public ServiceResponse handleCall(ServiceCall call) {
+		if (call == null) {
+			return new ServiceResponse(CallStatus.serviceSpecificFailure);
+		}
+
+		String cmd = call.getProcessURI();
+		if (cmd.startsWith(UserPasswordDummyService.AUTHENTICATE_USR_PASSWORD_SERVICE)) {
+			UserPasswordCredentials upc = (UserPasswordCredentials) call
+					.getInputValue(UserPasswordDummyService.CRED_IN);
+			User u = authenticate(upc.getUsername(), upc.getPassword(), upc.getDigestAlgorithm());
+			if (u != null) {
+				ProcessOutput out = new ProcessOutput(UserPasswordDummyService.USER_OUT, u);
+				ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+				sr.addOutput(out);
+				return sr;
+			}
+		}
+
+		if (cmd.startsWith(UserPasswordDummyService.GET_PWD_DIGEST_SERVICE)) {
+			ProcessOutput out = new ProcessOutput(UserPasswordDummyService.DIGEST_OUT, SecureHashAlgorithm.IND_SHA512);
+			ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
+			sr.addOutput(out);
+			return sr;
+		}
+
+		return new ServiceResponse(CallStatus.serviceSpecificFailure);
+	}
+
+	/**
+	 * @param username
+	 * @param password
+	 * @param digestAlgorithm
+	 * @return
+	 */
+	private User authenticate(String username, Base64Binary password, Digest digestAlgorithm) {
+		if (username != null && !username.isEmpty()) {
+			if (username.contains(CAREGIVER_TRIGGER)) {
+				return new Caregiver(Constants.uAAL_MIDDLEWARE_LOCAL_ID_PREFIX
+						+ username.toLowerCase().replace(" ", "_").replace("#", "").replace("/", "_"));
+			} else {
+				return new AssistedPerson(Constants.uAAL_MIDDLEWARE_LOCAL_ID_PREFIX
+						+ username.toLowerCase().replace(" ", "_").replace("#", "").replace("/", "_"));
+			}
+		}
+		return null;
+	}
 
 }

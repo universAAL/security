@@ -24,56 +24,56 @@ import org.universAAL.middleware.serialization.MessageContentSerializer;
 
 public class AuthenticatorActivator implements ModuleActivator, SharedObjectListener {
 
-    ModuleContext context;
-    private UserPasswordCallee callee;
-    private MessageContentSerializer serializer; 
+	ModuleContext context;
+	private UserPasswordCallee callee;
+	private MessageContentSerializer serializer;
 
-    /** {@ inheritDoc} */
-    public void start(ModuleContext mc) throws Exception {
-	context = mc;
-	LogUtils.logDebug(context, getClass(), "start", "Starting.");
-	/*
-	 * uAAL stuff
-	 */
-	Object[] obj = context.getContainer()
-		.fetchSharedObject(context, 
-			new Object[] { MessageContentSerializer.class.getName() }, this);
-	if (obj.length > 0){
-	    sharedObjectAdded(obj[0], null);
-	}
-	
-	UserPasswordProfileService.initialize(context);
-	callee = new UserPasswordCallee(this);
-	LogUtils.logDebug(context, getClass(), "start", "Started.");
-    }
+	/** {@ inheritDoc} */
+	public void start(ModuleContext mc) throws Exception {
+		context = mc;
+		LogUtils.logDebug(context, getClass(), "start", "Starting.");
+		/*
+		 * uAAL stuff
+		 */
+		Object[] obj = context.getContainer().fetchSharedObject(context,
+				new Object[] { MessageContentSerializer.class.getName() }, this);
+		if (obj.length > 0) {
+			sharedObjectAdded(obj[0], null);
+		}
 
-    /** {@ inheritDoc} */
-    public void stop(ModuleContext mc) throws Exception {
-	callee.close();
-    }
+		UserPasswordProfileService.initialize(context);
+		callee = new UserPasswordCallee(this);
+		LogUtils.logDebug(context, getClass(), "start", "Started.");
+	}
 
-    /** {@ inheritDoc}	 */
-    public synchronized void sharedObjectAdded(Object sharedObj, Object removeHook) {
-	if (sharedObj instanceof MessageContentSerializer) {
-	    serializer = (MessageContentSerializer) sharedObj;
-	    this.notifyAll();
+	/** {@ inheritDoc} */
+	public void stop(ModuleContext mc) throws Exception {
+		callee.close();
 	}
-    }
 
-    /** {@ inheritDoc}	 */
-    public synchronized void sharedObjectRemoved(Object removeHook) {
-	if (removeHook.equals(serializer)){
-	    serializer = null;
+	/** {@ inheritDoc} */
+	public synchronized void sharedObjectAdded(Object sharedObj, Object removeHook) {
+		if (sharedObj instanceof MessageContentSerializer) {
+			serializer = (MessageContentSerializer) sharedObj;
+			this.notifyAll();
+		}
 	}
-    }
-    
-    public synchronized MessageContentSerializer getSerializer(){
-	while (serializer == null){
-	    try {
-		this.wait();
-	    } catch (InterruptedException e) {}
+
+	/** {@ inheritDoc} */
+	public synchronized void sharedObjectRemoved(Object removeHook) {
+		if (removeHook.equals(serializer)) {
+			serializer = null;
+		}
 	}
-	return serializer; 
-    }
+
+	public synchronized MessageContentSerializer getSerializer() {
+		while (serializer == null) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+			}
+		}
+		return serializer;
+	}
 
 }

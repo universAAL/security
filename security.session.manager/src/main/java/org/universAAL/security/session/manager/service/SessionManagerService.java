@@ -39,71 +39,70 @@ import org.universAAL.ontology.security.SessionManagementService;
  */
 public class SessionManagerService extends SessionManagementService {
 
+	public static final String NAMESPACE = "http://security.universAAL.org/SessionManager#";
+	public static final String MY_URI = NAMESPACE + "SessionManagaerService";
 
-    public static final String NAMESPACE = "http://security.universAAL.org/SessionManager#";
-    public static final String MY_URI = NAMESPACE + "SessionManagaerService";
-    
-    public static final ServiceProfile[] profs = new ServiceProfile[3];
-    
-    static final String SESSIONS_IN_DEVICE_SERVICE = NAMESPACE +"listDeviceSessions";
-    static final String SESSIONS_IN_LOCATIONS_SERVICE = NAMESPACE +"listLocationSessions";
-    static final String GET_SESSION_FOR_USER_SERVICE = NAMESPACE + "getSession";
+	public static final ServiceProfile[] profs = new ServiceProfile[3];
 
-    static final String DEV_IN = NAMESPACE + "deviceIn";
-    static final String LOC_IN = NAMESPACE + "locationIn";
-    static final String USER_PARAM = NAMESPACE + "userInOut";
-    static final String SESSION_OUT = NAMESPACE + "validSession";
-    
-    
-    
-    /**
-     * @param uri
-     */
-    public SessionManagerService(String uri) {
-	super(uri);
-    }
+	static final String SESSIONS_IN_DEVICE_SERVICE = NAMESPACE + "listDeviceSessions";
+	static final String SESSIONS_IN_LOCATIONS_SERVICE = NAMESPACE + "listLocationSessions";
+	static final String GET_SESSION_FOR_USER_SERVICE = NAMESPACE + "getSession";
 
-    /**
-     * 
-     */
-    public SessionManagerService() {
-	super();
-    }
+	static final String DEV_IN = NAMESPACE + "deviceIn";
+	static final String LOC_IN = NAMESPACE + "locationIn";
+	static final String USER_PARAM = NAMESPACE + "userInOut";
+	static final String SESSION_OUT = NAMESPACE + "validSession";
 
-    public static ServiceProfile[] initialize(ModuleContext mc) {
-	OntologyManagement.getInstance().register(mc, 
-		new SimpleOntology(MY_URI, AuthenticationService.MY_URI, new ResourceFactory() {
-	    
-	    public Resource createInstance(String classURI, String instanceURI,
-		    int factoryIndex) {
-		return new SessionManagerService(instanceURI);
-	    }
-	}));
-	
-	/*
-	 * List Valid Sessions for Device
+	/**
+	 * @param uri
 	 */
-	SessionManagerService listInD = new SessionManagerService(SESSIONS_IN_DEVICE_SERVICE);
-	listInD.addFilteringInput(DEV_IN, Device.MY_URI, 1, 1, new String[]{PROP_USER,SecurityOntology.PROP_SESSION,DeviceBoundSession.PROP_BOUNDED_DEVICE});
-	listInD.addOutput(USER_PARAM, User.MY_URI, 0, -1, new String[]{PROP_USER});
-	profs[0] = listInD.myProfile;
-	
-	/*
-	 * List Valid Sessions for Location
-	 */
-	SessionManagerService listInL = new SessionManagerService(SESSIONS_IN_LOCATIONS_SERVICE);
-	listInL.addFilteringInput(LOC_IN, Location.MY_URI, 1, 1, new String[]{PROP_USER,SecurityOntology.PROP_SESSION,LocationBoundSession.PROP_BOUNDED_LOCATION});
-	listInL.addOutput(USER_PARAM, User.MY_URI, 0, -1, new String[]{PROP_USER});
-	profs[1] = listInL.myProfile;
+	public SessionManagerService(String uri) {
+		super(uri);
+	}
 
-	/*
-	 * is valid for Device and User
+	/**
+	 * 
 	 */
-	SessionManagerService isValidUD = new SessionManagerService(GET_SESSION_FOR_USER_SERVICE);
-	isValidUD.addFilteringInput(USER_PARAM, User.MY_URI, 1, 1, new String[]{PROP_USER});
-	isValidUD.addOutput(SESSION_OUT, Session.MY_URI, 0, 1, new String[]{PROP_USER,SecurityOntology.PROP_SESSION});
-	profs[2] = isValidUD.myProfile;
-	
-	return profs;
-    }
+	public SessionManagerService() {
+		super();
+	}
+
+	public static ServiceProfile[] initialize(ModuleContext mc) {
+		OntologyManagement.getInstance().register(mc,
+				new SimpleOntology(MY_URI, AuthenticationService.MY_URI, new ResourceFactory() {
+
+					public Resource createInstance(String classURI, String instanceURI, int factoryIndex) {
+						return new SessionManagerService(instanceURI);
+					}
+				}));
+
+		/*
+		 * List Valid Sessions for Device
+		 */
+		SessionManagerService listInD = new SessionManagerService(SESSIONS_IN_DEVICE_SERVICE);
+		listInD.addFilteringInput(DEV_IN, Device.MY_URI, 1, 1,
+				new String[] { PROP_USER, SecurityOntology.PROP_SESSION, DeviceBoundSession.PROP_BOUNDED_DEVICE });
+		listInD.addOutput(USER_PARAM, User.MY_URI, 0, -1, new String[] { PROP_USER });
+		profs[0] = listInD.myProfile;
+
+		/*
+		 * List Valid Sessions for Location
+		 */
+		SessionManagerService listInL = new SessionManagerService(SESSIONS_IN_LOCATIONS_SERVICE);
+		listInL.addFilteringInput(LOC_IN, Location.MY_URI, 1, 1,
+				new String[] { PROP_USER, SecurityOntology.PROP_SESSION, LocationBoundSession.PROP_BOUNDED_LOCATION });
+		listInL.addOutput(USER_PARAM, User.MY_URI, 0, -1, new String[] { PROP_USER });
+		profs[1] = listInL.myProfile;
+
+		/*
+		 * is valid for Device and User
+		 */
+		SessionManagerService isValidUD = new SessionManagerService(GET_SESSION_FOR_USER_SERVICE);
+		isValidUD.addFilteringInput(USER_PARAM, User.MY_URI, 1, 1, new String[] { PROP_USER });
+		isValidUD.addOutput(SESSION_OUT, Session.MY_URI, 0, 1,
+				new String[] { PROP_USER, SecurityOntology.PROP_SESSION });
+		profs[2] = isValidUD.myProfile;
+
+		return profs;
+	}
 }

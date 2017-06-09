@@ -24,7 +24,8 @@ import org.universAAL.security.authorisator.ProjectActivator;
  */
 public class RoleMngServiceProfile extends RoleManagementService {
 
-    public static String MY_URI = ProjectActivator.NAMESPACE + "RoleManagement";
+	public static String MY_URI = ProjectActivator.NAMESPACE + "RoleManagement";
+
 	/**
 	 * 
 	 */
@@ -38,7 +39,7 @@ public class RoleMngServiceProfile extends RoleManagementService {
 		super(uri);
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public String getClassURI() {
 		return MY_URI;

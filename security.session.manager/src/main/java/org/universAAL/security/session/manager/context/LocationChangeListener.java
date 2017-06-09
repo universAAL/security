@@ -25,6 +25,6 @@ import org.universAAL.ontology.location.Location;
  */
 public interface LocationChangeListener {
 
-    void locationChanged(Location l);
-    
+	void locationChanged(Location l);
+
 }

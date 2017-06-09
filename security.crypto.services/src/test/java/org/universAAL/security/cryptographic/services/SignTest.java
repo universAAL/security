@@ -29,28 +29,29 @@ import org.universAAL.ontology.cryptographic.digest.MessageDigest;
  */
 public class SignTest extends CommonTest {
 
-//	public void test() throws Exception{
-//		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-//		keyGen.initialize(512);
-//		System.out.println( keyGen.genKeyPair().getPublic().getFormat());
-//		System.out.println(keyGen.genKeyPair().getPrivate().getFormat());
-//	}
-	
-	public void testSign() throws Exception{
+	// public void test() throws Exception{
+	// KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+	// keyGen.initialize(512);
+	// System.out.println( keyGen.genKeyPair().getPublic().getFormat());
+	// System.out.println(keyGen.genKeyPair().getPrivate().getFormat());
+	// }
+
+	public void testSign() throws Exception {
 		AsymmetricEncryption enc = new RSA();
 		Digest dig = MessageDigest.IND_MD5;
 		KeyRing kr = EncryptionServiceCallee.generateKeyRing(enc, null);
-		
+
 		Resource r = RandomResourceGenerator.randomResource();
-		
+
 		SignedResource sr = SignVerifyCallee.sign(r, dig, enc, kr.getPrivateKey());
-		
+
 		assertEquals(r, sr.getSignedResource());
-		
+
 		Boolean verify = SignVerifyCallee.verify(sr, dig, enc, kr.getPublicKey());
 		assertEquals(Boolean.TRUE, verify);
-		
-		verify = SignVerifyCallee.verify(sr, dig, enc, EncryptionServiceCallee.generateKeyRing(enc, null).getPublicKey());
+
+		verify = SignVerifyCallee.verify(sr, dig, enc,
+				EncryptionServiceCallee.generateKeyRing(enc, null).getPublicKey());
 		assertEquals(Boolean.FALSE, verify);
 	}
 }

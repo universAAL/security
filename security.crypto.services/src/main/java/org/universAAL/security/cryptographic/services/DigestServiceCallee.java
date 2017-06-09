@@ -41,8 +41,7 @@ public class DigestServiceCallee extends ServiceCallee {
 	 * @param context
 	 * @param realizedServices
 	 */
-	public DigestServiceCallee(ModuleContext context,
-			ServiceProfile[] realizedServices) {
+	public DigestServiceCallee(ModuleContext context, ServiceProfile[] realizedServices) {
 		super(context, realizedServices);
 	}
 
@@ -51,57 +50,53 @@ public class DigestServiceCallee extends ServiceCallee {
 	 * @param realizedServices
 	 * @param throwOnError
 	 */
-	public DigestServiceCallee(ModuleContext context,
-			ServiceProfile[] realizedServices, boolean throwOnError) {
+	public DigestServiceCallee(ModuleContext context, ServiceProfile[] realizedServices, boolean throwOnError) {
 		super(context, realizedServices, throwOnError);
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public void communicationChannelBroken() {
 
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResponse handleCall(ServiceCall call) {
 		Resource r = (Resource) call.getInputValue(DigestServiceProfiles.IN_RESOURCE);
 		Digest d = (Digest) call.getInputValue(DigestServiceProfiles.IN_METHOD);
-		
-		
-		
+
 		Base64Binary digest = null;
 		try {
 			digest = digestResource(r, d);
 		} catch (NoSuchAlgorithmException e) {
-			LogUtils.logError(owner, getClass(), "handleCall", "The digest algorithm is not found, this should not be possible, check your java version.");
+			LogUtils.logError(owner, getClass(), "handleCall",
+					"The digest algorithm is not found, this should not be possible, check your java version.");
 			ServiceResponse sr = new ServiceResponse(CallStatus.serviceSpecificFailure);
 			sr.setResourceComment("NoSuchAlgorithmException");
 			return sr;
 		}
-		
+
 		ProcessOutput out = new ProcessOutput(DigestServiceProfiles.OUT_DIGEST, digest);
-		
+
 		ServiceResponse sr = new ServiceResponse(CallStatus.succeeded);
 		sr.addOutput(out);
 		return sr;
 	}
 
-	static Base64Binary digestResource(Resource r, Digest method) throws NoSuchAlgorithmException{
+	static Base64Binary digestResource(Resource r, Digest method) throws NoSuchAlgorithmException {
 		MessageDigest md = getMD(method);
-		
+
 		// Serialize Resource
 		String message = ProjectActivator.serializer.getObject().serialize(r);
 		// Digest serialized resource
 		byte[] digested = md.digest(message.getBytes());
-		
+
 		return new Base64Binary(digested);
-		
+
 	}
-	
-	
-	static private MessageDigest getMD(Digest digestAlgorithm)
-			throws NoSuchAlgorithmException {
+
+	static private MessageDigest getMD(Digest digestAlgorithm) throws NoSuchAlgorithmException {
 		if (digestAlgorithm.equals(org.universAAL.ontology.cryptographic.digest.MessageDigest.IND_MD2)) {
 			return MessageDigest.getInstance("MD2");
 		}
@@ -122,5 +117,5 @@ public class DigestServiceCallee extends ServiceCallee {
 		}
 		throw new NoSuchAlgorithmException();
 	}
-	
+
 }

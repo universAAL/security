@@ -28,11 +28,13 @@ import org.universAAL.security.authorisator.ProjectActivator;
  */
 public class SecuritySubProfileRoleManagement extends AuthorizationService {
 
-
 	public static String MY_URI = ProjectActivator.NAMESPACE + "SubProfileManagement";
-    
-    public static String[] pp_roles = new String[] {ProfilingService.PROP_CONTROLS,User.PROP_HAS_PROFILE,UserProfile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_ROLES};
-    public static String[] pp_subprofile = new String[] {ProfilingService.PROP_CONTROLS,User.PROP_HAS_PROFILE,UserProfile.PROP_HAS_SUB_PROFILE};
+
+	public static String[] pp_roles = new String[] { ProfilingService.PROP_CONTROLS, User.PROP_HAS_PROFILE,
+			UserProfile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_ROLES };
+	public static String[] pp_subprofile = new String[] { ProfilingService.PROP_CONTROLS, User.PROP_HAS_PROFILE,
+			UserProfile.PROP_HAS_SUB_PROFILE };
+
 	/**
 	 * 
 	 */
@@ -46,12 +48,10 @@ public class SecuritySubProfileRoleManagement extends AuthorizationService {
 		super(uri);
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public String getClassURI() {
 		return MY_URI;
 	}
-	
-	
 
 }

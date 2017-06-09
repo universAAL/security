@@ -27,37 +27,37 @@ import org.universAAL.middleware.rdf.Resource;
 public class RandomResourceGenerator {
 
 	static private SecureRandom random = new SecureRandom();
-	
+
 	static private String NAMESPACE = "http://ontologies.universAAL.org/Test.owl#";
 
 	static public String randomText() {
 		return new BigInteger(130, random).toString(32);
 	}
 
-	static public int randomNumber(int minimum,int  maximum){
-		return minimum + (int)(Math.random() * maximum); 
+	static public int randomNumber(int minimum, int maximum) {
+		return minimum + (int) (Math.random() * maximum);
 	}
-	
-	static public Resource randomResource(){
+
+	static public Resource randomResource() {
 		return genResource(5, 2, 10);
 	}
-	
-	static public Resource genResource (int depth, int minprops, int maxprops){
+
+	static public Resource genResource(int depth, int minprops, int maxprops) {
 		Resource r = new Resource(NAMESPACE + randomText());
 		int nprops = randomNumber(minprops, maxprops);
 		for (int i = 0; i < nprops; i++) {
 			int propType = randomNumber(0, 3);
 			switch (propType) {
-			case 0: //Integer
-				r.setProperty(NAMESPACE+"propInt"+randomText(), new Integer(randomNumber(0, 1024)));
+			case 0: // Integer
+				r.setProperty(NAMESPACE + "propInt" + randomText(), new Integer(randomNumber(0, 1024)));
 				break;
-			case 1: //String
-				r.setProperty(NAMESPACE+"propString"+randomText(), randomText());
+			case 1: // String
+				r.setProperty(NAMESPACE + "propString" + randomText(), randomText());
 				break;
 			case 2:
 			case 3: // another Resource
-				if (depth >0) {
-					r.setProperty(NAMESPACE + "propRes" + randomText(), genResource(depth-1, minprops, maxprops));
+				if (depth > 0) {
+					r.setProperty(NAMESPACE + "propRes" + randomText(), genResource(depth - 1, minprops, maxprops));
 				}
 				break;
 			default:
@@ -66,5 +66,5 @@ public class RandomResourceGenerator {
 		}
 		return r;
 	}
-	
+
 }

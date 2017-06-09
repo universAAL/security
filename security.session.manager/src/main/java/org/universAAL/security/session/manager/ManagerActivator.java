@@ -30,70 +30,67 @@ import org.universAAL.security.session.manager.service.SessionManagerService;
 
 public class ManagerActivator implements ModuleActivator {
 
-    ModuleContext context;
+	ModuleContext context;
 
-    SessionManager sessionManager;
+	SessionManager sessionManager;
 
-    private Subscriber subscriber;
+	private Subscriber subscriber;
 
-    private SCallee scallee;
+	private SCallee scallee;
 
-    private SessionPublisher publisher;
+	private SessionPublisher publisher;
 
-    private SituationMonitor monitor;
+	private SituationMonitor monitor;
 
-    public void start(ModuleContext ctxt) throws Exception {
-	context = ctxt;
-	LogUtils.logDebug(context, getClass(), "start", "Starting.");
-	/*
-	 * uAAL stuff
-	 */
-	LogUtils.logDebug(context, getClass(), "start", "Starting Publisher.");
-	publisher = new SessionPublisher(context);
+	public void start(ModuleContext ctxt) throws Exception {
+		context = ctxt;
+		LogUtils.logDebug(context, getClass(), "start", "Starting.");
+		/*
+		 * uAAL stuff
+		 */
+		LogUtils.logDebug(context, getClass(), "start", "Starting Publisher.");
+		publisher = new SessionPublisher(context);
 
-	LogUtils.logDebug(context, getClass(), "start",
-		"Starting Situation Monitor.");
-	monitor = new SituationMonitorImpl(context);
+		LogUtils.logDebug(context, getClass(), "start", "Starting Situation Monitor.");
+		monitor = new SituationMonitorImpl(context);
 
-	// Initialize sessionManager.
-	LogUtils.logDebug(context, getClass(), "start",
-		"Starting Session Manager.");
-	sessionManager = new SessionManagerImpl(context, monitor, publisher);
+		// Initialize sessionManager.
+		LogUtils.logDebug(context, getClass(), "start", "Starting Session Manager.");
+		sessionManager = new SessionManagerImpl(context, monitor, publisher);
 
-	LogUtils.logDebug(context, getClass(), "start", "Starting Susbscriber.");
-	subscriber = new Subscriber(context, sessionManager);
+		LogUtils.logDebug(context, getClass(), "start", "Starting Susbscriber.");
+		subscriber = new Subscriber(context, sessionManager);
 
-	LogUtils.logDebug(context, getClass(), "start", "Adding services.");
-	scallee = new SCallee(context,
-		SessionManagerService.initialize(context), sessionManager);
-	LogUtils.logDebug(context, getClass(), "start", "Started.");
-    }
-
-    public void stop(ModuleContext ctxt) throws Exception {
-	LogUtils.logDebug(context, getClass(), "stop", "Stopping.");
-	/*
-	 * close uAAL stuff
-	 */
-	if (publisher != null) {
-	    publisher.close();
-	    LogUtils.logDebug(context, getClass(), "start", "Stopping.");
-	    publisher = null;
-	}
-	if (monitor != null) {
-	    monitor.close();
-	    monitor = null;
-	}
-	if (subscriber != null) {
-	    subscriber.close();
-	    subscriber = null;
-	}
-	if (scallee != null) {
-	    scallee.close();
-	    scallee = null;
+		LogUtils.logDebug(context, getClass(), "start", "Adding services.");
+		scallee = new SCallee(context, SessionManagerService.initialize(context), sessionManager);
+		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
 
-	CHeQuery.close();
+	public void stop(ModuleContext ctxt) throws Exception {
+		LogUtils.logDebug(context, getClass(), "stop", "Stopping.");
+		/*
+		 * close uAAL stuff
+		 */
+		if (publisher != null) {
+			publisher.close();
+			LogUtils.logDebug(context, getClass(), "start", "Stopping.");
+			publisher = null;
+		}
+		if (monitor != null) {
+			monitor.close();
+			monitor = null;
+		}
+		if (subscriber != null) {
+			subscriber.close();
+			subscriber = null;
+		}
+		if (scallee != null) {
+			scallee.close();
+			scallee = null;
+		}
 
-	LogUtils.logDebug(context, getClass(), "stop", "Stopped.");
-    }
+		CHeQuery.close();
+
+		LogUtils.logDebug(context, getClass(), "stop", "Stopped.");
+	}
 }

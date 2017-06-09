@@ -26,20 +26,21 @@ import org.universAAL.ontology.security.Session;
 
 /**
  * Generic Interface for Session Manager
+ * 
  * @author amedrano
  *
  */
 public interface SessionManager {
 
-    void userAuthenticatedTo(User usr, Device dvc);
-    
-    void userDeauthenticatedFrom(User usr, Device dvc);
-    
-    void userLocationChange(User usr, Location loc);
-    
-    Set<User> validUsersForDevice(Device dvc);
-    
-    Set<User> validUsersForLocation(Location loc);
-    
-    Session getCopyOfUserSession(User usr);
+	void userAuthenticatedTo(User usr, Device dvc);
+
+	void userDeauthenticatedFrom(User usr, Device dvc);
+
+	void userLocationChange(User usr, Location loc);
+
+	Set<User> validUsersForDevice(Device dvc);
+
+	Set<User> validUsersForLocation(Location loc);
+
+	Session getCopyOfUserSession(User usr);
 }

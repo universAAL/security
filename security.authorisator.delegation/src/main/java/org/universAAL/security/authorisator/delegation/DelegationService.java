@@ -40,7 +40,7 @@ import org.universAAL.ontology.security.SecuritySubprofile;
  */
 public class DelegationService extends ProfilingService {
 	static final ServiceProfile[] profs = new ServiceProfile[3];
-	
+
 	static final String NAMESPACE = "http://security.universAAL.org/Delegation#";
 	static final String MY_URI = NAMESPACE + "DelegationService";
 
@@ -67,56 +67,70 @@ public class DelegationService extends ProfilingService {
 		super(uri);
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public String getClassURI() {
 		return MY_URI;
 	}
 
 	static void initialize(ModuleContext mc) {
-		OntologyManagement.getInstance().register(mc, 
-			new SimpleOntology(MY_URI, ProfilingService.MY_URI, new ResourceFactory() {
-		    
-		    public Resource createInstance(String classURI, String instanceURI,
-			    int factoryIndex) {
-			return new DelegationService(instanceURI);
-		    }
-		}));
-		
-		//create Delegation Form
+		OntologyManagement.getInstance().register(mc,
+				new SimpleOntology(MY_URI, ProfilingService.MY_URI, new ResourceFactory() {
+
+					public Resource createInstance(String classURI, String instanceURI, int factoryIndex) {
+						return new DelegationService(instanceURI);
+					}
+				}));
+
+		// create Delegation Form
 		DelegationService create = new DelegationService(PROC_CREATE);
-		create.addFilteringInput(PARAM_AUTHORISER_USER, User.MY_URI, 1, 1, new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_AUTHORISER});
-		create.addFilteringInput(PARAM_DELEGATE_USER, User.MY_URI, 1, 1, new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_DELEGATE});
-		create.addFilteringInput(PARAM_AUTHORISED_ROLES, Role.MY_URI, 1, -1, new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_DELEGATED_COMPETENCES});
-		create.addFilteringInput(PARAM_ASYMENTRIC_ENCRYPTION, AsymmetricEncryption.MY_URI, 1, 1, new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_ASYMMETRIC});
-		create.addOutput(PARAM_DELEGATION_FORM, DelegationForm.MY_URI, 1, 1, new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS});
+		create.addFilteringInput(PARAM_AUTHORISER_USER, User.MY_URI, 1, 1,
+				new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+						Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS,
+						DelegationForm.PROP_AUTHORISER });
+		create.addFilteringInput(PARAM_DELEGATE_USER, User.MY_URI, 1, 1,
+				new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+						Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS,
+						DelegationForm.PROP_DELEGATE });
+		create.addFilteringInput(PARAM_AUTHORISED_ROLES, Role.MY_URI, 1, -1,
+				new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+						Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS,
+						DelegationForm.PROP_DELEGATED_COMPETENCES });
+		create.addFilteringInput(PARAM_ASYMENTRIC_ENCRYPTION, AsymmetricEncryption.MY_URI, 1, 1,
+				new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+						Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS,
+						DelegationForm.PROP_ASYMMETRIC });
+		create.addOutput(PARAM_DELEGATION_FORM, DelegationForm.MY_URI, 1, 1,
+				new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+						Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS });
 		// Asymmetric has to have the keyring
 		create.addInstanceLevelRestriction(
-				MergedRestriction.getAllValuesRestrictionWithCardinality(AsymmetricEncryption.PROP_KEY_RING, KeyRing.MY_URI, 1, 1),
-				new String[]{Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_ASYMMETRIC,AsymmetricEncryption.PROP_KEY_RING});
-			// Additionally the Keyring MUST have a private Key
+				MergedRestriction.getAllValuesRestrictionWithCardinality(AsymmetricEncryption.PROP_KEY_RING,
+						KeyRing.MY_URI, 1, 1),
+				new String[] { Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS,
+						DelegationForm.PROP_ASYMMETRIC, AsymmetricEncryption.PROP_KEY_RING });
+		// Additionally the Keyring MUST have a private Key
 		create.addInstanceLevelRestriction(
-				MergedRestriction.getAllValuesRestrictionWithCardinality(KeyRing.PROP_PRIVATE_KEY, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1),
-				new String[]{Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS, DelegationForm.PROP_ASYMMETRIC,AsymmetricEncryption.PROP_KEY_RING,KeyRing.PROP_PRIVATE_KEY});
-		
+				MergedRestriction.getAllValuesRestrictionWithCardinality(KeyRing.PROP_PRIVATE_KEY,
+						TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1),
+				new String[] { Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS,
+						DelegationForm.PROP_ASYMMETRIC, AsymmetricEncryption.PROP_KEY_RING, KeyRing.PROP_PRIVATE_KEY });
+
 		profs[0] = create.myProfile;
-		
+
 		// add Delegation form to Delegated User's securitysubprofile
 		DelegationService add = new DelegationService(PROC_ADD);
-		add.addInputWithAddEffect(PARAM_DELEGATION_FORM, DelegationForm.MY_URI, 1, 1, new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS});
+		add.addInputWithAddEffect(PARAM_DELEGATION_FORM, DelegationForm.MY_URI, 1, 1,
+				new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+						Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS });
 		profs[1] = add.myProfile;
-		
-		//Delegation form revokation
+
+		// Delegation form revokation
 		DelegationService revoke = new DelegationService(PROC_REVOKE);
-		revoke.addInputWithRemoveEffect(PARAM_DELEGATION_FORM, DelegationForm.MY_URI, 1, 1, new String[]
-				{ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE, Profile.PROP_HAS_SUB_PROFILE,SecuritySubprofile.PROP_DELEGATED_FORMS});
+		revoke.addInputWithRemoveEffect(PARAM_DELEGATION_FORM, DelegationForm.MY_URI, 1, 1,
+				new String[] { ProfilingService.PROP_CONTROLS, Profilable.PROP_HAS_PROFILE,
+						Profile.PROP_HAS_SUB_PROFILE, SecuritySubprofile.PROP_DELEGATED_FORMS });
 		profs[2] = revoke.myProfile;
 	}
-	
+
 }

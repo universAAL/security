@@ -49,40 +49,36 @@ import org.universAAL.ontology.che.ContextHistoryService;
 public class CHeQuerrier {
 
 	private static final String UTF_8 = "utf-8";
-	private static final String OUTPUT_RESULT_STRING = ContextHistoryOntology.NAMESPACE
-			+ "outputfromCHE";
-	
+	private static final String OUTPUT_RESULT_STRING = ContextHistoryOntology.NAMESPACE + "outputfromCHE";
+
 	private ModuleContext owner;
 	private DependencyProxy<MessageContentSerializer> serial;
-	
-	public CHeQuerrier(ModuleContext mc){
+
+	public CHeQuerrier(ModuleContext mc) {
 		this.owner = mc;
-		serial = new PassiveDependencyProxy<MessageContentSerializer>(owner, new Object[] { MessageContentSerializer.class.getName() });
+		serial = new PassiveDependencyProxy<MessageContentSerializer>(owner,
+				new Object[] { MessageContentSerializer.class.getName() });
 	}
 
-	private String gURI(){
+	private String gURI() {
 		return "http://authorisator.security.universaal.org/CHeCall#" + UUID.randomUUID();
 	}
-	
-	public String unserialisedQuery(String query){
-		ServiceRequest getQuery = new ServiceRequest(gURI(),new ContextHistoryService(
-				null), null);
 
-		MergedRestriction r = MergedRestriction.getFixedValueRestriction(
-				ContextHistoryService.PROP_PROCESSES, query);
+	public String unserialisedQuery(String query) {
+		ServiceRequest getQuery = new ServiceRequest(gURI(), new ContextHistoryService(null), null);
+
+		MergedRestriction r = MergedRestriction.getFixedValueRestriction(ContextHistoryService.PROP_PROCESSES, query);
 
 		getQuery.getRequestedService().addInstanceLevelRestriction(r,
 				new String[] { ContextHistoryService.PROP_PROCESSES });
-		getQuery.addSimpleOutputBinding(
-				new ProcessOutput(OUTPUT_RESULT_STRING), new PropertyPath(null,
-						true,
-						new String[] { ContextHistoryService.PROP_RETURNS })
-						.getThePath());
+		getQuery.addSimpleOutputBinding(new ProcessOutput(OUTPUT_RESULT_STRING),
+				new PropertyPath(null, true, new String[] { ContextHistoryService.PROP_RETURNS }).getThePath());
 		ServiceCaller sc = new DefaultServiceCaller(owner);
 		ServiceResponse sr = sc.call(getQuery);
 		sc.close();
-		if (!sr.getCallStatus().equals(CallStatus.succeeded)){
-			throw new RuntimeException("unable to query. Query:\n" + query + "\nReturned:\n"+getSerializer().serialize(sr));
+		if (!sr.getCallStatus().equals(CallStatus.succeeded)) {
+			throw new RuntimeException(
+					"unable to query. Query:\n" + query + "\nReturned:\n" + getSerializer().serialize(sr));
 		}
 		List res = sr.getOutput(OUTPUT_RESULT_STRING);
 		if (res != null && res.size() > 0 && res.get(0) instanceof String) {
@@ -90,7 +86,7 @@ public class CHeQuerrier {
 		}
 		return null;
 	}
-	
+
 	public Object query(String query) {
 		try {
 			Object res = getSerializer().deserialize(unserialisedQuery(query));
@@ -104,11 +100,10 @@ public class CHeQuerrier {
 		return (MessageContentSerializerEx) serial.getObject();
 	}
 
-	public static InputStream getResource(String Rfile){
-		return CHeQuerrier.class.getClassLoader()
-					.getResourceAsStream(Rfile);
+	public static InputStream getResource(String Rfile) {
+		return CHeQuerrier.class.getClassLoader().getResourceAsStream(Rfile);
 	}
-	
+
 	public static String getQuery(InputStream file, String[] params) {
 		String query = "";
 		try {
@@ -125,45 +120,40 @@ public class CHeQuerrier {
 		}
 		return query;
 	}
-	
-    /**
-     * Splits a Turtle serialized string into prefixes and content, so it can be
-     * used inside SPARQL queries.
-     * 
-     * @param serialized
-     *            The turtle string
-     * @return An array of length 2. The first item [0] is the string with the
-     *         prefixes, and the second [1] is the string with the triples
-     *         content
-     */
+
+	/**
+	 * Splits a Turtle serialized string into prefixes and content, so it can be
+	 * used inside SPARQL queries.
+	 * 
+	 * @param serialized
+	 *            The turtle string
+	 * @return An array of length 2. The first item [0] is the string with the
+	 *         prefixes, and the second [1] is the string with the triples
+	 *         content
+	 */
 	public static String[] splitPrefixes(String serialized) {
-		//Remove Data types, specially XMLLiterals
+		// Remove Data types, specially XMLLiterals
 		String clean = serialized.replaceAll("\"[^\"]*?\"", "");
 		int lastprefix = 0, lastprefixdot = 0, lastprefixuri = 0;
 		lastprefix = clean.toLowerCase().lastIndexOf("@prefix");
 		if (lastprefix >= 0) {
 			lastprefixuri = clean.substring(lastprefix).indexOf(">");
-			lastprefixdot = clean.substring(lastprefix + lastprefixuri)
-					.indexOf(".");
+			lastprefixdot = clean.substring(lastprefix + lastprefixuri).indexOf(".");
 		}
 		String[] result = new String[2];
-		result[0] = clean
-				.substring(0, lastprefixuri + lastprefixdot + lastprefix + 1)
-				.replace("@", " ").replace(">.", "> ").replace(" .", " ")
-				.replace(". ", " ");
-		result[1] = serialized.substring(lastprefixuri + lastprefixdot
-				+ lastprefix + 1);
+		result[0] = clean.substring(0, lastprefixuri + lastprefixdot + lastprefix + 1).replace("@", " ")
+				.replace(">.", "> ").replace(" .", " ").replace(". ", " ");
+		result[1] = serialized.substring(lastprefixuri + lastprefixdot + lastprefix + 1);
 		return result;
 	}
-    
-    public Resource getFullResourceGraph(String uri){
-    	String query = "prefix : <urn:foo:test>\n" +
-    					"CONSTRUCT { ?s ?p ?o }\n" +
-    					"WHERE { <"+ uri +"> (:a|!:a)* ?s . ?s ?p ?o . }";
-    	
-    	Object o = getSerializer().deserialize(unserialisedQuery(query),uri);
-    	Resource r = (Resource) o;
-    	LogUtils.logDebug(owner, getClass(), "getFullResourceGraph", "result:\n" + getSerializer().serialize(r));
-    	return r;
-    }
+
+	public Resource getFullResourceGraph(String uri) {
+		String query = "prefix : <urn:foo:test>\n" + "CONSTRUCT { ?s ?p ?o }\n" + "WHERE { <" + uri
+				+ "> (:a|!:a)* ?s . ?s ?p ?o . }";
+
+		Object o = getSerializer().deserialize(unserialisedQuery(query), uri);
+		Resource r = (Resource) o;
+		LogUtils.logDebug(owner, getClass(), "getFullResourceGraph", "result:\n" + getSerializer().serialize(r));
+		return r;
+	}
 }

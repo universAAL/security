@@ -34,11 +34,11 @@ import org.universAAL.ontology.security.AnonymizationService;
  */
 public class AnonServiceProfile extends AnonymizationService {
 	static final ServiceProfile[] profs = new ServiceProfile[2];
-	
+
 	static final String NAMESPACE = "http://security.universAAL.org/Anonymization#";
 	static final String MY_URI = NAMESPACE + "AnonymizationService";
 
-	static final String PROC_ANON = NAMESPACE +"anonymizeProperty";
+	static final String PROC_ANON = NAMESPACE + "anonymizeProperty";
 	static final String PROC_DEANON = NAMESPACE + "deanonymizeProperty";
 	static final String PARAM_METHOD = NAMESPACE + "useEncryptionMethod";
 	static final String PARAM_IN_ANONYMIZABLE = NAMESPACE + "anonymizableInput";
@@ -46,6 +46,7 @@ public class AnonServiceProfile extends AnonymizationService {
 	static final String PARAM_OUT_ANONYMIZABLE = NAMESPACE + "anonymizableOutput";
 
 	private static Hashtable restrictions = new Hashtable();
+
 	/**
 	 * 
 	 */
@@ -59,41 +60,47 @@ public class AnonServiceProfile extends AnonymizationService {
 		super(uri);
 	}
 
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	@Override
 	public String getClassURI() {
 		return MY_URI;
 	}
+
 	static void initialize(ModuleContext mc) {
-		OntologyManagement.getInstance().register(mc, 
-			new SimpleOntology(MY_URI, AnonymizationService.MY_URI, new ResourceFactory() {
-		    
-		    public Resource createInstance(String classURI, String instanceURI,
-			    int factoryIndex) {
-			return new AnonServiceProfile(instanceURI);
-		    }
-		}));
-		
-		addRestriction(getClassRestrictionsOnProperty(
-				AnonymizationService.MY_URI, PROP_ANONYMIZABLE),
-				new String []{PROP_ANONYMIZABLE}, restrictions );
-		
-		//Anonymize Service Profile
+		OntologyManagement.getInstance().register(mc,
+				new SimpleOntology(MY_URI, AnonymizationService.MY_URI, new ResourceFactory() {
+
+					public Resource createInstance(String classURI, String instanceURI, int factoryIndex) {
+						return new AnonServiceProfile(instanceURI);
+					}
+				}));
+
+		addRestriction(getClassRestrictionsOnProperty(AnonymizationService.MY_URI, PROP_ANONYMIZABLE),
+				new String[] { PROP_ANONYMIZABLE }, restrictions);
+
+		// Anonymize Service Profile
 		AnonServiceProfile anon = new AnonServiceProfile(PROC_ANON);
-		anon.addFilteringInput(PARAM_METHOD, AsymmetricEncryption.MY_URI, 1, -1, new String[]{PROP_ASYMMETRIC_ENCRYPTION});
-		//TODO add restriction to force all Asymmetric Keyrings to have public keys
-		anon.addInputWithChangeEffect(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
-//		anon.addFilteringInput(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
-		anon.addFilteringInput(PARAM_PROPERTY, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String[]{PROP_ANONYMIZABLE,Anonymizable.PROP_ANNONYMOUS_RESOURCE});
-		anon.addOutput(PARAM_OUT_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
+		anon.addFilteringInput(PARAM_METHOD, AsymmetricEncryption.MY_URI, 1, -1,
+				new String[] { PROP_ASYMMETRIC_ENCRYPTION });
+		// TODO add restriction to force all Asymmetric Keyrings to have public
+		// keys
+		anon.addInputWithChangeEffect(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1,
+				new String[] { PROP_ANONYMIZABLE });
+		// anon.addFilteringInput(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1,
+		// 1, new String[]{PROP_ANONYMIZABLE});
+		anon.addFilteringInput(PARAM_PROPERTY, TypeMapper.getDatatypeURI(Resource.class), 1, 1,
+				new String[] { PROP_ANONYMIZABLE, Anonymizable.PROP_ANNONYMOUS_RESOURCE });
+		anon.addOutput(PARAM_OUT_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[] { PROP_ANONYMIZABLE });
 		profs[0] = anon.myProfile;
-		
-		//Deanonymize Service Profile
+
+		// Deanonymize Service Profile
 		AnonServiceProfile deanon = new AnonServiceProfile(PROC_DEANON);
-		deanon.addFilteringInput(PARAM_METHOD, AsymmetricEncryption.MY_URI, 1, -1, new String[]{PROP_ASYMMETRIC_ENCRYPTION});
-		//TODO add restriction to force all Asymmetric Keyrings to have private keys
-		deanon.addFilteringInput(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
-		deanon.addOutput(PARAM_OUT_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[]{PROP_ANONYMIZABLE});
+		deanon.addFilteringInput(PARAM_METHOD, AsymmetricEncryption.MY_URI, 1, -1,
+				new String[] { PROP_ASYMMETRIC_ENCRYPTION });
+		// TODO add restriction to force all Asymmetric Keyrings to have private
+		// keys
+		deanon.addFilteringInput(PARAM_IN_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[] { PROP_ANONYMIZABLE });
+		deanon.addOutput(PARAM_OUT_ANONYMIZABLE, Anonymizable.MY_URI, 1, 1, new String[] { PROP_ANONYMIZABLE });
 		profs[1] = deanon.myProfile;
 	}
 }

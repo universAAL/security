@@ -10,20 +10,19 @@ public class DelegationActivator implements ModuleActivator {
 
 	static ModuleContext context;
 	private DelegationServieCallee callee;
-	
-	public void start(ModuleContext ctxt) throws Exception {	
+
+	public void start(ModuleContext ctxt) throws Exception {
 		context = ctxt;
 		LogUtils.logDebug(context, getClass(), "start", "Starting.");
 		/*
 		 * uAAL stuff
 		 */
-		//Add authorisation modification
+		// Add authorisation modification
 		AuthorisatorCallee.registerChecker(new DelegationAccessChecker());
 		DelegationService.initialize(context);
-		callee = new DelegationServieCallee(context, DelegationService.profs); 
+		callee = new DelegationServieCallee(context, DelegationService.profs);
 		LogUtils.logDebug(context, getClass(), "start", "Started.");
 	}
-
 
 	public void stop(ModuleContext ctxt) throws Exception {
 		LogUtils.logDebug(context, getClass(), "stop", "Stopping.");

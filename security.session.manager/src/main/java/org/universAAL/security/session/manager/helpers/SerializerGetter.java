@@ -22,45 +22,45 @@ import org.universAAL.middleware.serialization.MessageContentSerializerEx;
 
 public class SerializerGetter implements SharedObjectListener {
 
-    ModuleContext context;
-    private MessageContentSerializerEx serializer; 
+	ModuleContext context;
+	private MessageContentSerializerEx serializer;
 
-    /**
-     * 
-     */
-    public SerializerGetter(ModuleContext mc) throws Exception {
-	context = mc;
-	/*
-	 * uAAL stuff
+	/**
+	 * 
 	 */
-	Object[] obj = context.getContainer()
-		.fetchSharedObject(context, 
-			new Object[] { MessageContentSerializerEx.class.getName() }, this);
-	if (obj.length > 0){
-	    sharedObjectAdded(obj[0], null);
+	public SerializerGetter(ModuleContext mc) throws Exception {
+		context = mc;
+		/*
+		 * uAAL stuff
+		 */
+		Object[] obj = context.getContainer().fetchSharedObject(context,
+				new Object[] { MessageContentSerializerEx.class.getName() }, this);
+		if (obj.length > 0) {
+			sharedObjectAdded(obj[0], null);
+		}
 	}
-    }
 
-    /** {@ inheritDoc}	 */
-    public synchronized void sharedObjectAdded(Object sharedObj, Object removeHook) {
-	serializer = (MessageContentSerializerEx) sharedObj;
-	this.notifyAll();
-    }
+	/** {@ inheritDoc} */
+	public synchronized void sharedObjectAdded(Object sharedObj, Object removeHook) {
+		serializer = (MessageContentSerializerEx) sharedObj;
+		this.notifyAll();
+	}
 
-    /** {@ inheritDoc}	 */
-    public synchronized void sharedObjectRemoved(Object removeHook) {
-	if (removeHook.equals(serializer)){
-	    serializer = null;
+	/** {@ inheritDoc} */
+	public synchronized void sharedObjectRemoved(Object removeHook) {
+		if (removeHook.equals(serializer)) {
+			serializer = null;
+		}
 	}
-    }
-    
-    public synchronized MessageContentSerializerEx getSerializer(){
-	while (serializer == null){
-	    try {
-		this.wait();
-	    } catch (InterruptedException e) {}
+
+	public synchronized MessageContentSerializerEx getSerializer() {
+		while (serializer == null) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+			}
+		}
+		return serializer;
 	}
-	return serializer; 
-    }
 
 }

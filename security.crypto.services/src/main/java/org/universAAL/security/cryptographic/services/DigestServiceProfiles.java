@@ -39,12 +39,12 @@ import org.universAAL.ontology.cryptographic.digest.SecureHashAlgorithm;
 public class DigestServiceProfiles extends DigestService {
 
 	static final ServiceProfile[] profs = new ServiceProfile[1];
-	
+
 	static private final String NAMESPACE = "http://security.universAAL.org/JavaDigestServices#";
-    public static String MY_URI = NAMESPACE + "JavaDigestAlgorithms";
+	public static String MY_URI = NAMESPACE + "JavaDigestAlgorithms";
 
 	private static Hashtable restrictions = new Hashtable();
-	
+
 	static final String PROC_DIGEST = NAMESPACE + "digestProcess";
 	static final String OUT_DIGEST = NAMESPACE + "digestedOutput";
 	static final String IN_RESOURCE = NAMESPACE + "resourceToBeDigested";
@@ -64,62 +64,52 @@ public class DigestServiceProfiles extends DigestService {
 	public DigestServiceProfiles(String uri) {
 		super(uri);
 	}
-	
+
 	public String getClassURI() {
 		return MY_URI;
 	}
-	
+
 	static void initialize(ModuleContext mc) {
-		OntologyManagement.getInstance().register(mc, 
-			new SimpleOntology(MY_URI, DigestService.MY_URI, new ResourceFactory() {
-		    
-		    public Resource createInstance(String classURI, String instanceURI,
-			    int factoryIndex) {
-			return new DigestServiceProfiles(instanceURI);
-		    }
-		}));
-		
-		
+		OntologyManagement.getInstance().register(mc,
+				new SimpleOntology(MY_URI, DigestService.MY_URI, new ResourceFactory() {
+
+					public Resource createInstance(String classURI, String instanceURI, int factoryIndex) {
+						return new DigestServiceProfiles(instanceURI);
+					}
+				}));
+
 		/*
 		 * Service Profiles
 		 */
-		
-		addRestriction(getClassRestrictionsOnProperty(
-				DigestService.MY_URI, PROP_RESOURCE_TO_DIGEST),
-				new String[]{PROP_RESOURCE_TO_DIGEST}, restrictions );
-		
-		addRestriction(getClassRestrictionsOnProperty(
-				DigestService.MY_URI, PROP_DIGEST_METHOD),
-				new String[]{PROP_DIGEST_METHOD}, restrictions );
-		
-		addRestriction(getClassRestrictionsOnProperty(
-				DigestService.MY_URI, PROP_DIGESTED_TEXT),
-				new String[]{PROP_DIGESTED_TEXT}, restrictions );
-		
-		
+
+		addRestriction(getClassRestrictionsOnProperty(DigestService.MY_URI, PROP_RESOURCE_TO_DIGEST),
+				new String[] { PROP_RESOURCE_TO_DIGEST }, restrictions);
+
+		addRestriction(getClassRestrictionsOnProperty(DigestService.MY_URI, PROP_DIGEST_METHOD),
+				new String[] { PROP_DIGEST_METHOD }, restrictions);
+
+		addRestriction(getClassRestrictionsOnProperty(DigestService.MY_URI, PROP_DIGESTED_TEXT),
+				new String[] { PROP_DIGESTED_TEXT }, restrictions);
+
 		// Hash
 		DigestServiceProfiles digestProfile = new DigestServiceProfiles(PROC_DIGEST);
-		digestProfile.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1, new String[] {DigestService.PROP_DIGESTED_TEXT});
-		digestProfile.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1, new String [] {DigestService.PROP_RESOURCE_TO_DIGEST});
-		digestProfile.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1, new String [] {DigestService.PROP_DIGEST_METHOD});
-		//Method restricted to available instances
+		digestProfile.addOutput(OUT_DIGEST, TypeMapper.getDatatypeURI(Base64Binary.class), 1, 1,
+				new String[] { DigestService.PROP_DIGESTED_TEXT });
+		digestProfile.addFilteringInput(IN_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1,
+				new String[] { DigestService.PROP_RESOURCE_TO_DIGEST });
+		digestProfile.addFilteringInput(IN_METHOD, Digest.MY_URI, 1, 1,
+				new String[] { DigestService.PROP_DIGEST_METHOD });
+		// Method restricted to available instances
 		digestProfile.addInstanceLevelRestriction(
-				MergedRestriction.getAllValuesRestrictionWithCardinality(
-						PROP_DIGEST_METHOD, 
-						new Enumeration(
-								new Digest[]{
-										MessageDigest.IND_MD2,
-										MessageDigest.IND_MD5,
-										SecureHashAlgorithm.IND_SHA,
-										SecureHashAlgorithm.IND_SHA256,
-										SecureHashAlgorithm.IND_SHA384,
-										SecureHashAlgorithm.IND_SHA512,}
-								), 1, 1),
-								new String [] {DigestService.PROP_DIGEST_METHOD});
-		
+				MergedRestriction.getAllValuesRestrictionWithCardinality(PROP_DIGEST_METHOD,
+						new Enumeration(new Digest[] { MessageDigest.IND_MD2, MessageDigest.IND_MD5,
+								SecureHashAlgorithm.IND_SHA, SecureHashAlgorithm.IND_SHA256,
+								SecureHashAlgorithm.IND_SHA384, SecureHashAlgorithm.IND_SHA512, }),
+						1, 1),
+				new String[] { DigestService.PROP_DIGEST_METHOD });
+
 		profs[0] = digestProfile.myProfile;
-		
-		
+
 	}
-	
+
 }

@@ -34,29 +34,28 @@ import org.universAAL.security.authorisator.interfaces.AccessChecker;
  */
 public class AssetDefaultAccessChecker implements AccessChecker {
 
-
-	/**{@inheritDoc} */
+	/** {@inheritDoc} */
 	public Set<AccessType> checkAccess(ModuleContext mc, User usr, Resource asset) {
 		return resolveFromValue(asset.getProperty(Asset.PROP_HAS_DEFAULT_ACCESS));
-		
+
 	}
 
-	static Set<AccessType> resolveFromValue(Object ar){
-		if (ar == null ) {
+	static Set<AccessType> resolveFromValue(Object ar) {
+		if (ar == null) {
 			return Collections.EMPTY_SET;
 		}
-		Object darat = ((AccessRight)ar).getProperty(AccessRight.PROP_ACCESS_TYPE);
-		if (darat ==  null) {
+		Object darat = ((AccessRight) ar).getProperty(AccessRight.PROP_ACCESS_TYPE);
+		if (darat == null) {
 			return Collections.EMPTY_SET;
 		}
-		if (darat instanceof AccessType){
+		if (darat instanceof AccessType) {
 			HashSet<AccessType> res = new HashSet<AccessType>();
 			res.add((AccessType) darat);
 			return res;
 		}
-		if (darat instanceof List){
+		if (darat instanceof List) {
 			HashSet<AccessType> res = new HashSet<AccessType>();
-			res.addAll((List)darat);
+			res.addAll((List) darat);
 			return res;
 		}
 		return Collections.EMPTY_SET;
