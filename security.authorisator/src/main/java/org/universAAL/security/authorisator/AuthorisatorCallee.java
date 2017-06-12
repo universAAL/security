@@ -97,7 +97,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 
 			List roles = ssp.getRoles();
 			roles.remove(r);
-			ssp.setProperty(SecuritySubprofile.PROP_ROLES, roles);
+			ssp.changeProperty(SecuritySubprofile.PROP_ROLES, roles);
 
 			// update SSP role prop in CHe
 			if (updateProperty(ssp, SecuritySubprofile.PROP_ROLES))
@@ -123,7 +123,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 			Role sr = (Role) call.getInputValue(ProjectActivator.SUBROLE);
 
 			r.removeSubRole(sr);
-
+			// XXX make it recursive?
 			// update Role subroles in CHe
 			if (updateProperty(r, Role.PROP_SUB_ROLES))
 				return new ServiceResponse(CallStatus.succeeded);
@@ -232,17 +232,29 @@ public class AuthorisatorCallee extends ServiceCallee {
 			copy = new Resource(newURI);
 		for (Enumeration e = r.getPropertyURIs(); e.hasMoreElements();) {
 			String key = (String) e.nextElement();
-			copy.setProperty(key, r.getProperty(key));
+			copy.changeProperty(key, r.getProperty(key));
 		}
 		return copy;
 	}
 
+	/**
+	 * Query the data base to know if the object in the database has a particular property.
+	 * @param rURI The root resource URI.
+	 * @param propURI The property to check.
+	 * @return the result of the query.
+	 */
 	private boolean hasProperty(String rURI, String propURI) {
 		String out = query.unserialisedQuery(
 				CHeQuerrier.getQuery(CHeQuerrier.getResource("hasProperty.sparql"), new String[] { rURI, propURI }));
 		return Boolean.parseBoolean(out);
 	}
 
+	/**
+	 * Sends the instructions for setting a property in the Database.
+	 * @param r the root resource
+	 * @param prop the property URI to be updated.
+	 * @return true iif the property was correctly setted
+	 */
 	private boolean setProperty(Resource r, String prop) {
 
 		Object propvalue = r.getProperty(prop);
@@ -274,9 +286,14 @@ public class AuthorisatorCallee extends ServiceCallee {
 
 	}
 
+	/**
+	 * Sends Update instructions for a property in the Database.
+	 * @param r the root resource
+	 * @param prop the property URI to be updated.
+	 * @return true iif the property was correctly updated
+	 */
 	private boolean updateProperty(Resource r, String prop) {
-
-		if (!hasProperty(r.getURI(), prop)) {
+		if (!hasProperty(r.getURI(), prop) || !r.hasProperty(prop)){
 			return setProperty(r, prop);
 		}
 
@@ -303,6 +320,11 @@ public class AuthorisatorCallee extends ServiceCallee {
 		return resp != null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
 	}
 
+	/**
+	 * Update a full object in the data base.
+	 * @param r the new object (replacing old one with same URI)
+	 * @return true iif the object is updated.
+	 */
 	private boolean updateObject(Resource r) {
 
 		String serialization = serializer.getObject().serialize(r);
@@ -316,6 +338,11 @@ public class AuthorisatorCallee extends ServiceCallee {
 		return resp != null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
 	}
 
+	/**
+	 * Query the database to gather all objects of the same class URI.
+	 * @param classuri The class of the objects to be collected.
+	 * @return a list, or the single object stored in the data base with the requested class.
+	 */
 	private Object getAllObjectsOfType(String classuri) {
 		List val = new ArrayList();
 		Object o = query.query(CHeQuerrier.getQuery(CHeQuerrier.getResource("getObjectType.sparql"),
