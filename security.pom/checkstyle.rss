@@ -26,9 +26,9 @@ under the License.
     <copyright>&#169;2017 universAAL Consortium</copyright>
     <item>
       <title>File: 50,
-             Errors: 668,
+             Errors: 663,
              Warnings: 66,
-             Infos: 151
+             Infos: 152
       </title>
             <link>http://security/security.pom//checkstyle.html</link>
       <description>
@@ -63,13 +63,13 @@ under the License.
                   <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.AuthorisatorCallee.java">org/universAAL/security/authorisator/AuthorisatorCallee.java</a>
                 </td>
                 <td>
-                  3
+                  4
                 </td>
                 <td>
                   1
                 </td>
                 <td>
-                  17
+                  12
                 </td>
               </tr>
                           <tr>
