@@ -192,38 +192,6 @@
 <th>Project</th>
 <th>Line</th></tr>
 <tr class="b">
-<td>org/universAAL/security/authorisator/AuthorisatorCallee.java</td>
-<td>universAAL Security Authorisator</td>
-<td>267</td></tr>
-<tr class="a">
-<td>org/universAAL/security/authorisator/AuthorisatorCallee.java</td>
-<td>universAAL Security Authorisator</td>
-<td>302</td></tr>
-<tr class="b"><td colspan='3'>
-<div>
-<pre>		String propvalueURI = &quot;&quot;;
-		if (propvalue instanceof Resource) {
-			if (!((Resource) propvalue).isAnon()) {
-				propvalueURI = ((Resource) propvalue).getURI();
-				propvalueURI = &quot;&lt;&quot; + propvalueURI + &quot;&gt; .&quot;;
-			} else {
-				propvalueURI = &quot;_:BN000000 .&quot;;
-			}
-		}
-
-		String serialization = serializer.getObject().serialize(propvalue);
-
-		String[] split = CHeQuerrier.splitPrefixes(serialization);
-
-		String prefixes = split[0];
-		String serialValue = split[1];
-		String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource(&quot;setProperty.sparql&quot;),</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Project</th>
-<th>Line</th></tr>
-<tr class="b">
 <td>org/universAAL/security/authenticator/profile/UserPasswordCallee.java</td>
 <td>universAAL Security Profiling Server Managed User Password Authenticator</td>
 <td>196</td></tr>
