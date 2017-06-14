@@ -1,7 +1,7 @@
 #1 are prefixes
 #2 is the object URI to be updated
 #3 is the property URI
-#4 is the property value turtle serialization
+#4 is the turtle serialization of the object only containing the property
 
 $1
 

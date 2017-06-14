@@ -264,28 +264,33 @@ public class AuthorisatorCallee extends ServiceCallee {
 					new String[] { r.getURI(), prop }));
 			return resp != null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
 		}
-		String propvalueURI = "";
-		if (propvalue instanceof Resource) {
-			if (!((Resource) propvalue).isAnon()) {
-				propvalueURI = ((Resource) propvalue).getURI();
-				propvalueURI = "<" + propvalueURI + "> .";
-			} else {
-				propvalueURI = "_:BN000000 .";
-			}
-		}
+		
 
-		String serialization = serializer.getObject().serialize(propvalue);
+		String serialization = serializer.getObject().serialize(removeOtherProps(r, prop));
 
 		String[] split = CHeQuerrier.splitPrefixes(serialization);
 
 		String prefixes = split[0];
 		String serialValue = split[1];
 		String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("setProperty.sparql"),
-				new String[] { prefixes, r.getURI(), prop, propvalueURI + serialValue }));
+				new String[] { prefixes, serialization }));
 		return resp != null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
 
 	}
 
+	private Resource removeOtherProps(Resource r, String prop){
+		// create a copy and remove every other property
+				Resource copy = r.copy(false);
+				Enumeration en = copy.getPropertyURIs();
+				while (en.hasMoreElements()) {
+					String p = (String) en.nextElement();
+					if (!p.equals(prop)){
+						copy.changeProperty(p, null);
+					}
+				}
+				return copy;
+	}
+	
 	/**
 	 * Sends Update instructions for a property in the Database.
 	 * @param r the root resource
@@ -297,26 +302,16 @@ public class AuthorisatorCallee extends ServiceCallee {
 			return setProperty(r, prop);
 		}
 
-		Object propvalue = r.getProperty(prop);
-
-		String propvalueURI = "";
-		if (propvalue instanceof Resource) {
-			if (!((Resource) propvalue).isAnon()) {
-				propvalueURI = ((Resource) propvalue).getURI();
-				propvalueURI = "<" + propvalueURI + "> .";
-			} else {
-				propvalueURI = "_:BN000000 .";
-			}
-		}
-
-		String serialization = serializer.getObject().serialize(propvalue);
+		
+		//serialize copy, which is the same as r but only with prop
+		String serialization = serializer.getObject().serialize(removeOtherProps(r, prop));
 
 		String[] split = CHeQuerrier.splitPrefixes(serialization);
 
 		String prefixes = split[0];
 		String serialValue = split[1];
 		String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("updateProperty.sparql"),
-				new String[] { prefixes, r.getURI(), prop, propvalueURI + serialValue }));
+				new String[] { prefixes, r.getURI(), prop, serialValue }));
 		return resp != null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
 	}
 
