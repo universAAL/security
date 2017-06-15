@@ -296,6 +296,10 @@ public class AuthorisatorCallee extends ServiceCallee {
 					pval = ((List)pval).get(0);
 					copy.changeProperty(prop, pval);
 				}
+				if (pval instanceof Resource){
+					((Resource)pval).unliteral();
+				}
+				
 				return copy;
 	}
 	

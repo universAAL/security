@@ -6,7 +6,7 @@
 $1
 
 DELETE {<$2> <$3> ?o}
-INSERT {<$2> <$3> $4}
+INSERT {$4}
 WHERE  { 
         <$2> <$3> ?o . 
 }
