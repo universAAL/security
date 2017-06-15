@@ -39,6 +39,7 @@ import org.universAAL.ontology.security.DelegationForm;
 import org.universAAL.ontology.security.Role;
 import org.universAAL.ontology.security.RoleManagementService;
 import org.universAAL.ontology.security.SecuritySubprofile;
+import org.universAAL.security.authorisator.dummyCHe.ContextHistoryCallee;
 
 /**
  * @author amedrano
@@ -58,14 +59,19 @@ public class TestServiceCalls extends OntTestCase {
 
 	private ProjectActivator scallee;
 
+	private ContextHistoryCallee che = null;
+	
+	private static final boolean VERBOSE = false;
+
 	/** {@inheritDoc} */
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-
 		scallee = new ProjectActivator();
 		scallee.start(mc);
-
+		if (VERBOSE) {
+			che = new ContextHistoryCallee(mc);
+		}
 	}
 
 	public void testExecution() {
@@ -219,6 +225,31 @@ public class TestServiceCalls extends OntTestCase {
 			// it will fail... this is just to test the call matchmaking
 		}
 
+		// second pass:
+		AccessRight ar2 = new AccessRight("accessRightURI2");
+		ar2.addAccessType(AccessType.read);
+		
+		sname = "remove AccessRight from role 2";
+		
+		newRole.addAccessRight(ar);
+		newRole.addAccessRight(ar2);
+		
+		sreq = new ServiceRequest(new RoleManagementService(), u1);
+		sreq.addValueFilter(new String[] { RoleManagementService.PROP_ROLE }, newRole);
+		sreq.addRemoveEffect(new String[] { RoleManagementService.PROP_ROLE, Role.PROP_HAS_ACCESS_RIGHTS });
+		sreq.getRequestedService().addInstanceLevelRestriction(
+				MergedRestriction.getFixedValueRestriction(Role.PROP_HAS_ACCESS_RIGHTS,
+						new AccessRight("accessRightURI")),
+				new String[] { RoleManagementService.PROP_ROLE, Role.PROP_HAS_ACCESS_RIGHTS });
+		try {
+			writeR(REQUEST_F, sname, sreq);
+			ServiceResponse srep = scaller.call(sreq);
+			writeR(RESPONSE_F, sname, srep);
+			// System.out.println(srep.getCallStatus());
+		} catch (Exception e) {
+			// it will fail... this is just to test the call matchmaking
+		}
+		
 		// change AccessRight
 		sname = "change AccessRight";
 		sreq = new ServiceRequest(new RoleManagementService(), u1);
@@ -314,6 +345,9 @@ public class TestServiceCalls extends OntTestCase {
 	}
 
 	private void writeR(String folder, String sname, Resource sreq) {
+		if (VERBOSE) {
+			System.out.println("----- " + sname + " -----");
+		}
 		File dir = new File("./target/" + folder);
 		dir.mkdirs();
 		File out = new File(dir, sname);
