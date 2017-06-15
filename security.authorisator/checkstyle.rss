@@ -28,7 +28,7 @@ under the License.
       <title>File: 9,
              Errors: 92,
              Warnings: 13,
-             Infos: 40
+             Infos: 45
       </title>
             <link>http://security/security.authorisator//checkstyle.html</link>
       <description>
@@ -49,7 +49,7 @@ under the License.
                   <a href="http://security/security.authorisator//checkstyle.html#org.universAAL.security.authorisator.AuthorisatorCallee.java">org/universAAL/security/authorisator/AuthorisatorCallee.java</a>
                 </td>
                 <td>
-                  9
+                  14
                 </td>
                 <td>
                   1
