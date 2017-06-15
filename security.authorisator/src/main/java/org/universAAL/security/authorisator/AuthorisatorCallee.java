@@ -273,7 +273,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 		String prefixes = split[0];
 		String serialValue = split[1];
 		String resp = query.unserialisedQuery(CHeQuerrier.getQuery(CHeQuerrier.getResource("setProperty.sparql"),
-				new String[] { prefixes, serialization }));
+				new String[] { prefixes, serialValue }));
 		return resp != null && !resp.isEmpty() && !resp.toLowerCase().equals("false");
 
 	}
@@ -287,6 +287,14 @@ public class AuthorisatorCallee extends ServiceCallee {
 					if (!p.equals(prop)){
 						copy.changeProperty(p, null);
 					}
+				}
+				
+				// remove list in case of list of 1
+				Object pval = copy.getProperty(prop);
+				if (pval instanceof List 
+						&& ((List)pval).size() == 1){
+					pval = ((List)pval).get(0);
+					copy.changeProperty(prop, pval);
 				}
 				return copy;
 	}
