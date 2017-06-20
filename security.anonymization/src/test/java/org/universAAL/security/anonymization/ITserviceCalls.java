@@ -20,8 +20,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.universAAL.container.JUnit.JUnitModuleContext;
 import org.universAAL.middleware.bus.junit.BusTestCase;
+import org.universAAL.middleware.container.JUnit.JUnitModuleContext;
 import org.universAAL.middleware.owl.ManagedIndividual;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.rdf.Resource;

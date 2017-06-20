@@ -17,9 +17,9 @@ package org.universAAL.security.cryptographic.services;
 
 import junit.framework.TestCase;
 
-import org.universAAL.container.JUnit.JUnitModuleContext;
 import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
+import org.universAAL.middleware.container.JUnit.JUnitModuleContext;
 import org.universAAL.middleware.owl.DataRepOntology;
 import org.universAAL.middleware.owl.OntologyManagement;
 import org.universAAL.middleware.serialization.MessageContentSerializer;
