@@ -16,13 +16,9 @@
 package org.universAAL.security.authorisator;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
-
-import javax.management.RuntimeErrorException;
 
 import org.universAAL.ioc.dependencies.DependencyProxy;
 import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
@@ -49,7 +45,8 @@ import org.universAAL.ontology.che.ContextHistoryService;
 public class CHeQuerrier {
 
 	private static final String UTF_8 = "utf-8";
-	private static final String OUTPUT_RESULT_STRING = ContextHistoryOntology.NAMESPACE + "outputfromCHE";
+	private static final String OUTPUT_RESULT_STRING = ContextHistoryOntology.NAMESPACE
+			+ "outputfromCHE";
 
 	private ModuleContext owner;
 	private DependencyProxy<MessageContentSerializer> serial;
@@ -61,24 +58,30 @@ public class CHeQuerrier {
 	}
 
 	private String gURI() {
-		return "http://authorisator.security.universaal.org/CHeCall#" + UUID.randomUUID();
+		return "http://authorisator.security.universaal.org/CHeCall#"
+				+ UUID.randomUUID();
 	}
 
 	public String unserialisedQuery(String query) {
-		ServiceRequest getQuery = new ServiceRequest(gURI(), new ContextHistoryService(null), null);
+		ServiceRequest getQuery = new ServiceRequest(gURI(),
+				new ContextHistoryService(null), null);
 
-		MergedRestriction r = MergedRestriction.getFixedValueRestriction(ContextHistoryService.PROP_PROCESSES, query);
+		MergedRestriction r = MergedRestriction.getFixedValueRestriction(
+				ContextHistoryService.PROP_PROCESSES, query);
 
 		getQuery.getRequestedService().addInstanceLevelRestriction(r,
 				new String[] { ContextHistoryService.PROP_PROCESSES });
-		getQuery.addSimpleOutputBinding(new ProcessOutput(OUTPUT_RESULT_STRING),
-				new PropertyPath(null, true, new String[] { ContextHistoryService.PROP_RETURNS }).getThePath());
+		getQuery.addSimpleOutputBinding(
+				new ProcessOutput(OUTPUT_RESULT_STRING), new PropertyPath(null,
+						true,
+						new String[] { ContextHistoryService.PROP_RETURNS })
+						.getThePath());
 		ServiceCaller sc = new DefaultServiceCaller(owner);
 		ServiceResponse sr = sc.call(getQuery);
 		sc.close();
 		if (!sr.getCallStatus().equals(CallStatus.succeeded)) {
-			throw new RuntimeException(
-					"unable to query. Query:\n" + query + "\nReturned:\n" + getSerializer().serialize(sr));
+			throw new RuntimeException("unable to query. Query:\n" + query
+					+ "\nReturned:\n" + getSerializer().serialize(sr));
 		}
 		List res = sr.getOutput(OUTPUT_RESULT_STRING);
 		if (res != null && res.size() > 0 && res.get(0) instanceof String) {
@@ -92,6 +95,8 @@ public class CHeQuerrier {
 			Object res = getSerializer().deserialize(unserialisedQuery(query));
 			return res;
 		} catch (Exception e) {
+			LogUtils.logError(owner, getClass(), "query",
+					new String[] { "Error Deserializing, returning null." }, e);
 			return null;
 		}
 	}
@@ -138,22 +143,27 @@ public class CHeQuerrier {
 		lastprefix = clean.toLowerCase().lastIndexOf("@prefix");
 		if (lastprefix >= 0) {
 			lastprefixuri = clean.substring(lastprefix).indexOf(">");
-			lastprefixdot = clean.substring(lastprefix + lastprefixuri).indexOf(".");
+			lastprefixdot = clean.substring(lastprefix + lastprefixuri)
+					.indexOf(".");
 		}
 		String[] result = new String[2];
-		result[0] = clean.substring(0, lastprefixuri + lastprefixdot + lastprefix + 1).replace("@", " ")
-				.replace(">.", "> ").replace(" .", " ").replace(". ", " ");
-		result[1] = serialized.substring(lastprefixuri + lastprefixdot + lastprefix + 1);
+		result[0] = clean
+				.substring(0, lastprefixuri + lastprefixdot + lastprefix + 1)
+				.replace("@", " ").replace(">.", "> ").replace(" .", " ")
+				.replace(". ", " ");
+		result[1] = serialized.substring(lastprefixuri + lastprefixdot
+				+ lastprefix + 1);
 		return result;
 	}
 
 	public Resource getFullResourceGraph(String uri) {
-		String query = "prefix : <urn:foo:test>\n" + "CONSTRUCT { ?s ?p ?o }\n" + "WHERE { <" + uri
-				+ "> (:a|!:a)* ?s . ?s ?p ?o . }";
+		String query = "prefix : <urn:foo:test>\n" + "CONSTRUCT { ?s ?p ?o }\n"
+				+ "WHERE { <" + uri + "> (:a|!:a)* ?s . ?s ?p ?o . }";
 
 		Object o = getSerializer().deserialize(unserialisedQuery(query), uri);
 		Resource r = (Resource) o;
-		LogUtils.logDebug(owner, getClass(), "getFullResourceGraph", "result:\n" + getSerializer().serialize(r));
+		LogUtils.logDebug(owner, getClass(), "getFullResourceGraph",
+				"result:\n" + getSerializer().serialize(r));
 		return r;
 	}
 }
