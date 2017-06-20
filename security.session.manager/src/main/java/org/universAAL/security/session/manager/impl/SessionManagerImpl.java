@@ -125,7 +125,7 @@ public class SessionManagerImpl implements SessionManager {
 	 * @return
 	 */
 	private String constructSessionURI(User usr) {
-		return Constants.uAAL_MIDDLEWARE_LOCAL_ID_PREFIX + "sessionFor" + usr.getLocalName();
+		return Constants.MIDDLEWARE_LOCAL_ID_PREFIX + "sessionFor" + usr.getLocalName();
 	}
 
 	/**

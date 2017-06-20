@@ -102,10 +102,10 @@ public class UserPasswordCallee extends ServiceCallee {
 	private User authenticate(String username, Base64Binary password, Digest digestAlgorithm) {
 		if (username != null && !username.isEmpty()) {
 			if (username.contains(CAREGIVER_TRIGGER)) {
-				return new Caregiver(Constants.uAAL_MIDDLEWARE_LOCAL_ID_PREFIX
+				return new Caregiver(Constants.MIDDLEWARE_LOCAL_ID_PREFIX
 						+ username.toLowerCase().replace(" ", "_").replace("#", "").replace("/", "_"));
 			} else {
-				return new AssistedPerson(Constants.uAAL_MIDDLEWARE_LOCAL_ID_PREFIX
+				return new AssistedPerson(Constants.MIDDLEWARE_LOCAL_ID_PREFIX
 						+ username.toLowerCase().replace(" ", "_").replace("#", "").replace("/", "_"));
 			}
 		}
