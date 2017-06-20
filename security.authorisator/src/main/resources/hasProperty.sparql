@@ -1,3 +1,0 @@
-# 1 URI of the object
-# 2 URI of the property
-ASK { <$1> <$2> ?o }
