@@ -28,7 +28,7 @@ under the License.
       <title>File: 50,
              Errors: 671,
              Warnings: 66,
-             Infos: 157
+             Infos: 154
       </title>
             <link>http://security/security.pom//checkstyle.html</link>
       <description>
@@ -329,7 +329,7 @@ under the License.
                   <a href="http://security/security.pom//checkstyle.html#org.universAAL.security.authorisator.CHeQuerrier.java">org/universAAL/security/authorisator/CHeQuerrier.java</a>
                 </td>
                 <td>
-                  8
+                  5
                 </td>
                 <td>
                   1

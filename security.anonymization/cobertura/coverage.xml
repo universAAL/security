@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.11538461538461539" branch-rate="0.23076923076923078" lines-covered="15" lines-valid="130" branches-covered="6" branches-valid="26" complexity="2.4" version="2.1.1" timestamp="1497871681494">
+<coverage line-rate="0.11538461538461539" branch-rate="0.19230769230769232" lines-covered="15" lines-valid="130" branches-covered="5" branches-valid="26" complexity="2.4" version="2.1.1" timestamp="1497953319611">
 	<sources>
 		<source>--source</source>
 		<source>/home/travis/build/universAAL/security/security.anonymization/src/main/java</source>
 	</sources>
 	<packages>
-		<package name="org.universAAL.security.anonymization" line-rate="0.11538461538461539" branch-rate="0.23076923076923078" complexity="2.4">
+		<package name="org.universAAL.security.anonymization" line-rate="0.11538461538461539" branch-rate="0.19230769230769232" complexity="2.4">
 			<classes>
-				<class name="org.universAAL.security.anonymization.AnonServiceCallee" filename="org/universAAL/security/anonymization/AnonServiceCallee.java" line-rate="0.15625" branch-rate="0.23076923076923078" complexity="3.625">
+				<class name="org.universAAL.security.anonymization.AnonServiceCallee" filename="org/universAAL/security/anonymization/AnonServiceCallee.java" line-rate="0.15625" branch-rate="0.19230769230769232" complexity="3.625">
 					<methods>
 						<method name="&lt;init&gt;" signature="(Lorg/universAAL/middleware/container/ModuleContext;[Lorg/universAAL/middleware/service/owls/profile/ServiceProfile;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -60,25 +60,25 @@
 								<line number="80" hits="0" branch="false"/>
 							</lines>
 						</method>
-						<method name="copyWreplacedProperty" signature="(Lorg/universAAL/middleware/rdf/Resource;Ljava/lang/Object;Ljava/lang/Object;)Lorg/universAAL/middleware/rdf/Resource;" line-rate="0.9090909090909091" branch-rate="0.75" complexity="0">
+						<method name="copyWreplacedProperty" signature="(Lorg/universAAL/middleware/rdf/Resource;Ljava/lang/Object;Ljava/lang/Object;)Lorg/universAAL/middleware/rdf/Resource;" line-rate="0.9090909090909091" branch-rate="0.625" complexity="0">
 							<lines>
 								<line number="186" hits="1" branch="false"/>
 								<line number="187" hits="1" branch="false"/>
 								<line number="188" hits="1" branch="false"/>
-								<line number="189" hits="5" branch="true" condition-coverage="75% (3/4)">
+								<line number="189" hits="2" branch="true" condition-coverage="75% (3/4)">
 									<conditions>
 										<condition number="0" type="jump" coverage="50%"/>
 										<condition number="1" type="jump" coverage="100%"/>
 									</conditions>
 								</line>
-								<line number="190" hits="4" branch="false"/>
-								<line number="191" hits="4" branch="true" condition-coverage="100% (2/2)">
+								<line number="190" hits="1" branch="false"/>
+								<line number="191" hits="1" branch="true" condition-coverage="50% (1/2)">
 									<conditions>
-										<condition number="0" type="jump" coverage="100%"/>
+										<condition number="0" type="jump" coverage="50%"/>
 									</conditions>
 								</line>
 								<line number="193" hits="1" branch="false"/>
-								<line number="195" hits="4" branch="false"/>
+								<line number="195" hits="1" branch="false"/>
 								<line number="196" hits="1" branch="true" condition-coverage="50% (1/2)">
 									<conditions>
 										<condition number="0" type="jump" coverage="50%"/>
@@ -279,20 +279,20 @@
 						<line number="186" hits="1" branch="false"/>
 						<line number="187" hits="1" branch="false"/>
 						<line number="188" hits="1" branch="false"/>
-						<line number="189" hits="5" branch="true" condition-coverage="75% (3/4)">
+						<line number="189" hits="2" branch="true" condition-coverage="75% (3/4)">
 							<conditions>
 								<condition number="0" type="jump" coverage="50%"/>
 								<condition number="1" type="jump" coverage="100%"/>
 							</conditions>
 						</line>
-						<line number="190" hits="4" branch="false"/>
-						<line number="191" hits="4" branch="true" condition-coverage="100% (2/2)">
+						<line number="190" hits="1" branch="false"/>
+						<line number="191" hits="1" branch="true" condition-coverage="50% (1/2)">
 							<conditions>
-								<condition number="0" type="jump" coverage="100%"/>
+								<condition number="0" type="jump" coverage="50%"/>
 							</conditions>
 						</line>
 						<line number="193" hits="1" branch="false"/>
-						<line number="195" hits="4" branch="false"/>
+						<line number="195" hits="1" branch="false"/>
 						<line number="196" hits="1" branch="true" condition-coverage="50% (1/2)">
 							<conditions>
 								<condition number="0" type="jump" coverage="50%"/>
