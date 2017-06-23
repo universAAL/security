@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.owl.ManagedIndividual;
@@ -43,6 +42,7 @@ import org.universAAL.security.authorisator.access_checkers.AssetDefaultAccessCh
 import org.universAAL.security.authorisator.access_checkers.CheckUserRoles;
 import org.universAAL.security.authorisator.interfaces.AccessChecker;
 import org.universAAL.security.authorisator.profiles.AuthorisationServiceProfile;
+import org.universAAL.utilities.ioc.dependencies.impl.PassiveDependencyProxy;
 
 /**
  * @author amedrano

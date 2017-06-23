@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.owl.MergedRestriction;
@@ -44,6 +43,7 @@ import org.universAAL.ontology.security.SecuritySubprofile;
 import org.universAAL.security.authorisator.AuthorisatorCallee;
 import org.universAAL.security.authorisator.CHeQuerrier;
 import org.universAAL.security.authorisator.ProjectActivator;
+import org.universAAL.utilities.ioc.dependencies.impl.PassiveDependencyProxy;
 
 /**
  * @author amedrano

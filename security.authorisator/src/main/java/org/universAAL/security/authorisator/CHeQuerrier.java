@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
-import org.universAAL.ioc.dependencies.DependencyProxy;
-import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.owl.MergedRestriction;
@@ -37,6 +35,8 @@ import org.universAAL.middleware.service.ServiceResponse;
 import org.universAAL.middleware.service.owls.process.ProcessOutput;
 import org.universAAL.ontology.che.ContextHistoryOntology;
 import org.universAAL.ontology.che.ContextHistoryService;
+import org.universAAL.utilities.ioc.dependencies.DependencyProxy;
+import org.universAAL.utilities.ioc.dependencies.impl.PassiveDependencyProxy;
 
 /**
  * @author amedrano

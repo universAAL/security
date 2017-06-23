@@ -15,11 +15,11 @@
  ******************************************************************************/
 package org.universAAL.security.cryptographic.services;
 
-import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleActivator;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.serialization.MessageContentSerializer;
+import org.universAAL.utilities.ioc.dependencies.impl.PassiveDependencyProxy;
 
 public class ProjectActivator implements ModuleActivator {
 

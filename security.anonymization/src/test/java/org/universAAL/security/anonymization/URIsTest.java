@@ -20,7 +20,6 @@ import java.net.URLDecoder;
 
 import junit.framework.TestCase;
 
-import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.JUnit.JUnitModuleContext;
 import org.universAAL.middleware.owl.DataRepOntology;
@@ -38,6 +37,7 @@ import org.universAAL.ontology.shape.ShapeOntology;
 import org.universAAL.ontology.space.SpaceOntology;
 import org.universAAL.ontology.vcard.VCardOntology;
 import org.universAAL.security.anonymization.AnonServiceCallee;
+import org.universAAL.utilities.ioc.dependencies.impl.PassiveDependencyProxy;
 
 /**
  * @author amedrano

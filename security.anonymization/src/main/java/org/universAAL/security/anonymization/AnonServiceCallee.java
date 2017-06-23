@@ -20,7 +20,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 
-import org.universAAL.ioc.dependencies.impl.PassiveDependencyProxy;
 import org.universAAL.middleware.container.ModuleContext;
 import org.universAAL.middleware.container.utils.LogUtils;
 import org.universAAL.middleware.owl.MergedRestriction;
@@ -39,6 +38,7 @@ import org.universAAL.ontology.cryptographic.Encryption;
 import org.universAAL.ontology.cryptographic.EncryptionService;
 import org.universAAL.ontology.cryptographic.MultidestinationEncryptedResource;
 import org.universAAL.ontology.cryptographic.symmetric.AES;
+import org.universAAL.utilities.ioc.dependencies.impl.PassiveDependencyProxy;
 
 /**
  * @author amedrano
