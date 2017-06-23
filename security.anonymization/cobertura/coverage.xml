@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.11538461538461539" branch-rate="0.19230769230769232" lines-covered="15" lines-valid="130" branches-covered="5" branches-valid="26" complexity="2.4" version="2.1.1" timestamp="1497953319611">
+<coverage line-rate="0.11538461538461539" branch-rate="0.19230769230769232" lines-covered="15" lines-valid="130" branches-covered="5" branches-valid="26" complexity="2.4" version="2.1.1" timestamp="1498199818290">
 	<sources>
 		<source>--source</source>
 		<source>/home/travis/build/universAAL/security/security.anonymization/src/main/java</source>
