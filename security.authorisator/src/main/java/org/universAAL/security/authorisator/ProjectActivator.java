@@ -60,7 +60,7 @@ public class ProjectActivator implements ModuleActivator {
 
 		LogUtils.logDebug(context, getClass(), "start", "Starting.");
 		/*
-		 * uAAL stuff
+		 * universAAL stuff
 		 */
 		// definining profiles
 
@@ -216,7 +216,7 @@ public class ProjectActivator implements ModuleActivator {
 	public void stop(ModuleContext ctxt) throws Exception {
 		LogUtils.logDebug(context, getClass(), "stop", "Stopping.");
 		/*
-		 * close uAAL stuff
+		 * close universAAL stuff
 		 */
 		callee.close();
 

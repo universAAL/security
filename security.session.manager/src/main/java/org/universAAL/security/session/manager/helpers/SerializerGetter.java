@@ -31,7 +31,7 @@ public class SerializerGetter implements SharedObjectListener {
 	public SerializerGetter(ModuleContext mc) throws Exception {
 		context = mc;
 		/*
-		 * uAAL stuff
+		 * universAAL stuff
 		 */
 		Object[] obj = context.getContainer().fetchSharedObject(context,
 				new Object[] { MessageContentSerializerEx.class.getName() }, this);

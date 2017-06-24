@@ -46,7 +46,7 @@ public class ManagerActivator implements ModuleActivator {
 		context = ctxt;
 		LogUtils.logDebug(context, getClass(), "start", "Starting.");
 		/*
-		 * uAAL stuff
+		 * universAAL stuff
 		 */
 		LogUtils.logDebug(context, getClass(), "start", "Starting Publisher.");
 		publisher = new SessionPublisher(context);
@@ -69,7 +69,7 @@ public class ManagerActivator implements ModuleActivator {
 	public void stop(ModuleContext ctxt) throws Exception {
 		LogUtils.logDebug(context, getClass(), "stop", "Stopping.");
 		/*
-		 * close uAAL stuff
+		 * close universAAL stuff
 		 */
 		if (publisher != null) {
 			publisher.close();

@@ -33,7 +33,7 @@ public class AuthenticatorActivator implements ModuleActivator, SharedObjectList
 		context = mc;
 		LogUtils.logDebug(context, getClass(), "start", "Starting.");
 		/*
-		 * uAAL stuff
+		 * universAAL stuff
 		 */
 		Object[] obj = context.getContainer().fetchSharedObject(context,
 				new Object[] { MessageContentSerializer.class.getName() }, this);

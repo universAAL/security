@@ -15,7 +15,7 @@ public class DelegationActivator implements ModuleActivator {
 		context = ctxt;
 		LogUtils.logDebug(context, getClass(), "start", "Starting.");
 		/*
-		 * uAAL stuff
+		 * universAAL stuff
 		 */
 		// Add authorisation modification
 		AuthorisatorCallee.registerChecker(new DelegationAccessChecker());
@@ -27,7 +27,7 @@ public class DelegationActivator implements ModuleActivator {
 	public void stop(ModuleContext ctxt) throws Exception {
 		LogUtils.logDebug(context, getClass(), "stop", "Stopping.");
 		/*
-		 * close uAAL stuff
+		 * close universAAL stuff
 		 */
 		AuthorisatorCallee.unregisterChecker(DelegationAccessChecker.class);
 		callee.close();

@@ -113,7 +113,7 @@ public class EncryptionServiceProfiles extends EncryptionService {
 				new String[] { EncryptionService.PROP_ENCRYPTION, SymmetricEncryption.PROP_SIMPLE_KEY });
 		// eAES.addFilteringInput(KEY, SimpleKey.MY_URI, 1, 1, new String[]
 		// {EncryptionService.PROP_ENCRYPTION, Encryption.PROP_KEY}); // TODO
-		// Possible uAAL bug!
+		// Possible universAAL bug!
 		eAES.addFilteringInput(METHOD, AES.MY_URI, 1, 1, new String[] { EncryptionService.PROP_ENCRYPTION });
 		eAES.addFilteringInput(CLEAR_RESOURCE, TypeMapper.getDatatypeURI(Resource.class), 1, 1,
 				new String[] { EncryptionService.PROP_ENCRYPTS });

@@ -34,7 +34,7 @@ public class ProjectActivator implements ModuleActivator {
 		context = ctxt;
 		LogUtils.logDebug(context, getClass(), "start", "Starting.");
 		/*
-		 * uAAL stuff
+		 * universAAL stuff
 		 */
 		serializer = new PassiveDependencyProxy<MessageContentSerializer>(context,
 				new Object[] { MessageContentSerializer.class.getName() });
@@ -54,7 +54,7 @@ public class ProjectActivator implements ModuleActivator {
 	public void stop(ModuleContext ctxt) throws Exception {
 		LogUtils.logDebug(context, getClass(), "stop", "Stopping.");
 		/*
-		 * close uAAL stuff
+		 * close universAAL stuff
 		 */
 		digestCallee.close();
 		encrypCallee.close();

@@ -30,7 +30,7 @@ public class AuthenticatorActivator implements ModuleActivator {
 		context = mc;
 		LogUtils.logDebug(context, getClass(), "start", "Starting.");
 		/*
-		 * uAAL stuff
+		 * universAAL stuff
 		 */
 		UserPasswordDummyService.initialize(context);
 		callee = new UserPasswordCallee(context);
