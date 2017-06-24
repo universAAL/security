@@ -28,7 +28,7 @@ under the License.
       <title>File: 4,
              Errors: 45,
              Warnings: 3,
-             Infos: 11
+             Infos: 1
       </title>
             <link>http://security/security.authorisator.delegation//checkstyle.html</link>
       <description>
@@ -49,7 +49,7 @@ under the License.
                   <a href="http://security/security.authorisator.delegation//checkstyle.html#org.universAAL.security.authorisator.access_checkers.DelegationAccessChecker.java">org/universAAL/security/authorisator/access_checkers/DelegationAccessChecker.java</a>
                 </td>
                 <td>
-                  4
+                  1
                 </td>
                 <td>
                   1
@@ -63,7 +63,7 @@ under the License.
                   <a href="http://security/security.authorisator.delegation//checkstyle.html#org.universAAL.security.authorisator.delegation.DelegationService.java">org/universAAL/security/authorisator/delegation/DelegationService.java</a>
                 </td>
                 <td>
-                  4
+                  0
                 </td>
                 <td>
                   1
@@ -91,7 +91,7 @@ under the License.
                   <a href="http://security/security.authorisator.delegation//checkstyle.html#org.universAAL.security.authorisator.delegation.DelegationServieCallee.java">org/universAAL/security/authorisator/delegation/DelegationServieCallee.java</a>
                 </td>
                 <td>
-                  3
+                  0
                 </td>
                 <td>
                   0

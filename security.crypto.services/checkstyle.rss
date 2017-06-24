@@ -28,7 +28,7 @@ under the License.
       <title>File: 10,
              Errors: 145,
              Warnings: 18,
-             Infos: 45
+             Infos: 9
       </title>
             <link>http://security/security.crypto.services//checkstyle.html</link>
       <description>
@@ -49,7 +49,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.EncryptionServiceProfiles.java">org/universAAL/security/cryptographic/services/EncryptionServiceProfiles.java</a>
                 </td>
                 <td>
-                  7
+                  3
                 </td>
                 <td>
                   10
@@ -63,7 +63,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.MultiDestinationProfiles.java">org/universAAL/security/cryptographic/services/MultiDestinationProfiles.java</a>
                 </td>
                 <td>
-                  4
+                  1
                 </td>
                 <td>
                   2
@@ -77,7 +77,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.SignVerifyCallee.java">org/universAAL/security/cryptographic/services/SignVerifyCallee.java</a>
                 </td>
                 <td>
-                  4
+                  1
                 </td>
                 <td>
                   0
@@ -91,7 +91,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.DigestServiceCallee.java">org/universAAL/security/cryptographic/services/DigestServiceCallee.java</a>
                 </td>
                 <td>
-                  4
+                  1
                 </td>
                 <td>
                   1
@@ -105,7 +105,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.SignVerifyProfiles.java">org/universAAL/security/cryptographic/services/SignVerifyProfiles.java</a>
                 </td>
                 <td>
-                  5
+                  1
                 </td>
                 <td>
                   2
@@ -119,7 +119,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.MultiDestinationCallee.java">org/universAAL/security/cryptographic/services/MultiDestinationCallee.java</a>
                 </td>
                 <td>
-                  4
+                  1
                 </td>
                 <td>
                   0
@@ -133,7 +133,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.ProjectActivator.java">org/universAAL/security/cryptographic/services/ProjectActivator.java</a>
                 </td>
                 <td>
-                  3
+                  0
                 </td>
                 <td>
                   0
@@ -147,7 +147,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.DigestServiceProfiles.java">org/universAAL/security/cryptographic/services/DigestServiceProfiles.java</a>
                 </td>
                 <td>
-                  5
+                  1
                 </td>
                 <td>
                   2
@@ -161,7 +161,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.utils.BlockChipher.java">org/universAAL/security/cryptographic/services/utils/BlockChipher.java</a>
                 </td>
                 <td>
-                  5
+                  0
                 </td>
                 <td>
                   1
@@ -175,7 +175,7 @@ under the License.
                   <a href="http://security/security.crypto.services//checkstyle.html#org.universAAL.security.cryptographic.services.EncryptionServiceCallee.java">org/universAAL/security/cryptographic/services/EncryptionServiceCallee.java</a>
                 </td>
                 <td>
-                  4
+                  0
                 </td>
                 <td>
                   0
