@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2016 Universidad Politécnica de Madrid UPM
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,7 +60,7 @@ public class TestServiceCalls extends OntTestCase {
 	private ProjectActivator scallee;
 
 	private ContextHistoryCallee che = null;
-	
+
 	private static final boolean VERBOSE = false;
 
 	/** {@inheritDoc} */
@@ -228,12 +228,12 @@ public class TestServiceCalls extends OntTestCase {
 		// second pass:
 		AccessRight ar2 = new AccessRight("accessRightURI2");
 		ar2.addAccessType(AccessType.read);
-		
+
 		sname = "remove AccessRight from role 2";
-		
+
 		newRole.addAccessRight(ar);
 		newRole.addAccessRight(ar2);
-		
+
 		sreq = new ServiceRequest(new RoleManagementService(), u1);
 		sreq.addValueFilter(new String[] { RoleManagementService.PROP_ROLE }, newRole);
 		sreq.addRemoveEffect(new String[] { RoleManagementService.PROP_ROLE, Role.PROP_HAS_ACCESS_RIGHTS });
@@ -249,7 +249,7 @@ public class TestServiceCalls extends OntTestCase {
 		} catch (Exception e) {
 			// it will fail... this is just to test the call matchmaking
 		}
-		
+
 		// change AccessRight
 		sname = "change AccessRight";
 		sreq = new ServiceRequest(new RoleManagementService(), u1);

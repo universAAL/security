@@ -26,9 +26,9 @@ import org.universAAL.ontology.phThing.Device;
  * Implementation will initialize status and monitor changes regarding
  * {@link Device}s and {@link Location}s; in order to keep internal status
  * synchronized with actual status.
- * 
+ *
  * @author amedrano
- * 
+ *
  */
 public interface SituationMonitor {
 

@@ -26,7 +26,7 @@ import org.universAAL.ontology.security.Session;
 
 /**
  * Generic Interface for Session Manager
- * 
+ *
  * @author amedrano
  *
  */

@@ -44,7 +44,7 @@ public class Subscriber extends ContextSubscriber {
 	private QueueProcessor processor = new QueueProcessor();
 
 	/**
-	 * 
+	 *
 	 */
 	public Subscriber(ModuleContext mc, SessionManager sessionMngr) {
 		super(mc, getPermSusbcriptions());

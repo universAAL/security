@@ -40,7 +40,7 @@ import org.universAAL.security.session.manager.helpers.LocationTreeWrapper;
 public class SituationMonitorImpl extends ContextSubscriber implements SituationMonitor {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final String AUX_PROP = "http://security.universAAL.org/Security#auxProp";
 
@@ -51,7 +51,7 @@ public class SituationMonitorImpl extends ContextSubscriber implements Situation
 	private List<LocationChangeListener> listeners;
 
 	/**
-	 * 
+	 *
 	 */
 	public SituationMonitorImpl(ModuleContext mc) {
 		super(mc, getPatterns());
@@ -86,7 +86,7 @@ public class SituationMonitorImpl extends ContextSubscriber implements Situation
 
 	/**
 	 * Service call to query all locations in CHe.
-	 * 
+	 *
 	 */
 	private void initializeLocations() {
 		if (locations == null) {

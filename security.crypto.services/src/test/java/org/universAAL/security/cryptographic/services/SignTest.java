@@ -25,7 +25,7 @@ import org.universAAL.ontology.cryptographic.digest.MessageDigest;
 
 /**
  * @author amedrano
- * 
+ *
  */
 public class SignTest extends CommonTest {
 

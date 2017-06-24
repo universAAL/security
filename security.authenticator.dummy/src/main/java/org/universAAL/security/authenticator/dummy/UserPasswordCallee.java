@@ -51,7 +51,7 @@ public class UserPasswordCallee extends ServiceCallee {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public UserPasswordCallee(ModuleContext mc) {
 		this(mc, UserPasswordDummyService.profs);

@@ -27,9 +27,9 @@ import org.universAAL.ontology.location.Location;
  * Some Utility tools missing from the ontology. This class gives a utility
  * model of the {@link Location} tree represented by the {@link Location}
  * instances. It relies on the data they have, and creates no more information.
- * 
+ *
  * @author amedrano
- * 
+ *
  */
 public class LocationTreeWrapper {
 
@@ -37,7 +37,7 @@ public class LocationTreeWrapper {
 
 	/**
 	 * Constructor. Model the given Location.
-	 * 
+	 *
 	 * @param l
 	 *            the location to be extended.
 	 */
@@ -55,7 +55,7 @@ public class LocationTreeWrapper {
 	/**
 	 * Get all {@link Location#PROP_CONTAINS children} of the {@link Location}
 	 * represented buy this node.
-	 * 
+	 *
 	 * @return The children in {@link LocationTreeWrapper} form.
 	 */
 	public Set<LocationTreeWrapper> getChildren() {
@@ -77,7 +77,7 @@ public class LocationTreeWrapper {
 	/**
 	 * Get the {@link Location#PROP_IS_CONTAINED_IN parent} {@link Location} of
 	 * the represented {@link Location} in {@link LocationTreeWrapper} form.
-	 * 
+	 *
 	 * @return the Parent node, or null if no parent is defined.
 	 */
 	public LocationTreeWrapper getParent() {
@@ -91,7 +91,7 @@ public class LocationTreeWrapper {
 	/**
 	 * Get the most generic {@link Location} reachable from the {@link Location}
 	 * represented.
-	 * 
+	 *
 	 * @return the tree root.
 	 */
 	public LocationTreeWrapper getRoot() {
@@ -105,7 +105,7 @@ public class LocationTreeWrapper {
 	/**
 	 * Check if there are no parents. If they are not any parents then this must
 	 * be the root node of the {@link Location} tree.
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isRoot() {

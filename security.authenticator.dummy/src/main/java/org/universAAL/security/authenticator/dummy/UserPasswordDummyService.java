@@ -54,7 +54,7 @@ public class UserPasswordDummyService extends AuthenticationService {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public UserPasswordDummyService() {
 		super();

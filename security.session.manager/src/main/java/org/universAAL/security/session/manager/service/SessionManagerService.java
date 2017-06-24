@@ -61,7 +61,7 @@ public class SessionManagerService extends SessionManagementService {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public SessionManagerService() {
 		super();

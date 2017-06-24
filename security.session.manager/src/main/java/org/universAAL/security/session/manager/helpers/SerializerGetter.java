@@ -26,7 +26,7 @@ public class SerializerGetter implements SharedObjectListener {
 	private MessageContentSerializerEx serializer;
 
 	/**
-	 * 
+	 *
 	 */
 	public SerializerGetter(ModuleContext mc) throws Exception {
 		context = mc;

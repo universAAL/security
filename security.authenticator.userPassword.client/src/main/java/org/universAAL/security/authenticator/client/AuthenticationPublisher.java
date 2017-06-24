@@ -31,7 +31,7 @@ import org.universAAL.ontology.security.SecurityOntology;
 /**
  * This class should be used when the Authentication is successful, to allow the
  * Session Manager to uplift the authentication to a Session.
- * 
+ *
  * @author amedrano
  *
  */

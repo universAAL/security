@@ -54,7 +54,7 @@ public class UserPasswordProfileService extends AuthenticationService {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public UserPasswordProfileService() {
 		super();

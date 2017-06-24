@@ -65,7 +65,7 @@ public class UserPasswordCallee extends ServiceCallee {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public UserPasswordCallee(AuthenticatorActivator aa) {
 		this(aa.context, UserPasswordProfileService.profs);

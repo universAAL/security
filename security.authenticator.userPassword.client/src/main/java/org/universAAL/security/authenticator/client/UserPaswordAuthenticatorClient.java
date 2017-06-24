@@ -43,9 +43,9 @@ import org.universAAL.ontology.security.UserPasswordCredentials;
 /**
  * This class is a helper for all those components that need to authenticate a
  * user by means of user password authentication.
- * 
+ *
  * @author amedrano
- * 
+ *
  */
 public class UserPaswordAuthenticatorClient extends DefaultServiceCaller {
 
@@ -63,7 +63,7 @@ public class UserPaswordAuthenticatorClient extends DefaultServiceCaller {
 	/**
 	 * This method will try to authenticate the user. If successful the user
 	 * instance will be returned else it will be null.
-	 * 
+	 *
 	 * @param username
 	 *            the username to authenticate
 	 * @param password

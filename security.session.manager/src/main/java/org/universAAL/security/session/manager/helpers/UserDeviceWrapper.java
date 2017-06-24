@@ -30,7 +30,7 @@ import org.universAAL.ontology.profile.User;
 
 /**
  * A Wrapper to keep track of users in a certain Device.
- * 
+ *
  * @author amedrano
  *
  */
@@ -41,7 +41,7 @@ public class UserDeviceWrapper {
 	private Device dev;
 
 	/**
-	 * 
+	 *
 	 */
 	public UserDeviceWrapper(Device d) {
 		dev = d;
@@ -54,7 +54,7 @@ public class UserDeviceWrapper {
 	/**
 	 * The user set is stored as a {@link List} in the actual {@link Device}
 	 * instance, so this methods helps reformat that into a {@link Set}.
-	 * 
+	 *
 	 * @return
 	 */
 	public Set<User> getUserSet() {
@@ -71,7 +71,7 @@ public class UserDeviceWrapper {
 
 	/**
 	 * Complement to {@link UserDeviceWrapper#getUserSet()}.
-	 * 
+	 *
 	 * @param users
 	 */
 	public void setUserSet(Set<User> users) {
@@ -88,7 +88,7 @@ public class UserDeviceWrapper {
 
 	/**
 	 * Remove a single user from this {@link Device}.
-	 * 
+	 *
 	 * @param u
 	 */
 	public void removeUser(User u) {
@@ -99,7 +99,7 @@ public class UserDeviceWrapper {
 
 	/**
 	 * Add a single {@link User} to this {@link Device}.
-	 * 
+	 *
 	 * @param u
 	 */
 	public void addUser(User u) {

@@ -36,7 +36,7 @@ public class LocationTreeNode {
 	private LocationTreeNode parent;
 
 	/**
-	 * 
+	 *
 	 */
 	public LocationTreeNode(Location l) {
 		loc = l;

@@ -31,7 +31,7 @@ import org.universAAL.ontology.profile.User;
  * Extends {@link LocationTreeWrapper} to add a {@link Set} of {@link User}s to
  * each node in the tree. In addition it manages the Allocation and Deallocation
  * of users in the {@link Location} tree.
- * 
+ *
  * @author amedrano
  *
  */
@@ -41,7 +41,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 
 	/**
 	 * Model the given {@link Location}.
-	 * 
+	 *
 	 * @param l
 	 */
 	public UserLocationTree(Location l) {
@@ -51,7 +51,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 	/**
 	 * Utility method to transform {@link LocationTreeWrapper}s from
 	 * {@link LocationTreeWrapper#getChildren()} into {@link UserLocationTree}.
-	 * 
+	 *
 	 * @return
 	 */
 	private Set<UserLocationTree> getUserChildren() {
@@ -66,7 +66,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 	/**
 	 * Utility method to transform {@link LocationTreeWrapper}s from
 	 * {@link LocationTreeWrapper#getParent()} into {@link UserLocationTree}.
-	 * 
+	 *
 	 * @return
 	 */
 	private UserLocationTree getUserParent() {
@@ -80,7 +80,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 	/**
 	 * The user set is stored as a {@link List} in the actual {@link Location}
 	 * instance, so this methods helps reformat that into a {@link Set}.
-	 * 
+	 *
 	 * @return
 	 */
 	public Set<User> getUserSet() {
@@ -97,7 +97,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 
 	/**
 	 * Complement to {@link UserLocationTree#getUserSet()}.
-	 * 
+	 *
 	 * @param users
 	 */
 	public void setUserSet(Set<User> users) {
@@ -114,7 +114,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 
 	/**
 	 * Add a single {@link User} to this {@link Location}.
-	 * 
+	 *
 	 * @param u
 	 */
 	public void addUser(User u) {
@@ -131,7 +131,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 	 * Remove the {@link User} from the whole {@link Location} tree. There may
 	 * be users affected by this movement, since they might be alone now that
 	 * the other user is deallocated.
-	 * 
+	 *
 	 * @param u
 	 *            the user to be removed.
 	 * @return the {@link Set} of {@link User}s affected.
@@ -160,7 +160,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 	/**
 	 * Used as delegation method for
 	 * {@link UserLocationTree#allocateUser(User)}.
-	 * 
+	 *
 	 * @param u
 	 *            the user to add at this {@link Location}.
 	 * @param recursively
@@ -189,7 +189,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 	 * Allocate a user in the {@link Location} tree, this means the user is
 	 * logically located in all of the parent locations of this location. But
 	 * all children locations must be marked too.
-	 * 
+	 *
 	 * @param u
 	 *            the allocated user.
 	 * @return the affected {@link User}s by this allocation.
@@ -211,7 +211,7 @@ public class UserLocationTree extends LocationTreeWrapper {
 	/**
 	 * Calculate the uppermost {@link Location} in which the {@link User} is
 	 * alone.
-	 * 
+	 *
 	 * @param u
 	 * @return the {@link UserLocationTree} where the user is alone, null if it
 	 *         is not in the location tree, or she/he is not alone anywhere.

@@ -46,7 +46,7 @@ public class CHeQuery {
 	private static ServiceCaller sc = null;
 
 	/**
-	 * 
+	 *
 	 */
 	public CHeQuery(ModuleContext mc) {
 		owner = mc;

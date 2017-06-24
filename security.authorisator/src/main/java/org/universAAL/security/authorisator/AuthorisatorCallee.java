@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2016 Universidad Politécnica de Madrid UPM
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,7 +46,7 @@ import org.universAAL.utilities.ioc.dependencies.impl.PassiveDependencyProxy;
 
 /**
  * @author amedrano
- * 
+ *
  */
 public class AuthorisatorCallee extends ServiceCallee {
 
@@ -259,7 +259,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 
     /**
      * Sends a new triple (or more if value is complex) to the SPARQL backend.
-     * 
+     *
      * @param root
      * @param prop
      * @return
@@ -282,7 +282,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 
     /**
      * Removes a single triple from the SPARQL backend.
-     * 
+     *
      * @param root
      * @param prop
      * @return
@@ -326,7 +326,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 
     /**
      * Update a full object in the data base.
-     * 
+     *
      * @param r
      *            the new object (replacing old one with same URI)
      * @return true iif the object is updated.
@@ -348,7 +348,7 @@ public class AuthorisatorCallee extends ServiceCallee {
 
     /**
      * Query the database to gather all objects of the same class URI.
-     * 
+     *
      * @param classuri
      *            The class of the objects to be collected.
      * @return a list, or the single object stored in the data base with the

@@ -22,7 +22,7 @@ import org.universAAL.middleware.rdf.Resource;
 
 /**
  * @author amedrano
- * 
+ *
  */
 public class RandomResourceGenerator {
 

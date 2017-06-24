@@ -35,7 +35,7 @@ import org.universAAL.ontology.security.Session;
 import org.universAAL.security.session.manager.SessionManager;
 
 /**
- * 
+ *
  * @author amedrano
  *
  */
