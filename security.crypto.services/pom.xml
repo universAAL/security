@@ -1,36 +1,34 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.universAAL.security</groupId>
     <artifactId>security.pom</artifactId>
-    <version>3.4.1-SNAPSHOT</version>
+    <version>3.4.2-SNAPSHOT</version>
     <relativePath>../security.pom</relativePath>
   </parent>
-
   <artifactId>security.crypto.services</artifactId>
-  <version>3.4.1-SNAPSHOT</version>
+  <version>3.4.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>universAAL Security Basic Cryptographic Services</name>
   <description>Offers universAALized Java security services for hashing, encrypting, signing and verifying</description>
-
   <properties>
     <separatedGroupIds>org.universAAL.middleware</separatedGroupIds>
   </properties>
-
   <dependencies>
-	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-	</dependency>  	 	
-  	<dependency>
-  		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.context.core</artifactId>
-  	</dependency>   	
-  	<dependency>
-  		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.service.core</artifactId>
-  	</dependency>  	
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.middleware</groupId>
+      <artifactId>mw.bus.context.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.middleware</groupId>
+      <artifactId>mw.bus.service.core</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.universAAL.support</groupId>
       <artifactId>utilities.ioc</artifactId>
@@ -45,25 +43,23 @@
       <artifactId>mw.bus.junit</artifactId>
       <scope>test</scope>
     </dependency>
-  	<dependency>
-  		<groupId>org.universAAL.ontology</groupId>
-  		<artifactId>ont.cryptographic</artifactId>
-  	</dependency>
+    <dependency>
+      <groupId>org.universAAL.ontology</groupId>
+      <artifactId>ont.cryptographic</artifactId>
+    </dependency>
   </dependencies>
-
   <build>
-	<plugins>
-		<plugin>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>maven-bundle-plugin</artifactId>
-			<extensions>true</extensions>
-			<configuration>
-				<instructions>
-					<Export-Package>org.universAAL.security.authenticator</Export-Package>
-				</instructions>
-			</configuration>
-		</plugin>
-	</plugins>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>org.universAAL.security.authenticator</Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
-  
 </project>

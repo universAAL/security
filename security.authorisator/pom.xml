@@ -1,93 +1,90 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.universAAL.security</groupId>
-		<artifactId>security.pom</artifactId>
-		<version>3.4.1-SNAPSHOT</version>
-		<relativePath>../security.pom</relativePath>
-	</parent>
-
+  <parent>
+    <groupId>org.universAAL.security</groupId>
+    <artifactId>security.pom</artifactId>
+    <version>3.4.2-SNAPSHOT</version>
+    <relativePath>../security.pom</relativePath>
+  </parent>
   <artifactId>security.authorisator</artifactId>
-  <version>3.4.1-SNAPSHOT</version>
+  <version>3.4.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>universAAL Security Authorisator</name>
   <description>Offers Role-based security access management services</description>
-
   <properties>
     <separatedGroupIds>org.universAAL.middleware</separatedGroupIds>
   </properties>
-
   <dependencies>
-	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-	</dependency>  	 	
-	<dependency>
-		<groupId>org.universAAL.middleware</groupId>
-		<artifactId>mw.bus.junit</artifactId>
-		<scope>test</scope>
-	</dependency>		
-	<dependency>
-	<groupId>org.universAAL.middleware</groupId>
-		<artifactId>mw.container.osgi</artifactId>
-		<scope>test</scope>
-	</dependency>	
-	<dependency>
-		<groupId>org.universAAL.ontology</groupId>
-		<artifactId>ont.device</artifactId>
-		<scope>test</scope>
-	</dependency>
-  	<dependency>
-  		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.context.core</artifactId>
-  	</dependency>   	
-  	<dependency>
-  		<groupId>org.universAAL.middleware</groupId>
-  		<artifactId>mw.bus.service.core</artifactId>
-  	</dependency>  	
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.middleware</groupId>
+      <artifactId>mw.bus.junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.middleware</groupId>
+      <artifactId>mw.container.osgi</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.ontology</groupId>
+      <artifactId>ont.device</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.middleware</groupId>
+      <artifactId>mw.bus.context.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.middleware</groupId>
+      <artifactId>mw.bus.service.core</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.universAAL.support</groupId>
       <artifactId>utilities.ioc</artifactId>
     </dependency>
-  	<dependency>
-  		<groupId>org.universAAL.ontology</groupId>
-  		<artifactId>ont.profile</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.universAAL.ontology</groupId>
-  		<artifactId>ont.security</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.universAAL.ontology</groupId>
-  		<artifactId>ont.che</artifactId>
-  	</dependency>
+    <dependency>
+      <groupId>org.universAAL.ontology</groupId>
+      <artifactId>ont.profile</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.ontology</groupId>
+      <artifactId>ont.security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.universAAL.ontology</groupId>
+      <artifactId>ont.che</artifactId>
+    </dependency>
   </dependencies>
-
   <build>
-	<plugins>
-		<plugin>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>maven-bundle-plugin</artifactId>
-			<extensions>true</extensions>
-			<configuration>
-				<instructions>
-					<Export-Package>org.universAAL.security.authorisator,
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>org.universAAL.security.authorisator,
 					org.universAAL.security.authorisator.interfaces,
 					org.universAAL.security.authorisator.access_checkers</Export-Package>
-				</instructions>
-			</configuration>
-		</plugin>
-	</plugins>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
   <profiles>
     <profile>
       <id>uAAL-Runtime</id>
       <dependencies>
-	    <dependency>
-	      <groupId>org.universAAL.middleware</groupId>
-	      <artifactId>mw.data.serialization.turtle.osgi</artifactId>
-	    </dependency>
+        <dependency>
+          <groupId>org.universAAL.middleware</groupId>
+          <artifactId>mw.data.serialization.turtle.osgi</artifactId>
+        </dependency>
         <dependency>
           <groupId>org.universAAL.context</groupId>
           <artifactId>ctxt.che</artifactId>
