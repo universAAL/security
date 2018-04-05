@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c268" href="./ManagerActivator.html" title="org.universAAL.security.session.manager.ManagerActivator" alt="" coords="16,19,139,45"/>
-<area shape="rect" id="node1" href="./ManagerActivator.html" title="&lt;TABLE&gt;" alt="" coords="5,8,149,56"/>
-<area shape="rect" id="c269" href="./SessionManager.html" title="org.universAAL.security.session.manager.SessionManager" alt="" coords="184,11,301,53"/>
-<area shape="rect" id="node2" href="./SessionManager.html" title="&lt;TABLE&gt;" alt="" coords="173,6,312,58"/>
+<area shape="rect" id="node1_0" href="./ManagerActivator.html" title="org.universAAL.security.session.manager.ManagerActivator" alt="" coords="16,20,139,47"/>
+<area shape="rect" id="node1" href="./ManagerActivator.html" title="&lt;TABLE&gt;" alt="" coords="5,9,149,57"/>
+<area shape="rect" id="node2_1" href="./SessionManager.html" title="org.universAAL.security.session.manager.SessionManager" alt="" coords="184,11,301,55"/>
+<area shape="rect" id="node2" href="./SessionManager.html" title="&lt;TABLE&gt;" alt="" coords="173,6,312,61"/>
 </map>

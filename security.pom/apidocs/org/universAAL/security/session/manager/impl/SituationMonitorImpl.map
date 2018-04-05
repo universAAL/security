@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c2767" href="../context/SituationMonitor.html" title="org.universAAL.security.session.manager.context.SituationMonitor" alt="" coords="16,11,131,53"/>
-<area shape="rect" id="node1" href="../context/SituationMonitor.html" title="&lt;TABLE&gt;" alt="" coords="5,6,141,58"/>
-<area shape="rect" id="c2775" href="./SituationMonitorImpl.html" title="org.universAAL.security.session.manager.impl.SituationMonitorImpl" alt="" coords="86,118,226,143"/>
-<area shape="rect" id="node2" href="./SituationMonitorImpl.html" title="&lt;TABLE&gt;" alt="" coords="76,107,236,155"/>
-<area shape="rect" id="c2795" href="http://java.sun.com/j2se/1.4.2/docs/api/org/universAAL/middleware/context/ContextSubscriber.html" title="org.universAAL.middleware.context.ContextSubscriber" alt="" coords="175,19,305,45"/>
-<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/org/universAAL/middleware/context/ContextSubscriber.html" title="&lt;TABLE&gt;" alt="" coords="165,8,315,56"/>
+<area shape="rect" id="node1_0" href="../context/SituationMonitor.html" title="org.universAAL.security.session.manager.context.SituationMonitor" alt="" coords="16,11,131,55"/>
+<area shape="rect" id="node1" href="../context/SituationMonitor.html" title="&lt;TABLE&gt;" alt="" coords="5,6,141,61"/>
+<area shape="rect" id="node2_1" href="./SituationMonitorImpl.html" title="org.universAAL.security.session.manager.impl.SituationMonitorImpl" alt="" coords="87,120,227,147"/>
+<area shape="rect" id="node2" href="./SituationMonitorImpl.html" title="&lt;TABLE&gt;" alt="" coords="77,109,238,157"/>
+<area shape="rect" id="node3_2" href="http://java.sun.com/j2se/1.4.2/docs/api/org/universAAL/middleware/context/ContextSubscriber.html" title="org.universAAL.middleware.context.ContextSubscriber" alt="" coords="177,20,306,47"/>
+<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/org/universAAL/middleware/context/ContextSubscriber.html" title="&lt;TABLE&gt;" alt="" coords="166,9,317,57"/>
 </map>
